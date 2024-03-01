@@ -1,4 +1,3 @@
-from topics import TOPICS
 from tqdm import tqdm
 import argparse
 import torch
