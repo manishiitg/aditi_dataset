@@ -236,28 +236,6 @@ def eval_hf_model(args, model, tokenizer, prompts):
 
 def main(args):
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-
-    if args.awq:
-        print("Loading model and tokenizer vllm awq...")
-        model = vllm.LLM(
-            model=args.model_name_or_path,
-            tokenizer=args.model_name_or_path,
-            tokenizer_mode="auto",
-            tensor_parallel_size=torch.cuda.device_count(),
-            quantization="AWQ",
-            max_model_len=8196,
-        )
-    else:
-        print("Loading model and tokenizer vllm...")
-        model = vllm.LLM(
-            model=args.model_name_or_path,
-            tokenizer=args.model_name_or_path,
-            tokenizer_mode="auto",
-            tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196,
-        )
-
     prompts = []
     pending_data = []
 
@@ -283,6 +261,28 @@ def main(args):
         )
         prompts.append(text)
         pending_data.append({})
+
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+
+    if args.awq:
+        print("Loading model and tokenizer vllm awq...")
+        model = vllm.LLM(
+            model=args.model_name_or_path,
+            tokenizer=args.model_name_or_path,
+            tokenizer_mode="auto",
+            tensor_parallel_size=torch.cuda.device_count(),
+            quantization="AWQ",
+            max_model_len=8196,
+        )
+    else:
+        print("Loading model and tokenizer vllm...")
+        model = vllm.LLM(
+            model=args.model_name_or_path,
+            tokenizer=args.model_name_or_path,
+            tokenizer_mode="auto",
+            tensor_parallel_size=torch.cuda.device_count(),
+            max_model_len=8196,
+        )
 
     outputs = eval_hf_model(args, model, tokenizer, prompts)
 
