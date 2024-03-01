@@ -41,10 +41,11 @@ def main(args):
         processed_by = row["processed_by"]
         if args.model_name_or_path not in processed_by:
             final_data.append(row)
-        if args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path]:
+        if args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
             final_data.append(row)
-        if len(final_data) > max_rows:
-            break
+            row["processed_by"][args.model_name_or_path] = True
+        else:
+            row["processed_by"][args.model_name_or_path] = False
 
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
