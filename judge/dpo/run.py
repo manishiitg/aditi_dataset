@@ -7,7 +7,7 @@ from transformers import AutoTokenizer
 import vllm
 from datasets import Dataset
 import torch
-
+import time
 
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts):
@@ -31,7 +31,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
-    dataset = load_dataset(base_repo, split="train")
+    dataset = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
 
     final_data = []
     max_rows = 10
@@ -52,6 +52,7 @@ def main(args):
 
         push_data.append(row)
     
+    # required because will be running in a distributed way
     dataset = process_and_update_dataset(push_data)
     dataset.push_to_hub(base_repo, private=True)
 
