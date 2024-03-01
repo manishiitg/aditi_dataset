@@ -34,8 +34,8 @@ msg_context = {"role": "system", "content": str(PROMPT_1)}
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts):
     sampling_params = vllm.SamplingParams(
-        temperature=0,
-        max_tokens=512,
+        temperature=.7,
+        max_tokens=2048,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
@@ -50,42 +50,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
     return outputs
 
 
-def generate_data(
-    topic_selected,
-    system_message_generation,
-    system_message_selected,
-):
-    system_contexts = [
-        system_message_generation,
-        system_message_selected,
-    ]
-
-    user_prompts = [f"SUBJECT_AREA: {topic_selected}"]
-    gpt_outputs = []
-
-    for pp in range(len(system_contexts)):
-        msg_list = []
-        msg_system = {"role": "system", "content": str(system_contexts[pp])}
-        msg_list.append(msg_system)
-        msg_prompt = {"role": "user", "content": user_prompts[pp]}
-        msg_list.append(msg_prompt)
-
-        print(msg_prompt)
-
-
 def main(args):
-
-    topic_number = random.randint(0, len(TOPICS))
-    topic_selected = TOPICS[topic_number]
-    system_message_number = random.randint(0, len(SYSTEM_MESSAGES))
-    system_message_selected = SYSTEM_MESSAGES[system_message_number]
-    system_message_generation = PROMPT_1
-
-    generate_data(topic_selected,
-                  system_message_generation,
-                  system_message_selected)
-    
-    os.exit(1)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
@@ -109,28 +74,26 @@ def main(args):
             max_model_len=8196,
         )
 
-    default_system_en = "You are a helpful assistant."
-    default_system_hi = "आप एक सहायक सहायक हैं."
-
     prompts = []
     pending_data = []
-    for row in tqdm(final_data):
 
-        prompt = row["prompt"]
-        if args.lang == "hi":
-            messages = [
-                {"role": "system", "content": default_system_hi}
-            ]
-        else:
-            messages = [
-                {"role": "user", "content": default_system_en}
-            ]
+    topic_number = random.randint(0, len(TOPICS))
+    topic_selected = TOPICS[topic_number]
+    system_message_number = random.randint(0, len(SYSTEM_MESSAGES))
+    system_message_selected = SYSTEM_MESSAGES[system_message_number]
+    system_message_generation = PROMPT_1
 
-        messages.append(
-            {"role": "user", "content": prompt}
-        )
+    for row in tqdm(range(10)):
+
+        msg_list = []
+        msg_system = {"role": "system", "content": PROMPT_1 +
+                      "\n Question should be related to india."}
+        msg_list.append(msg_system)
+        msg_prompt = {"role": "user",
+                      "content": f"SUBJECT_AREA: {topic_selected}"}
+        msg_list.append(msg_prompt)
         text = tokenizer.apply_chat_template(
-            messages,
+            msg_list,
             tokenize=False,
             add_generation_prompt=True
         )
@@ -142,27 +105,7 @@ def main(args):
     for idx, text in enumerate(outputs):
         print("======")
         print("prompt", prompts[idx], "text", text)
-        pending_data[idx] = final_data[idx]
-        pending_data[idx]["processed_count"] += 1
-        processed_by = pending_data[idx]["processed_by"]
-        processed_by[args.model_name_or_path] = True
-        ratings = pending_data[idx]["ratings"]
-        ratings[args.model_name_or_path] = text
-
         pass
-
-    existing_data = []
-    dataset = load_dataset(base_repo, split="train")
-    for r in dataset:
-        processed_by = row["processed_by"]
-        if args.model_name_or_path not in processed_by:
-            pass
-        else:
-            existing_data.append(row)
-
-    final_data = pending_data + existing_data
-    dataset = process_and_update_dataset(final_data)
-    dataset.push_to_hub("manishiitg/custom-data-chat", private=False)
 
 
 def process_and_update_dataset(new_data):
