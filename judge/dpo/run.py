@@ -43,6 +43,7 @@ def main(args):
         if args.model_name_or_path not in processed_by:
             final_data.append(row)
         
+    print(len(final_data))
     os.exit(1)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
