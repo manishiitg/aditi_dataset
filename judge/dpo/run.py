@@ -90,6 +90,7 @@ def main(args):
             add_generation_prompt=True
         )
         prompts.append(text)
+        pending_data.append({})
 
     outputs = eval_hf_model(args, model, tokenizer, prompts)
 
