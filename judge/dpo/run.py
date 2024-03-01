@@ -36,7 +36,7 @@ def main(args):
     base_repo = "manishiitg/aditi-dpo-prompts"
     dataset = load_dataset(base_repo, split="train")
     dataset = dataset.filter(lambda x: x["language"] == args.lang)
-    dataset = dataset.select(range(100))
+    dataset = dataset.select(range(10))
 
     final_data = []
 
