@@ -251,7 +251,7 @@ def main(args):
 
         msg_list = []
         msg_system = {"role": "system", "content": PROMPT_1 +
-                      "\n Question should be related to india."}
+                      "\n Question should only be related to india or indian context."}
         msg_list.append(msg_system)
         msg_prompt = {"role": "user",
                       "content": f"SUBJECT_AREA: {topic_selected}"}
