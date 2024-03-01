@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./scripts/indic_eval/common_vars.sh
+source ./scripts/common_vars.sh
 
 TASK_NAME=dpo
 
