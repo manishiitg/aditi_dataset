@@ -98,6 +98,7 @@ def main(args):
         print("======")
         print("prompt", prompts[idx], "text", text)
         pending_data[idx] = final_data[idx]
+        pending_data[idx]["processed_count"] += 1
         processed_by = pending_data[idx]["processed_by"]
         processed_by[args.model_name_or_path] = True
         ratings = pending_data[idx]["ratings"]
