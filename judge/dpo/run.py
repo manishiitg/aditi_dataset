@@ -42,7 +42,7 @@ def main(args):
     for row in dataset:
         if row["language"] == args.lang:
             processed_by = row["processed_by"]
-            if args.model_name_or_path not in processed_by:
+            if args.model_name_or_path not in processed_by and len(final_data) < max_rows:
                 final_data.append(row)
                 row["processed_by"][args.model_name_or_path] = True
             elif args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
