@@ -128,7 +128,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--lang",
         type=str,
-        default=None,
+        default="hi",
     )
     parser.add_argument(
         "--awq",
