@@ -57,7 +57,7 @@ def main(args):
                 tokenizer_mode="auto",
                 tensor_parallel_size=torch.cuda.device_count(),
                 quantization="AWQ",
-                max_model_len=8196,
+                # max_model_len=8196,
             )
         else:
             print("Loading model and tokenizer vllm...")
@@ -66,7 +66,7 @@ def main(args):
                 tokenizer=args.model_name_or_path,
                 tokenizer_mode="auto",
                 tensor_parallel_size=torch.cuda.device_count(),
-                max_model_len=8196,
+                # max_model_len=8196,
             )
 
         default_system_en = "You are a helpful assistant."
@@ -122,10 +122,11 @@ def main(args):
                 #     # "Qwen/Qwen1.5-72B-Chat-AWQ"
                 #     # "manishiitg/open-aditi-hi-v3"
                 #     for k, v in processed_row["responses"].items():
-                #         if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
-                #             processed_row["chosen"] = v
-                #         else:
-                #             processed_row["rejected"] = v
+                #         if v:
+                #             if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
+                #                 processed_row["chosen"] = v
+                #             else:
+                #                 processed_row["rejected"] = v
 
                 existing_data.append(processed_row)
             else:
