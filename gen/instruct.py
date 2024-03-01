@@ -239,9 +239,9 @@ def main(args):
     prompts = []
     pending_data = []
 
-    topic_number = random.randint(0, len(TOPICS))
+    topic_number = random.randint(0, len(TOPICS)-1)
     topic_selected = TOPICS[topic_number]
-    system_message_number = random.randint(0, len(SYSTEM_MESSAGES))
+    system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
     system_message_selected = SYSTEM_MESSAGES[system_message_number]
     system_message_generation = PROMPT_1
 
