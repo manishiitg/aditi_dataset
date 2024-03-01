@@ -245,6 +245,8 @@ def main(args):
     system_message_selected = SYSTEM_MESSAGES[system_message_number]
     system_message_generation = PROMPT_1
 
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+
     for row in tqdm(range(10)):
 
         msg_list = []
@@ -261,8 +263,6 @@ def main(args):
         )
         prompts.append(text)
         pending_data.append({})
-
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
