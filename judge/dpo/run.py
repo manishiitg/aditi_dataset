@@ -52,7 +52,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196,
+            max_model_len=4096,
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -61,7 +61,7 @@ def main(args):
             tokenizer=args.tokenizer_name_or_path if args.tokenizer_name_or_path else args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196,
+            max_model_len=4096,
         )
 
     prompts = []
