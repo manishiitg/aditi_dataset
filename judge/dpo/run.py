@@ -1,6 +1,5 @@
 from tqdm import tqdm
 import argparse
-import os
 import torch
 import json
 from datasets import load_dataset
@@ -8,8 +7,6 @@ from transformers import AutoTokenizer
 import vllm
 from datasets import Dataset
 import torch
-import re
-import time
 
 
 @torch.no_grad()
@@ -119,7 +116,6 @@ def process_and_update_dataset(new_data):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    args = parser.parse_args()
     parser.add_argument(
         "--model_name_or_path",
         type=str,
@@ -137,4 +133,5 @@ if __name__ == "__main__":
         action="store_true",
         help="Load model as awq"
     )
+    args = parser.parse_args()
     main(args)
