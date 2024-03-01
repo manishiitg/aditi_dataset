@@ -36,7 +36,7 @@ def main(args):
                            cache_dir="temp-" + str(time.time()))
 
     final_data = []
-    max_rows = 10000
+    max_rows = 1000
 
     push_data = []
     for row in dataset:
