@@ -219,7 +219,7 @@ msg_context = {"role": "system", "content": str(PROMPT_1)}
 def eval_hf_model(args, model, tokenizer, prompts):
     sampling_params = vllm.SamplingParams(
         temperature=.7,
-        max_tokens=2048,
+        max_tokens=4096,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
