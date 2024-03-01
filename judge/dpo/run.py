@@ -113,7 +113,7 @@ def main(args):
         uuid = row["uuid"]
         if uuid in uuid_row_map:
             processed_row = uuid_row_map[uuid]
-            if len(processed_row["ratings"]) == 2:
+            if len(processed_row["ratings"]) >= 2:
                 # "Qwen/Qwen1.5-72B-Chat-AWQ"
                 # "manishiitg/open-aditi-hi-v3"
                 for k, v in processed_row["ratings"].items():
