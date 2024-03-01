@@ -42,14 +42,13 @@ def main(args):
         if args.model_name_or_path not in processed_by:
             final_data.append(row)
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.tokenizer_name_or_path if args.tokenizer_name_or_path else args.model_name_or_path)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
         model = vllm.LLM(
             model=args.model_name_or_path,
-            tokenizer=args.tokenizer_name_or_path if args.tokenizer_name_or_path else args.model_name_or_path,
+            tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
