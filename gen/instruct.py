@@ -236,8 +236,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
 
 def main(args):
 
-    prompts = []
-    pending_data = []
+    
 
     topic_number = random.randint(0, len(TOPICS)-1)
     topic_selected = TOPICS[topic_number]
@@ -247,7 +246,8 @@ def main(args):
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
-    for row in tqdm(range(10)):
+    prompts = []
+    for idx in tqdm(range(10)):
 
         msg_list = []
         msg_system = {"role": "system", "content": PROMPT_1 +
@@ -262,7 +262,6 @@ def main(args):
             add_generation_prompt=True
         )
         prompts.append(text)
-        pending_data.append({})
 
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
