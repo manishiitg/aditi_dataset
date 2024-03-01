@@ -112,7 +112,17 @@ def main(args):
     for row in dataset:
         uuid = row["uuid"]
         if uuid in uuid_row_map:
-            existing_data.append(uuid_row_map[uuid])
+            processed_row = uuid_row_map[uuid]
+            if len(processed_row["ratings"]) == 2:
+                # "Qwen/Qwen1.5-72B-Chat-AWQ"
+                # "manishiitg/open-aditi-hi-v3"
+                for k, v in processed_row["ratings"].items():
+                    if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
+                        processed_row["chosen"] = v
+                    else:
+                        processed_row["rejected"] = v
+
+            existing_data.append(processed_row)
         else:
             existing_data.append(row)
 
