@@ -124,11 +124,13 @@ if __name__ == "__main__":
         "--model_name_or_path",
         type=str,
         default=None,
+        help="model name"
     )
     parser.add_argument(
         "--lang",
         type=str,
         default="hi",
+        help="lang"
     )
     parser.add_argument(
         "--awq",
