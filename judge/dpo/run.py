@@ -9,6 +9,7 @@ from datasets import Dataset
 import torch
 import time
 
+
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts):
     sampling_params = vllm.SamplingParams(
@@ -31,10 +32,11 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
-    dataset = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+    dataset = load_dataset(base_repo, split="train",
+                           cache_dir="temp-" + str(time.time()))
 
     final_data = []
-    max_rows = 10
+    max_rows = 10000
 
     push_data = []
     for row in dataset:
@@ -46,12 +48,11 @@ def main(args):
             elif args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
                 final_data.append(row)
                 row["processed_by"][args.model_name_or_path] = True
-                
+
             row["processed_by"][args.model_name_or_path] = False
-            
 
         push_data.append(row)
-    
+
     # required because will be running in a distributed way
     dataset = process_and_update_dataset(push_data)
     dataset.push_to_hub(base_repo, private=True)
@@ -123,7 +124,8 @@ def main(args):
             uuid_row_map[uuid] = pending_data[idx]
 
         existing_data = []
-        dataset = load_dataset(base_repo, split="train")
+        dataset = load_dataset(base_repo, split="train",
+                               cache_dir="temp-" + str(time.time()))
         for row in dataset:
             uuid = row["uuid"]
             if uuid in uuid_row_map:
