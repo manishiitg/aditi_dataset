@@ -37,6 +37,7 @@ def main(args):
     final_data = []
     max_rows = 10
 
+    push_data = []
     for row in dataset:
         processed_by = row["processed_by"]
         if args.model_name_or_path not in processed_by:
@@ -46,6 +47,11 @@ def main(args):
             row["processed_by"][args.model_name_or_path] = True
         else:
             row["processed_by"][args.model_name_or_path] = False
+
+        push_data.append(row)
+    
+    dataset = process_and_update_dataset(push_data)
+    dataset.push_to_hub(base_repo, private=True)
 
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
