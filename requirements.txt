@@ -1,0 +1,23 @@
+torch
+scipy
+packaging
+sentencepiece
+datasets
+deepspeed>=0.10.0
+accelerate>=0.21.0,<0.23.0  # 0.23.0 will cause an incorrect learning rate schedule when using deepspeed, which is likely caused by https://github.com/huggingface/accelerate/commit/727d624322c67db66a43c559d8c86414d5ffb537
+peft>=0.4.0
+bitsandbytes>=0.41.1
+tokenizers>=0.13.3
+protobuf
+transformers
+termcolor
+jsonlines
+unidic-lite
+einops
+flash-attn
+auto-gptq
+fire
+alpaca-eval==0.3.1
+vllm 
+huggingface_hub
+datasets
