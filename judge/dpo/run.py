@@ -39,8 +39,11 @@ def main(args):
 
     for row in dataset:
         processed_by = row["processed_by"]
+        print(processed_by)
         if args.model_name_or_path not in processed_by:
             final_data.append(row)
+        
+    os.exit(1)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
