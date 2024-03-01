@@ -238,11 +238,11 @@ def main(args):
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
+    topic_number = random.randint(0, len(TOPICS)-1)
+    topic_selected = TOPICS[topic_number]
+    
     prompts = []
-    for idx in tqdm(range(10)):
-
-        topic_number = random.randint(0, len(TOPICS)-1)
-        topic_selected = TOPICS[topic_number]
+    for idx in tqdm(range(20)):
 
         msg_list = []
         msg_system = {"role": "system", "content": PROMPT_1 +
