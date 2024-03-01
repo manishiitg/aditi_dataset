@@ -117,7 +117,7 @@ def main(args):
 
     final_data = pending_data + existing_data
     dataset = process_and_update_dataset(final_data)
-    dataset.push_to_hub(base_repo, private=False)
+    dataset.push_to_hub("manishiitg/custom-data-chat", private=False)
 
 
 def process_and_update_dataset(new_data):
