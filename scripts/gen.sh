@@ -18,6 +18,6 @@ for model_name_or_path in "${model_names[@]}"; do
         awq_param=""
     fi
     
-    python3 -m judge.dpo.gen --model_name_or_path $model_name_or_path --lang hi $awq_param
+    python3 -m gen.instruct --model_name_or_path $model_name_or_path --lang hi $awq_param
     
 done

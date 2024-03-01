@@ -13,6 +13,5 @@ transformers
 termcolor
 jsonlines
 flash-attn
-auto-gptq
 vllm 
 huggingface_hub
