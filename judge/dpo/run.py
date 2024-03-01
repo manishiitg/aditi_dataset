@@ -45,8 +45,6 @@ def main(args):
         if len(final_data) > max_rows:
             break
         
-    print(final_data)
-    os.exit(1)
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
