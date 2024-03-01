@@ -69,6 +69,7 @@ def main(args):
 
     prompts = []
     pending_data = []
+    uuid = []
     for row in tqdm(final_data):
 
         prompt = row["prompt"]
@@ -90,33 +91,35 @@ def main(args):
             add_generation_prompt=True
         )
         prompts.append(text)
-        pending_data.append({})
+        pending_data.append(row["uuid"])
 
     outputs = eval_hf_model(args, model, tokenizer, prompts)
 
+    uuid_row_map = {}
     for idx, text in enumerate(outputs):
         print("======")
         print("prompt", prompts[idx], "text", text)
+
+        uuid = uuid[idx]
         pending_data[idx] = final_data[idx]
         pending_data[idx]["processed_count"] += 1
         processed_by = pending_data[idx]["processed_by"]
         processed_by[args.model_name_or_path] = True
-        ratings = pending_data[idx]["ratings"]
-        ratings[args.model_name_or_path] = text
-        pass
+        pending_data[idx]["ratings"][args.model_name_or_path] = text
+        uuid_row_map[uuid] = pending_data[idx]
 
     existing_data = []
     dataset = load_dataset(base_repo, split="train")
     for row in dataset:
-        processed_by = row["processed_by"]
-        if args.model_name_or_path not in processed_by:
-            pass
+        uuid = row["uuid"]
+        if uuid in uuid_row_map:
+            existing_data.append(uuid_row_map[row])
         else:
             existing_data.append(row)
 
-    final_data = pending_data + existing_data
+    final_data = existing_data
     dataset = process_and_update_dataset(final_data)
-    dataset.push_to_hub(base_repo, private=False)
+    dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
