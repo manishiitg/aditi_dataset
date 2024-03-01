@@ -103,12 +103,11 @@ def main(args):
         processed_by[args.model_name_or_path] = True
         ratings = pending_data[idx]["ratings"]
         ratings[args.model_name_or_path] = text
-
         pass
 
     existing_data = []
     dataset = load_dataset(base_repo, split="train")
-    for r in dataset:
+    for row in dataset:
         processed_by = row["processed_by"]
         if args.model_name_or_path not in processed_by:
             pass
