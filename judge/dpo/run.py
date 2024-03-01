@@ -44,94 +44,97 @@ def main(args):
             final_data.append(row)
         if len(final_data) > max_rows:
             break
+        
+    print(final_data)
+    os.exit(1)
+    if len(final_data) > 0:
+        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-
-    if args.awq:
-        print("Loading model and tokenizer vllm awq...")
-        model = vllm.LLM(
-            model=args.model_name_or_path,
-            tokenizer=args.model_name_or_path,
-            tokenizer_mode="auto",
-            tensor_parallel_size=torch.cuda.device_count(),
-            quantization="AWQ",
-            max_model_len=8196,
-        )
-    else:
-        print("Loading model and tokenizer vllm...")
-        model = vllm.LLM(
-            model=args.model_name_or_path,
-            tokenizer=args.model_name_or_path,
-            tokenizer_mode="auto",
-            tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196,
-        )
-
-    default_system_en = "You are a helpful assistant."
-    default_system_hi = "आप एक सहायक सहायक हैं."
-
-    prompts = []
-    pending_data = []
-    for row in tqdm(final_data):
-
-        prompt = row["prompt"]
-        if args.lang == "hi":
-            messages = [
-                {"role": "system", "content": default_system_hi}
-            ]
+        if args.awq:
+            print("Loading model and tokenizer vllm awq...")
+            model = vllm.LLM(
+                model=args.model_name_or_path,
+                tokenizer=args.model_name_or_path,
+                tokenizer_mode="auto",
+                tensor_parallel_size=torch.cuda.device_count(),
+                quantization="AWQ",
+                max_model_len=8196,
+            )
         else:
-            messages = [
-                {"role": "user", "content": default_system_en}
-            ]
+            print("Loading model and tokenizer vllm...")
+            model = vllm.LLM(
+                model=args.model_name_or_path,
+                tokenizer=args.model_name_or_path,
+                tokenizer_mode="auto",
+                tensor_parallel_size=torch.cuda.device_count(),
+                max_model_len=8196,
+            )
 
-        messages.append(
-            {"role": "user", "content": prompt}
-        )
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        prompts.append(text)
-        pending_data.append(row)
+        default_system_en = "You are a helpful assistant."
+        default_system_hi = "आप एक सहायक सहायक हैं."
 
-    outputs = eval_hf_model(args, model, tokenizer, prompts)
+        prompts = []
+        pending_data = []
+        for row in tqdm(final_data):
 
-    uuid_row_map = {}
-    for idx, text in enumerate(outputs):
-        print("======")
-        print("prompt", prompts[idx], "text", text)
+            prompt = row["prompt"]
+            if args.lang == "hi":
+                messages = [
+                    {"role": "system", "content": default_system_hi}
+                ]
+            else:
+                messages = [
+                    {"role": "user", "content": default_system_en}
+                ]
 
-        uuid = final_data[idx]["uuid"]
-        pending_data[idx] = final_data[idx]
-        pending_data[idx]["processed_count"] += 1
-        processed_by = pending_data[idx]["processed_by"]
-        processed_by[args.model_name_or_path] = True
-        pending_data[idx]["responses"][args.model_name_or_path] = text
-        uuid_row_map[uuid] = pending_data[idx]
+            messages.append(
+                {"role": "user", "content": prompt}
+            )
+            text = tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
+            pending_data.append(row)
 
-    existing_data = []
-    dataset = load_dataset(base_repo, split="train")
-    for row in dataset:
-        uuid = row["uuid"]
-        if uuid in uuid_row_map:
-            processed_row = uuid_row_map[uuid]
-            # if len(processed_row["responses"]) >= 2:
-            #     # "Qwen/Qwen1.5-72B-Chat-AWQ"
-            #     # "manishiitg/open-aditi-hi-v3"
-            #     for k, v in processed_row["responses"].items():
-            #         if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
-            #             processed_row["chosen"] = v
-            #         else:
-            #             processed_row["rejected"] = v
+        outputs = eval_hf_model(args, model, tokenizer, prompts)
 
-            existing_data.append(processed_row)
-        else:
-            existing_data.append(row)
+        uuid_row_map = {}
+        for idx, text in enumerate(outputs):
+            print("======")
+            print("prompt", prompts[idx], "text", text)
 
-    final_data = existing_data
-    dataset = process_and_update_dataset(final_data)
-    dataset.push_to_hub(base_repo, private=True)
+            uuid = final_data[idx]["uuid"]
+            pending_data[idx] = final_data[idx]
+            pending_data[idx]["processed_count"] += 1
+            processed_by = pending_data[idx]["processed_by"]
+            processed_by[args.model_name_or_path] = True
+            pending_data[idx]["responses"][args.model_name_or_path] = text
+            uuid_row_map[uuid] = pending_data[idx]
+
+        existing_data = []
+        dataset = load_dataset(base_repo, split="train")
+        for row in dataset:
+            uuid = row["uuid"]
+            if uuid in uuid_row_map:
+                processed_row = uuid_row_map[uuid]
+                # if len(processed_row["responses"]) >= 2:
+                #     # "Qwen/Qwen1.5-72B-Chat-AWQ"
+                #     # "manishiitg/open-aditi-hi-v3"
+                #     for k, v in processed_row["responses"].items():
+                #         if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
+                #             processed_row["chosen"] = v
+                #         else:
+                #             processed_row["rejected"] = v
+
+                existing_data.append(processed_row)
+            else:
+                existing_data.append(row)
+
+        final_data = existing_data
+        dataset = process_and_update_dataset(final_data)
+        dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
