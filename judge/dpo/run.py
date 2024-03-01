@@ -33,18 +33,18 @@ def main(args):
     base_repo = "manishiitg/aditi-dpo-prompts"
     dataset = load_dataset(base_repo, split="train")
     dataset = dataset.filter(lambda x: x["language"] == args.lang)
-    dataset = dataset.select(range(10))
+    
 
     final_data = []
+    max_rows = 10
 
     for row in dataset:
         processed_by = row["processed_by"]
         print(processed_by)
         if args.model_name_or_path not in processed_by:
             final_data.append(row)
-        
-    print(len(final_data))
-    os.exit(1)
+        if len(final_data) > max_rows:
+            break
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
