@@ -69,7 +69,6 @@ def main(args):
 
     prompts = []
     pending_data = []
-    uuid = []
     for row in tqdm(final_data):
 
         prompt = row["prompt"]
@@ -91,7 +90,7 @@ def main(args):
             add_generation_prompt=True
         )
         prompts.append(text)
-        pending_data.append(row["uuid"])
+        pending_data.append(row)
 
     outputs = eval_hf_model(args, model, tokenizer, prompts)
 
@@ -100,7 +99,7 @@ def main(args):
         print("======")
         print("prompt", prompts[idx], "text", text)
 
-        uuid = uuid[idx]
+        uuid = final_data[idx]["uuid"]
         pending_data[idx] = final_data[idx]
         pending_data[idx]["processed_count"] += 1
         processed_by = pending_data[idx]["processed_by"]
