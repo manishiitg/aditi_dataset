@@ -108,7 +108,7 @@ def main(args):
         pending_data[idx]["processed_count"] += 1
         processed_by = pending_data[idx]["processed_by"]
         processed_by[args.model_name_or_path] = True
-        pending_data[idx]["ratings"][args.model_name_or_path] = text
+        pending_data[idx]["responses"][args.model_name_or_path] = text
         uuid_row_map[uuid] = pending_data[idx]
 
     existing_data = []
@@ -117,10 +117,10 @@ def main(args):
         uuid = row["uuid"]
         if uuid in uuid_row_map:
             processed_row = uuid_row_map[uuid]
-            # if len(processed_row["ratings"]) >= 2:
+            # if len(processed_row["responses"]) >= 2:
             #     # "Qwen/Qwen1.5-72B-Chat-AWQ"
             #     # "manishiitg/open-aditi-hi-v3"
-            #     for k, v in processed_row["ratings"].items():
+            #     for k, v in processed_row["responses"].items():
             #         if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
             #             processed_row["chosen"] = v
             #         else:
