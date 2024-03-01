@@ -43,12 +43,15 @@ def main(args):
             if args.model_name_or_path not in processed_by:
                 final_data.append(row)
                 row["processed_by"][args.model_name_or_path] = True
+                push_data.append(row)
                 continue
             elif args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
                 final_data.append(row)
                 row["processed_by"][args.model_name_or_path] = True
+                push_data.append(row)
                 continue    
             row["processed_by"][args.model_name_or_path] = False
+            
 
         push_data.append(row)
     
