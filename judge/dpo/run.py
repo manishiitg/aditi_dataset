@@ -58,7 +58,7 @@ def main(args):
         print("Loading model and tokenizer vllm...")
         model = vllm.LLM(
             model=args.model_name_or_path,
-            tokenizer=args.tokenizer_name_or_path if args.tokenizer_name_or_path else args.model_name_or_path,
+            tokenizer=args.args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             max_model_len=4096,
