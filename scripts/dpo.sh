@@ -30,9 +30,6 @@ for model_name_or_path in "${model_names[@]}"; do
         awq_param=""
     fi
     
-    python3 -m judge.dpo.run \
-        --model_name_or_path $model_name_or_path \
-        --lang en \
-        $awq_param
+    python3 -m judge.dpo.run --model_name_or_path $model_name_or_path --lang en $awq_param
     
 done

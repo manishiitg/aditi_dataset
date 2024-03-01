@@ -52,7 +52,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=4096,
+            max_model_len=8196,
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -61,17 +61,29 @@ def main(args):
             tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=4096,
+            max_model_len=8196,
         )
+
+    default_system_en = "You are a helpful assistant."
+    default_system_hi = "आप एक सहायक सहायक हैं."
 
     prompts = []
     pending_data = []
     for row in tqdm(final_data):
 
         prompt = row["prompt"]
-        messages = [
+        if args.lang == "hi":
+            messages = [
+                {"role": "system", "content": default_system_hi}
+            ]
+        else:
+            messages = [
+                {"role": "user", "content": default_system_en}
+            ]
+
+        messages.append(
             {"role": "user", "content": prompt}
-        ]
+        )
         text = tokenizer.apply_chat_template(
             messages,
             tokenize=False,
