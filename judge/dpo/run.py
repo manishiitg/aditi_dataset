@@ -32,20 +32,22 @@ def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
     dataset = load_dataset(base_repo, split="train")
-    dataset = dataset.filter(lambda x: x["language"] == args.lang)
 
     final_data = []
     max_rows = 10
 
     push_data = []
     for row in dataset:
-        processed_by = row["processed_by"]
-        if args.model_name_or_path not in processed_by:
-            final_data.append(row)
-        if args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
-            final_data.append(row)
-            row["processed_by"][args.model_name_or_path] = True
-        else:
+        if row["language"] == args.lang:
+            processed_by = row["processed_by"]
+            if args.model_name_or_path not in processed_by:
+                final_data.append(row)
+                row["processed_by"][args.model_name_or_path] = True
+                continue
+            elif args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
+                final_data.append(row)
+                row["processed_by"][args.model_name_or_path] = True
+                continue    
             row["processed_by"][args.model_name_or_path] = False
 
         push_data.append(row)
