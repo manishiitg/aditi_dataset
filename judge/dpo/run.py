@@ -95,6 +95,7 @@ def main(args):
     outputs = eval_hf_model(args, model, tokenizer, prompts)
 
     for idx, text in enumerate(outputs):
+        print("======")
         print("prompt", prompts[idx], "text", text)
         pending_data[idx] = final_data[idx]
         processed_by = pending_data[idx]["processed_by"]
