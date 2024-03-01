@@ -112,7 +112,7 @@ def main(args):
     for row in dataset:
         uuid = row["uuid"]
         if uuid in uuid_row_map:
-            existing_data.append(uuid_row_map[row])
+            existing_data.append(uuid_row_map[uuid])
         else:
             existing_data.append(row)
 
