@@ -236,7 +236,6 @@ def eval_hf_model(args, model, tokenizer, prompts):
 
 def main(args):
 
-    
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
     prompts = []
@@ -244,9 +243,6 @@ def main(args):
 
         topic_number = random.randint(0, len(TOPICS)-1)
         topic_selected = TOPICS[topic_number]
-        system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
-        system_message_selected = SYSTEM_MESSAGES[system_message_number]
-        system_message_generation = PROMPT_1
 
         msg_list = []
         msg_system = {"role": "system", "content": PROMPT_1 +
@@ -284,10 +280,32 @@ def main(args):
 
     outputs = eval_hf_model(args, model, tokenizer, prompts)
 
+    prompts2 = []
     for idx, text in enumerate(outputs):
         print("======")
         print("prompt", prompts[idx], "text", text)
-        pass
+        system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
+        system_message_selected = SYSTEM_MESSAGES[system_message_number]
+        msg_list = []
+        msg_system = {"role": "system", "content": system_message_selected}
+        msg_list.append(msg_system)
+        msg_prompt = {"role": "user", "content": text}
+        msg_list.append(msg_prompt)
+        text = tokenizer.apply_chat_template(
+            msg_list,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        prompts2.append(text)
+
+    outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
+    for idx, text in enumerate(outputs):
+        print("======")
+
+        print("text", prompts2[idx])
+        print("text", text)
+        
+
 
 
 def process_and_update_dataset(new_data):
