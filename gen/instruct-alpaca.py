@@ -263,12 +263,12 @@ def main(args):
                 instructions = []
                 matches = text.split("\n")
                 for match in matches:
-                    if ":*" in match:
-                        ix = match.index(":*")
-                        match = match[ix+1:]
-                    else:
+                    if ":" in match:
                         ix = match.index(":")
                         match = match[ix+1:]
+                    else:
+                        print("skipping instruction", match)
+                        continue
                     instructions.append(match.strip())
 
                 topic_selected = topics_selected[idx]
