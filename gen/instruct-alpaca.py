@@ -9,6 +9,7 @@ from datasets import Dataset
 import torch
 import random
 import re
+from huggingface_hub import repo_exists
 
 
 SYSTEM_MESSAGES_ORCA = [
@@ -199,6 +200,10 @@ def main(args):
         )
 
     final_data = []
+    if repo_exists(base_repo):
+        existing_ds = load_dataset(base_repo, split="train")
+        for r in existing_ds:
+            final_data.append(r)
     topic_instruct_map = {}
     for loop in range(1):
 
@@ -278,6 +283,8 @@ def main(args):
                 if args.lang == "hinglish":
                     system_message_selected += "\n\n" + "Answer in hinglish only"
                 msg_list = []
+                print(system_message_selected)
+                break
                 msg_system = {"role": "system",
                               "content": system_message_selected}
                 msg_list.append(msg_system)
@@ -307,6 +314,7 @@ def main(args):
                 "answer": text,
                 "system_prompt": sys_prompt_selected[idx],
                 "language": args.lang,
+                "type" : "alpaca",
             })
 
         dataset = process_and_update_dataset(final_data)
