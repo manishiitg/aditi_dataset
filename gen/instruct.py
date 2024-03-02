@@ -257,10 +257,10 @@ def main(args):
         )
 
     final_data = []
-    if repo_exists(base_repo):
-        existing_ds = load_dataset(base_repo, split="train")
-        for r in existing_ds:
-            final_data.append(r)
+    # if repo_exists(base_repo):
+    #     existing_ds = load_dataset(base_repo, split="train")
+    #     for r in existing_ds:
+    #         final_data.append(r)
 
     languages = ["hinglish", "hindi", "english"]
     for lang in languages:
