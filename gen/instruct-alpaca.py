@@ -21,12 +21,10 @@ SYSTEM_MESSAGES_ORCA = [
     "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
     "You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. Think like you are answering to a five year old.",
-    "Explain how you used the definition to come up with the answer.",
     "You are an AI assistant. You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. You might need to use additional knowledge to answer the question.",
     "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
     "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
     "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
-    "You are an AI assistant, who knows every language and how to translate one language to another. Given a task, you explain in simple steps what the task is asking, any guidelines that it provides. You solve the task and show how you used the guidelines to solve the task.",
     "Given a definition of a task and a sample input, break the definition into small parts. Each of those parts will have some instruction. Explain their meaning by showing an example that meets the criteria in the instruction. Use the following format:\n\nPart #: a key part of the definition.\nUsage: Sample response that meets the criteria from the key part. Explain why you think it meets the criteria.",
     "You are an AI assistant that helps people find information.",
 ]
@@ -177,7 +175,6 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
-
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -204,121 +201,122 @@ def main(args):
         existing_ds = load_dataset(base_repo, split="train")
         for r in existing_ds:
             final_data.append(r)
-    topic_instruct_map = {}
-    for loop in range(1):
 
-        prompts = []
-        topics_selected = []
-        for idx in tqdm(range(1)):
+    languages = ["hindi", "english", "hinglish"]
+    for lang in languages:
+        args.lang = lang
+        topic_instruct_map = {}
+        for loop in range(1):
 
-            topic_number = random.randint(0, len(TOPICS)-1)
-            topic_selected = TOPICS[topic_number]
+            prompts = []
+            topics_selected = []
+            for idx in tqdm(range(1)):
 
-            msg_list = []
-            SYSTEM_PROMPT = PROMPT_2
+                topic_number = random.randint(0, len(TOPICS)-1)
+                topic_selected = TOPICS[topic_number]
 
-            if args.lang == "hindi":
-                SYSTEM_PROMPT = PROMPT_3
-
-            if args.lang == "hinglish":
-                SYSTEM_PROMPT = PROMPT_4
-
-            msg_system = {"role": "system", "content": SYSTEM_PROMPT}
-            msg_list.append(msg_system)
-
-            user = f"SUBJECT_AREA: {topic_selected}"
-
-            if topic_selected in topic_instruct_map:
-                existing_instruction = topic_instruct_map[topic_selected]
-                user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
-
-            msg_prompt = {"role": "user",
-                          "content": user}
-            msg_list.append(msg_prompt)
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts.append(text)
-            topics_selected.append(topic_selected)
-
-        outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
-
-        prompts2 = []
-        topics_selected2 = []
-        sys_prompt_selected = []
-        question2 = []
-        for idx, text in enumerate(outputs):
-            print("======")
-            print("prompt", prompts[idx], "text", text)
-
-            # Define the regex pattern to match the instructions
-            # instruction_pattern = r'\*([^*]*)\*'
-            # Find all matches for instructions
-            # instructions = re.findall(
-            #     instruction_pattern, text, re.DOTALL)
-
-            instructions = []
-            matches = text.split("\n")
-            for match in matches:
-                if ":*" in match:
-                    ix = match.index(":*")
-                    match = match[ix+1:]
-                else:
-                    ix = match.index(":")
-                    match = match[ix+1:]
-                instructions.append(match.strip())
-
-            topic_selected = topics_selected[idx]
-            topic_instruct_map[topic_selected] = text
-
-            for inst in instructions:
-                print("inst", inst)
-                system_message_number = random.randint(
-                    0, len(SYSTEM_MESSAGES)-1)
-                system_message_selected = SYSTEM_MESSAGES[system_message_number]
-                if args.lang == "hindi":
-                    system_message_selected += "\n\n" + "Answer in hindi only"
-                if args.lang == "hinglish":
-                    system_message_selected += "\n\n" + "Answer in hinglish only"
                 msg_list = []
-                print(system_message_selected)
-                break
-                msg_system = {"role": "system",
-                              "content": system_message_selected}
+                SYSTEM_PROMPT = PROMPT_2
+
+                if args.lang == "hindi":
+                    SYSTEM_PROMPT = PROMPT_3
+
+                if args.lang == "hinglish":
+                    SYSTEM_PROMPT = PROMPT_4
+
+                msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
-                msg_prompt = {"role": "user", "content": inst}
+
+                user = f"SUBJECT_AREA: {topic_selected}"
+
+                if topic_selected in topic_instruct_map:
+                    existing_instruction = topic_instruct_map[topic_selected]
+                    user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
+
+                msg_prompt = {"role": "user",
+                              "content": user}
                 msg_list.append(msg_prompt)
                 text = tokenizer.apply_chat_template(
                     msg_list,
                     tokenize=False,
                     add_generation_prompt=True
                 )
-                prompts2.append(text)
-                topics_selected2.append(topic_selected)
-                sys_prompt_selected.append(system_message_selected)
-                question2.append(inst)
+                prompts.append(text)
+                topics_selected.append(topic_selected)
 
-        
-        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-        for idx, text in enumerate(outputs2):
-            print("======")
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
 
-            print("topic selected", topics_selected2[idx])
-            print("text", question2[idx])
-            print("text", text)
-            final_data.append({
-                "topic": topics_selected2[idx],
-                "question": question2[idx],
-                "answer": text,
-                "system_prompt": sys_prompt_selected[idx],
-                "language": args.lang,
-                "type" : "alpaca",
-            })
+            prompts2 = []
+            topics_selected2 = []
+            sys_prompt_selected = []
+            question2 = []
+            for idx, text in enumerate(outputs):
+                print("======")
+                print("prompt", prompts[idx], "text", text)
 
-        dataset = process_and_update_dataset(final_data)
-        dataset.push_to_hub(base_repo, private=True)
+                # Define the regex pattern to match the instructions
+                # instruction_pattern = r'\*([^*]*)\*'
+                # Find all matches for instructions
+                # instructions = re.findall(
+                #     instruction_pattern, text, re.DOTALL)
+
+                instructions = []
+                matches = text.split("\n")
+                for match in matches:
+                    if ":*" in match:
+                        ix = match.index(":*")
+                        match = match[ix+1:]
+                    else:
+                        ix = match.index(":")
+                        match = match[ix+1:]
+                    instructions.append(match.strip())
+
+                topic_selected = topics_selected[idx]
+                topic_instruct_map[topic_selected] = text
+
+                for inst in instructions:
+                    print("inst", inst)
+                    system_message_number = random.randint(
+                        0, len(SYSTEM_MESSAGES)-1)
+                    system_message_selected = SYSTEM_MESSAGES[system_message_number]
+                    if args.lang == "hindi":
+                        system_message_selected += "\n\nAnswer in hindi only"
+                    if args.lang == "hinglish":
+                        system_message_selected += "\n\nAnswer in hinglish only"
+                    msg_list = []
+                    msg_system = {"role": "system",
+                                  "content": system_message_selected}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": inst}
+                    msg_list.append(msg_prompt)
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+                    prompts2.append(text)
+                    topics_selected2.append(topic_selected)
+                    sys_prompt_selected.append(system_message_selected)
+                    question2.append(inst)
+
+            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+            for idx, text in enumerate(outputs2):
+                print("======")
+
+                print("topic selected", topics_selected2[idx])
+                print("text", question2[idx])
+                print("text", text)
+                final_data.append({
+                    "topic": topics_selected2[idx],
+                    "question": question2[idx],
+                    "answer": text,
+                    "system_prompt": sys_prompt_selected[idx],
+                    "language": args.lang,
+                    "type": "alpaca",
+                })
+
+            dataset = process_and_update_dataset(final_data)
+            dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
