@@ -184,7 +184,7 @@ def main(args):
 
     prompts = []
     topics_selected = []
-    for idx in tqdm(range(50)):
+    for idx in tqdm(range(1)):
 
         topic_number = random.randint(0, len(TOPICS)-1)
         topic_selected = TOPICS[topic_number]
@@ -223,7 +223,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196,
+            max_model_len=8196*2,
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -232,7 +232,7 @@ def main(args):
             tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196,
+            max_model_len=8196*2,
         )
 
     outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
