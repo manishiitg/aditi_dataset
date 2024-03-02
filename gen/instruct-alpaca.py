@@ -202,7 +202,7 @@ def main(args):
         for r in existing_ds:
             final_data.append(r)
 
-    languages = ["hindi", "english", "hinglish"]
+    languages = ["hinglish","hindi", "english"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -244,7 +244,7 @@ def main(args):
                 prompts.append(text)
                 topics_selected.append(topic_selected)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             prompts2 = []
             topics_selected2 = []
