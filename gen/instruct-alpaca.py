@@ -271,9 +271,9 @@ def main(args):
             system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
             system_message_selected = SYSTEM_MESSAGES[system_message_number]
             if args.lang == "hindi":
-                system_message_selected + "\n\n" + "Answer in hindi only"
+                system_message_selected =+ "\n\n" + "Answer in hindi only"
             if args.lang == "hinglish":
-                system_message_selected + "\n\n" + "Answer in hinglish only"
+                system_message_selected =+ "\n\n" + "Answer in hinglish only"
             msg_list = []
             msg_system = {"role": "system", "content": system_message_selected}
             msg_list.append(msg_system)
