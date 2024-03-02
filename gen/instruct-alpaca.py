@@ -222,17 +222,20 @@ def main(args):
                 if args.lang == "hinglish":
                     SYSTEM_PROMPT = PROMPT_4
 
-                msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
-
                 user = f"SUBJECT_AREA: {topic_selected}"
 
                 if topic_selected in topic_instruct_map:
                     existing_instruction = topic_instruct_map[topic_selected]
                     user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
 
-                msg_prompt = {"role": "user",
-                              "content": user}
+                if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
+                    msg_prompt = {"role": "user",
+                                  "content": SYSTEM_PROMPT + "\n\n" + user}
+                else:
+                    msg_system = {"role": "system", "content": SYSTEM_PROMPT}
+                    msg_prompt = {"role": "user",
+                                  "content": user}
                 msg_list.append(msg_prompt)
                 text = tokenizer.apply_chat_template(
                     msg_list,
@@ -291,11 +294,6 @@ def main(args):
                         msg_prompt = {
                             "role": "user", "content": system_message_selected + "\n\n" + inst}
                         msg_list.append(msg_prompt)
-                        text = tokenizer.apply_chat_template(
-                            msg_list,
-                            tokenize=False,
-                            add_generation_prompt=True
-                        )
                     else:
                         msg_list = []
                         msg_system = {"role": "system",
@@ -303,11 +301,12 @@ def main(args):
                         msg_list.append(msg_system)
                         msg_prompt = {"role": "user", "content": inst}
                         msg_list.append(msg_prompt)
-                        text = tokenizer.apply_chat_template(
-                            msg_list,
-                            tokenize=False,
-                            add_generation_prompt=True
-                        )
+
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
                     print(text)
                     prompts2.append(text)
                     topics_selected2.append(topic_selected)
