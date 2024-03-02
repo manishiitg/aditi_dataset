@@ -103,10 +103,9 @@ Here are the requirements:
 
 List of 50 tasks:
 
-Example output format in markdown
-
-*Instruction:* <instruction>
-        """
+1. Instruction: <instruction>
+2. Instruction: <instruction>
+"""
 
 PROMPT_3 = """
 You are asked to come up with a set of 50 diverse task instructions. 
@@ -127,10 +126,9 @@ Here are the requirements:
 
 List of 50 tasks:
 
-Example output format in markdown
-
-*निर्देश:* <instruction_in_hindi>
-            """
+1. निर्देश: <instruction_in_hindi>
+2. निर्देश: <instruction_in_hindi>
+"""
 
 PROMPT_4 = """
 You are asked to come up with a set of 50 diverse task instructions. 
@@ -151,9 +149,8 @@ Here are the requirements:
 
 List of 50 tasks:
 
-Example output format in markdown
-
-*Instruction:* <instruction>
+1. Instruction: <instruction_in_hinglish>
+2. Instruction: <instruction_in_hinglish>
 """
 
 
