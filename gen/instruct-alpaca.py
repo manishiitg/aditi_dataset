@@ -189,6 +189,7 @@ def main(args):
             instruction_pattern, text, re.DOTALL)
 
         for inst in instructions:
+            print("inst", inst)
             system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
             system_message_selected = SYSTEM_MESSAGES[system_message_number]
             msg_list = []
