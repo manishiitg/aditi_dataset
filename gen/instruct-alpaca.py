@@ -28,6 +28,7 @@ SYSTEM_MESSAGES_ORCA = [
 ]
 
 TOPICS = [
+    "Cricket - players, matches, history, etc.",
     "Science - physics, chemistry, biology, astronomy, etc.",
     "Mathematics - algebra, geometry, calculus, statistics, etc.",
     "Technology - computers, engineering, AI, robotics, etc.",
@@ -309,7 +310,6 @@ def main(args):
                         tokenize=False,
                         add_generation_prompt=True
                     )
-                    print(text)
                     prompts2.append(text)
                     topics_selected2.append(topic_selected)
                     sys_prompt_selected.append(system_message_selected)
