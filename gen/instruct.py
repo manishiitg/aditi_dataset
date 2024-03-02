@@ -271,17 +271,17 @@ def main(args):
             prompts = []
             topics_selected = []
             questions = []
-            for xx in range(10):
+            for xx in range(1):
                 random.shuffle(TOPICS)
                 for topic_selected in TOPICS:
                     msg_list = []
                     sys = PROMPT_1 + "\n Question should only be related to india or indian context."
 
                     if args.lang == "hindi":
-                        sys += "\nGenerate questions only in hindi language"
-
+                        sys += "\n Generate questions only in hindi language"
+ 
                     if args.lang == "hinglish":
-                        sys += "\nGenerate questions only in hinglish language"
+                        sys += "\n Generate questions only in hinglish language"
 
                     msg_system = {"role": "system", "content": sys}
 
@@ -293,7 +293,7 @@ def main(args):
                     msg_list.append(msg_system)
                     msg_prompt = {"role": "user", "content": user}
                     msg_list.append(msg_prompt)
-                    
+
                     text = tokenizer.apply_chat_template(
                         msg_list,
                         tokenize=False,
@@ -307,6 +307,8 @@ def main(args):
             prompts2 = []
             sys_prompt_selected = []
             for idx, text in enumerate(outputs):
+                questions.append(text)
+                print("question", text)
                 system_message_number = random.randint(
                     0, len(SYSTEM_MESSAGES)-1)
                 system_message_selected = SYSTEM_MESSAGES[system_message_number]
@@ -317,11 +319,10 @@ def main(args):
                     text += "\n Reply on in hinglish language"
                 msg_list = []
                 msg_system = {"role": "system",
-                                "content": system_message_selected}
+                              "content": system_message_selected}
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user", "content": text}
-                questions.append(text)
-                print("question", text)
+
                 msg_list.append(msg_prompt)
                 text = tokenizer.apply_chat_template(
                     msg_list,
