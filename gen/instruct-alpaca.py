@@ -76,7 +76,7 @@ TOPICS = [
     "Gender & Sexuality - LGBTQ issues, feminism, roles, relationships, equality",
     # "Employment - careers, human resources, resumes, workplace culture, unions",
     "Crime & Justice - laws, law enforcement, courts, prisons, investigations",
-    "Social Issues - poverty, homelessness, human rights, community service",
+    # "Social Issues - poverty, homelessness, human rights, community service",
     "Technology - computers, engineering, artificial intelligence, innovations",
     "Entertainment - movies, television, games, comedy, performing arts",
 ]
@@ -209,6 +209,7 @@ def main(args):
 
             prompts = []
             topics_selected = []
+            random.shuffle(TOPICS)
             for topic_selected in TOPICS:
 
                 # topic_number = random.randint(0, len(TOPICS)-1)
@@ -273,7 +274,7 @@ def main(args):
                     else:
                         print("skipping instruction", match)
                         continue
-
+                    match = match.strip()
                     if match.startswith('"'):
                         match = match[0:]
                     if match.endswith('"'):

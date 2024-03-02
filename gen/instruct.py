@@ -7,6 +7,7 @@ from transformers import AutoTokenizer
 import vllm
 from datasets import Dataset
 import torch
+from huggingface_hub import repo_exists
 import random
 
 
@@ -137,14 +138,14 @@ SYSTEM_MESSAGES_ORCA = [
     "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
     "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. Think like you are answering to a five year old.",
-    "Explain how you used the definition to come up with the answer.",
-    "You are an AI assistant. You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. You might need to use additional knowledge to answer the question.",
+    # "You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. Think like you are answering to a five year old.",
+    # "Explain how you used the definition to come up with the answer.",
+    # "You are an AI assistant. You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. You might need to use additional knowledge to answer the question.",
     "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
     "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
     "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
     "You are an AI assistant, who knows every language and how to translate one language to another. Given a task, you explain in simple steps what the task is asking, any guidelines that it provides. You solve the task and show how you used the guidelines to solve the task.",
-    "Given a definition of a task and a sample input, break the definition into small parts. Each of those parts will have some instruction. Explain their meaning by showing an example that meets the criteria in the instruction. Use the following format:\n\nPart #: a key part of the definition.\nUsage: Sample response that meets the criteria from the key part. Explain why you think it meets the criteria.",
+    # "Given a definition of a task and a sample input, break the definition into small parts. Each of those parts will have some instruction. Explain their meaning by showing an example that meets the criteria in the instruction. Use the following format:\n\nPart #: a key part of the definition.\nUsage: Sample response that meets the criteria from the key part. Explain why you think it meets the criteria.",
     "You are an AI assistant that helps people find information.",
 ]
 
@@ -196,7 +197,7 @@ TOPICS = [
     "Gender & Sexuality - LGBTQ issues, feminism, roles, relationships, equality",
     # "Employment - careers, human resources, resumes, workplace culture, unions",
     "Crime & Justice - laws, law enforcement, courts, prisons, investigations",
-    "Social Issues - poverty, homelessness, human rights, community service",
+    # "Social Issues - poverty, homelessness, human rights, community service",
     "Technology - computers, engineering, artificial intelligence, innovations",
     "Entertainment - movies, television, games, comedy, performing arts",
 ]
@@ -210,6 +211,7 @@ code_data = False
 # else:
 SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA + SYSTEM_MESSAGES_TESS
 PROMPT_1 = """For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. The topic in the question should be important to the SUBJECT_AREA, with known-answers present. The generated question should be detailed, seek true nature of our universe from first principles, curiosity invoking, thought provoking, and also should be able to be answered by an intelligence like yourself. Make sure the question is sufficiently harder and multi-part, like a graduate level course question."""
+
 
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts):
@@ -232,28 +234,8 @@ def eval_hf_model(args, model, tokenizer, prompts):
 
 def main(args):
 
+    base_repo = "manishiitg/indic-synthetic-instruct"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-    
-    prompts = []
-    for idx in tqdm(range(20)):
-
-        topic_number = random.randint(0, len(TOPICS)-1)
-        topic_selected = TOPICS[topic_number]
-
-        msg_list = []
-        msg_system = {"role": "system", "content": PROMPT_1 +
-                      "\n Question should only be related to india or indian context."}
-        msg_list.append(msg_system)
-        msg_prompt = {"role": "user",
-                      "content": f"SUBJECT_AREA: {topic_selected}"}
-        msg_list.append(msg_prompt)
-        text = tokenizer.apply_chat_template(
-            msg_list,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        prompts.append(text)
-
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
         model = vllm.LLM(
@@ -262,7 +244,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196,
+            max_model_len=8196*2,
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -271,37 +253,90 @@ def main(args):
             tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196,
+            max_model_len=8196*2,
         )
 
-    outputs = eval_hf_model(args, model, tokenizer, prompts)
+    final_data = []
+    if repo_exists(base_repo):
+        existing_ds = load_dataset(base_repo, split="train")
+        for r in existing_ds:
+            final_data.append(r)
 
-    prompts2 = []
-    for idx, text in enumerate(outputs):
-        print("======")
-        print("prompt", prompts[idx], "text", text)
-        system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
-        system_message_selected = SYSTEM_MESSAGES[system_message_number]
-        msg_list = []
-        msg_system = {"role": "system", "content": system_message_selected}
-        msg_list.append(msg_system)
-        msg_prompt = {"role": "user", "content": text}
-        msg_list.append(msg_prompt)
-        text = tokenizer.apply_chat_template(
-            msg_list,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        prompts2.append(text)
+    languages = ["hinglish", "hindi", "english"]
+    for lang in languages:
+        args.lang = lang
+        topic_instruct_map = {}
+        for loop in range(10):
 
-    outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
-    for idx, text in enumerate(outputs2):
-        print("======")
+            prompts = []
+            topics_selected = []
+            random.shuffle(TOPICS)
+            for topic_selected in TOPICS:
 
-        print("text", prompts2[idx])
-        print("text", text)
-        
+                prompts = []
+                for topic_selected in TOPICS:
+                    msg_list = []
+                    sys = PROMPT_1 + "\n Question should only be related to india or indian context."
 
+                    if args.lang == "hindi":
+                        sys += "\nGenerate questions only in hindi language"
+
+                    if args.lang == "hinglish":
+                        sys += "\nGenerate questions only in hinglish language"
+
+                    msg_system = {"role": "system", "content": sys}
+
+                    user = f"SUBJECT_AREA: {topic_selected}"
+                    if topic_selected in topic_instruct_map:
+                        existing_instruction = topic_instruct_map[topic_selected]
+                        user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
+
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": user}
+                    msg_list.append(msg_prompt)
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+                    prompts.append(text)
+                    topics_selected.append(topic_selected)
+
+                outputs = eval_hf_model(args, model, tokenizer, prompts)
+
+                prompts2 = []
+                sys_prompt_selected = []
+                for idx, text in enumerate(outputs):
+                    print("======")
+                    print("prompt", prompts[idx], "text", text)
+                    system_message_number = random.randint(
+                        0, len(SYSTEM_MESSAGES)-1)
+                    system_message_selected = SYSTEM_MESSAGES[system_message_number]
+                    if args.lang == "hindi":
+                        system_message_selected += "\nGenerate questions only in hindi language"
+
+                    if args.lang == "hinglish":
+                        system_message_selected += "\nGenerate questions only in hinglish language"
+                    msg_list = []
+                    msg_system = {"role": "system",
+                                  "content": system_message_selected}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": text}
+                    msg_list.append(msg_prompt)
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+                    sys_prompt_selected.append(system_message_selected)
+                    prompts2.append(text)
+
+                outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
+                for idx, text in enumerate(outputs2):
+                    print("======")
+
+                    print("text", prompts2[idx])
+                    print("text", text)
 
 
 def process_and_update_dataset(new_data):
