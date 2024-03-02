@@ -266,15 +266,13 @@ def main(args):
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
-        for loop in range(100):
+        for loop in range(10):
 
             prompts = []
             topics_selected = []
             questions = []
-            random.shuffle(TOPICS)
-            for topic_selected in TOPICS:
-
-                prompts = []
+            for xx in range(10):
+                random.shuffle(TOPICS)
                 for topic_selected in TOPICS:
                     msg_list = []
                     sys = PROMPT_1 + "\n Question should only be related to india or indian context."
@@ -304,53 +302,53 @@ def main(args):
                     prompts.append(text)
                     topics_selected.append(topic_selected)
 
-                outputs = eval_hf_model(args, model, tokenizer, prompts)
+            outputs = eval_hf_model(args, model, tokenizer, prompts)
 
-                prompts2 = []
-                sys_prompt_selected = []
-                for idx, text in enumerate(outputs):
-                    system_message_number = random.randint(
-                        0, len(SYSTEM_MESSAGES)-1)
-                    system_message_selected = SYSTEM_MESSAGES[system_message_number]
-                    if args.lang == "hindi":
-                        system_message_selected += "\n Reply only in hindi language"
+            prompts2 = []
+            sys_prompt_selected = []
+            for idx, text in enumerate(outputs):
+                system_message_number = random.randint(
+                    0, len(SYSTEM_MESSAGES)-1)
+                system_message_selected = SYSTEM_MESSAGES[system_message_number]
+                if args.lang == "hindi":
+                    system_message_selected += "\n Reply only in hindi language"
 
-                    if args.lang == "hinglish":
-                        system_message_selected += "\n Reply on in hinglish language"
-                    msg_list = []
-                    msg_system = {"role": "system",
-                                  "content": system_message_selected}
-                    msg_list.append(msg_system)
-                    msg_prompt = {"role": "user", "content": text}
-                    questions.append(text)
-                    msg_list.append(msg_prompt)
-                    text = tokenizer.apply_chat_template(
-                        msg_list,
-                        tokenize=False,
-                        add_generation_prompt=True
-                    )
-                    sys_prompt_selected.append(system_message_selected)
-                    prompts2.append(text)
+                if args.lang == "hinglish":
+                    system_message_selected += "\n Reply on in hinglish language"
+                msg_list = []
+                msg_system = {"role": "system",
+                                "content": system_message_selected}
+                msg_list.append(msg_system)
+                msg_prompt = {"role": "user", "content": text}
+                questions.append(text)
+                msg_list.append(msg_prompt)
+                text = tokenizer.apply_chat_template(
+                    msg_list,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                sys_prompt_selected.append(system_message_selected)
+                prompts2.append(text)
 
-                outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
-                for idx, text in enumerate(outputs2):
-                    print("======")
+            outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
+            for idx, text in enumerate(outputs2):
+                print("======")
 
-                    print("topic selected", topics_selected[idx])
-                    print("question", questions[idx])
-                    print("text", text)
-                    final_data.append({
-                        "topic": topics_selected[idx],
-                        "question": questions[idx],
-                        "answer": text,
-                        "system_prompt": sys_prompt_selected[idx],
-                        "language": args.lang,
-                        "type": "reasoning",
-                        "model": args.model_name_or_path,
-                    })
+                print("topic selected", topics_selected[idx])
+                print("question", questions[idx])
+                print("text", text)
+                final_data.append({
+                    "topic": topics_selected[idx],
+                    "question": questions[idx],
+                    "answer": text,
+                    "system_prompt": sys_prompt_selected[idx],
+                    "language": args.lang,
+                    "type": "reasoning",
+                    "model": args.model_name_or_path,
+                })
 
-                dataset = process_and_update_dataset(final_data)
-                dataset.push_to_hub(base_repo, private=True)
+        dataset = process_and_update_dataset(final_data)
+        dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
