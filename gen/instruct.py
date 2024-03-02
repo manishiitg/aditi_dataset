@@ -321,6 +321,7 @@ def main(args):
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user", "content": text}
                 questions.append(text)
+                print("question", text)
                 msg_list.append(msg_prompt)
                 text = tokenizer.apply_chat_template(
                     msg_list,
@@ -329,6 +330,8 @@ def main(args):
                 )
                 sys_prompt_selected.append(system_message_selected)
                 prompts2.append(text)
+
+            os.exit(1)
 
             outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
             for idx, text in enumerate(outputs2):
