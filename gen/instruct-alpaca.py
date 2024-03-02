@@ -222,7 +222,6 @@ def main(args):
                 if args.lang == "hinglish":
                     SYSTEM_PROMPT = PROMPT_4
 
-                msg_list.append(msg_system)
                 user = f"SUBJECT_AREA: {topic_selected}"
 
                 if topic_selected in topic_instruct_map:
@@ -232,11 +231,14 @@ def main(args):
                 if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
                     msg_prompt = {"role": "user",
                                   "content": SYSTEM_PROMPT + "\n\n" + user}
+                    msg_list.append(msg_prompt)
                 else:
                     msg_system = {"role": "system", "content": SYSTEM_PROMPT}
+                    msg_list.append(msg_system)
                     msg_prompt = {"role": "user",
                                   "content": user}
-                msg_list.append(msg_prompt)
+                    msg_list.append(msg_prompt)
+
                 text = tokenizer.apply_chat_template(
                     msg_list,
                     tokenize=False,
