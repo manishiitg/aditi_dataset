@@ -210,8 +210,47 @@ code_data = False
 
 # else:
 SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA # + SYSTEM_MESSAGES_TESS
-PROMPT_1 = """For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. The topic in the question should be important to the SUBJECT_AREA, with known-answers present. The generated question should be detailed, seek true nature of our universe from first principles, curiosity invoking, thought provoking, and also should be able to be answered by an intelligence like yourself. Make sure the question is sufficiently harder and multi-part, like a graduate level course question."""
+PROMPT_1_EN = """
+You are asked to come up with a set of 20 diverse task instructions. 
 
+For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. 
+The topic in the question should be important to the SUBJECT_AREA, with known-answers present. 
+The generated question should be detailed, seek true nature of our universe from first principles, curiosity invoking, thought provoking, and also should be able to be answered by an intelligence like yourself. 
+Make sure the question is sufficiently harder and multi-part, like a graduate level course question.
+Make sure every instruction captures indian context.
+
+List of 20 tasks:
+1. <instruction>
+2. <instruction>
+"""
+
+PROMPT_1_HING = """
+You are asked to come up with a set of 20 diverse task instructions. 
+
+For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. 
+The topic in the question should be important to the SUBJECT_AREA, with known-answers present. 
+The generated question should be detailed, seek true nature of our universe from first principles, curiosity invoking, thought provoking, and also should be able to be answered by an intelligence like yourself. 
+Make sure the question is sufficiently harder and multi-part, like a graduate level course question.
+Make sure every instruction captures indian context and is in in hinglish language only. 
+
+List of 20 tasks:
+1. <instruction_in_hinglish>
+2. <instruction_in_hinglish>
+"""
+
+PROMPT_1_HI = """
+You are asked to come up with a set of 20 diverse task instructions. 
+
+For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. 
+The topic in the question should be important to the SUBJECT_AREA, with known-answers present. 
+The generated question should be detailed, seek true nature of our universe from first principles, curiosity invoking, thought provoking, and also should be able to be answered by an intelligence like yourself. 
+Make sure the question is sufficiently harder and multi-part, like a graduate level course question.
+Make sure every instruction captures indian context and is in in hindi language only. 
+
+List of 20 tasks:
+1. <instruction>
+2. <instruction>
+"""
 
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts):
@@ -275,13 +314,13 @@ def main(args):
                 random.shuffle(TOPICS)
                 for topic_selected in TOPICS:
                     msg_list = []
-                    sys = PROMPT_1 + "\n Question should only be related to india or indian context."
+                    sys = PROMPT_1_EN
 
                     if args.lang == "hindi":
-                        sys += "\n Generate questions only in hindi language"
+                        sys = PROMPT_1_HI
  
                     if args.lang == "hinglish":
-                        sys += "\n Generate questions only in hinglish language"
+                        sys = PROMPT_1_HING
 
                     msg_system = {"role": "system", "content": sys}
 
