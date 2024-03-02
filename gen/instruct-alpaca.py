@@ -204,11 +204,11 @@ def main(args):
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
-        for loop in range(1):
+        for loop in range(10):
 
             prompts = []
             topics_selected = []
-            for idx in tqdm(range(1)):
+            for idx in tqdm(range(100)):
 
                 topic_number = random.randint(0, len(TOPICS)-1)
                 topic_selected = TOPICS[topic_number]
@@ -329,6 +329,7 @@ def main(args):
                     "system_prompt": sys_prompt_selected[idx],
                     "language": args.lang,
                     "type": "alpaca",
+                    "model": args.model_name_or_path,
                 })
 
             dataset = process_and_update_dataset(final_data)
