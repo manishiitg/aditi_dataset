@@ -307,8 +307,6 @@ def main(args):
                 prompts2 = []
                 sys_prompt_selected = []
                 for idx, text in enumerate(outputs):
-                    print("======")
-                    print("prompt", prompts[idx], "text", text)
                     system_message_number = random.randint(
                         0, len(SYSTEM_MESSAGES)-1)
                     system_message_selected = SYSTEM_MESSAGES[system_message_number]
