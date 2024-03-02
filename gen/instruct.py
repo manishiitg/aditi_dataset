@@ -337,7 +337,7 @@ def main(args):
                     print("======")
 
                     print("topic selected", topics_selected[idx])
-                    print("question", prompts[idx])
+                    print("question", questions[idx])
                     print("text", text)
                     final_data.append({
                         "topic": topics_selected[idx],
