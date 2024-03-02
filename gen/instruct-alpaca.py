@@ -178,9 +178,6 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    print(args.lang)
-    os.exit(1)
-
     base_repo = "manishiitg/indic-synthetic-instruct"
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
