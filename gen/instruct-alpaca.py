@@ -191,7 +191,7 @@ def main(args):
 
         msg_list = []
         SYSTEM_PROMPT = PROMPT_2
-        
+
         if args.lang == "hi":
             SYSTEM_PROMPT = PROMPT_4
 
@@ -256,26 +256,28 @@ def main(args):
 
         for inst in instructions:
             print("inst", inst)
-            # system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
-            # system_message_selected = SYSTEM_MESSAGES[system_message_number]
-            # msg_list = []
-            # msg_system = {"role": "system", "content": system_message_selected}
-            # msg_list.append(msg_system)
-            # msg_prompt = {"role": "user", "content": inst}
-            # msg_list.append(msg_prompt)
-            # text = tokenizer.apply_chat_template(
-            #     msg_list,
-            #     tokenize=False,
-            #     add_generation_prompt=True
-            # )
-            # prompts2.append(text)
+            system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
+            system_message_selected = SYSTEM_MESSAGES[system_message_number]
+            if args.lang == "hi":
+                system_message_selected + "\n\n" + "Answer in hinglish only"
+            msg_list = []
+            msg_system = {"role": "system", "content": system_message_selected}
+            msg_list.append(msg_system)
+            msg_prompt = {"role": "user", "content": inst}
+            msg_list.append(msg_prompt)
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts2.append(text)
 
-    # outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-    # for idx, text in enumerate(outputs2):
-    #     print("======")
+    outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+    for idx, text in enumerate(outputs2):
+        print("======")
 
-    #     print("text", prompts2[idx])
-    #     print("text", text)
+        print("text", prompts2[idx])
+        print("text", text)
 
 
 def process_and_update_dataset(new_data):
