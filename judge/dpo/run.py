@@ -37,6 +37,7 @@ def main(args):
 
     final_data = []
     max_rows = 1000
+    # required because will be running in a distributed way
 
     push_data = []
     for row in dataset:
@@ -51,10 +52,14 @@ def main(args):
 
             if args.model_name_or_path not in row["processed_by"]:
                 row["processed_by"][args.model_name_or_path] = False
+            else:
+                if row["responses"][args.model_name_or_path]:
+                    row["processed_by"][args.model_name_or_path] = True
+                else:
+                    row["processed_by"][args.model_name_or_path] = False
 
         push_data.append(row)
 
-    # required because will be running in a distributed way
     dataset = process_and_update_dataset(push_data)
     dataset.push_to_hub(base_repo, private=True)
 
