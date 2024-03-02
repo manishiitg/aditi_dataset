@@ -313,10 +313,10 @@ def main(args):
                         0, len(SYSTEM_MESSAGES)-1)
                     system_message_selected = SYSTEM_MESSAGES[system_message_number]
                     if args.lang == "hindi":
-                        system_message_selected += "\Reply only in hindi language"
+                        system_message_selected += "\n Reply only in hindi language"
 
                     if args.lang == "hinglish":
-                        system_message_selected += "\Reply on in hinglish language"
+                        system_message_selected += "\n Reply on in hinglish language"
                     msg_list = []
                     msg_system = {"role": "system",
                                   "content": system_message_selected}
