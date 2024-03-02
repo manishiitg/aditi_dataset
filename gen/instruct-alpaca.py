@@ -102,8 +102,8 @@ Here are the requirements:
 
 List of 50 tasks:
 
-1. Instruction: <instruction>
-2. Instruction: <instruction>
+1. <instruction>
+2. <instruction>
 """
 
 PROMPT_3 = """
@@ -125,8 +125,8 @@ Here are the requirements:
 
 List of 50 tasks:
 
-1. निर्देश: <instruction_in_hindi>
-2. निर्देश: <instruction_in_hindi>
+1. <instruction_in_hindi>
+2. <instruction_in_hindi>
 """
 
 PROMPT_4 = """
@@ -148,8 +148,8 @@ Here are the requirements:
 
 List of 50 tasks:
 
-1. Instruction: <instruction_in_hinglish>
-2. Instruction: <instruction_in_hinglish>
+1. <instruction_in_hinglish>
+2. <instruction_in_hinglish>
 """
 
 
@@ -202,7 +202,7 @@ def main(args):
         for r in existing_ds:
             final_data.append(r)
 
-    languages = ["hinglish","hindi", "english"]
+    languages = ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -263,8 +263,8 @@ def main(args):
                 instructions = []
                 matches = text.split("\n")
                 for match in matches:
-                    if ":" in match:
-                        ix = match.index(":")
+                    if "." in match:
+                        ix = match.index(".")
                         match = match[ix+1:]
                     else:
                         print("skipping instruction", match)
