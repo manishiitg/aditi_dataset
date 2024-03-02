@@ -178,44 +178,6 @@ def main(args):
     base_repo = "manishiitg/indic-synthetic-instruct"
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-    topic_instruct_map = {}
-
-    prompts = []
-    topics_selected = []
-    for idx in tqdm(range(1)):
-
-        topic_number = random.randint(0, len(TOPICS)-1)
-        topic_selected = TOPICS[topic_number]
-
-        msg_list = []
-        SYSTEM_PROMPT = PROMPT_2
-
-        if args.lang == "hindi":
-            SYSTEM_PROMPT = PROMPT_3
-
-        if args.lang == "hinglish":
-            SYSTEM_PROMPT = PROMPT_4
-
-        msg_system = {"role": "system", "content": SYSTEM_PROMPT}
-        msg_list.append(msg_system)
-
-        user = f"SUBJECT_AREA: {topic_selected}"
-
-        if topic_selected in topic_instruct_map:
-            existing_instruction = topic_instruct_map[topic_selected]
-            user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
-
-        msg_prompt = {"role": "user",
-                      "content": user}
-        msg_list.append(msg_prompt)
-        text = tokenizer.apply_chat_template(
-            msg_list,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        prompts.append(text)
-        topics_selected.append(topic_selected)
-
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
         model = vllm.LLM(
@@ -236,77 +198,119 @@ def main(args):
             max_model_len=8196*2,
         )
 
-    outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
+    final_data = []
+    topic_instruct_map = {}
+    for loop in range(1):
 
-    prompts2 = []
-    topics_selected2 = []
-    sys_prompt_selected = []
-    question2 = []
-    for idx, text in enumerate(outputs):
-        print("======")
-        print("prompt", prompts[idx], "text", text)
+        prompts = []
+        topics_selected = []
+        for idx in tqdm(range(1)):
 
-        # Define the regex pattern to match the instructions
-        # instruction_pattern = r'\*([^*]*)\*'
-        # Find all matches for instructions
-        # instructions = re.findall(
-        #     instruction_pattern, text, re.DOTALL)
+            topic_number = random.randint(0, len(TOPICS)-1)
+            topic_selected = TOPICS[topic_number]
 
-        instructions = []
-        matches = text.split("\n")
-        for match in matches:
-            if ":*" in match:
-                ix = match.index(":*")
-                match = match[ix+1:]
-            else:
-                ix = match.index(":")
-                match = match[ix+1:]
-            instructions.append(match.strip())
-
-        topic_selected = topics_selected[idx]
-        topic_instruct_map[topic_selected] = text
-
-        for inst in instructions:
-            print("inst", inst)
-            system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
-            system_message_selected = SYSTEM_MESSAGES[system_message_number]
-            if args.lang == "hindi":
-                system_message_selected =+ "\n\n" + "Answer in hindi only"
-            if args.lang == "hinglish":
-                system_message_selected =+ "\n\n" + "Answer in hinglish only"
             msg_list = []
-            msg_system = {"role": "system", "content": system_message_selected}
+            SYSTEM_PROMPT = PROMPT_2
+
+            if args.lang == "hindi":
+                SYSTEM_PROMPT = PROMPT_3
+
+            if args.lang == "hinglish":
+                SYSTEM_PROMPT = PROMPT_4
+
+            msg_system = {"role": "system", "content": SYSTEM_PROMPT}
             msg_list.append(msg_system)
-            msg_prompt = {"role": "user", "content": inst}
+
+            user = f"SUBJECT_AREA: {topic_selected}"
+
+            if topic_selected in topic_instruct_map:
+                existing_instruction = topic_instruct_map[topic_selected]
+                user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
+
+            msg_prompt = {"role": "user",
+                          "content": user}
             msg_list.append(msg_prompt)
             text = tokenizer.apply_chat_template(
                 msg_list,
                 tokenize=False,
                 add_generation_prompt=True
             )
-            prompts2.append(text)
-            topics_selected2.append(topic_selected)
-            sys_prompt_selected.append(system_message_selected)
-            question2.append(inst)
+            prompts.append(text)
+            topics_selected.append(topic_selected)
 
-    final_data = []
-    outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-    for idx, text in enumerate(outputs2):
-        print("======")
+        outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
 
-        print("topic selected", topics_selected2[idx])
-        print("text", question2[idx])
-        print("text", text)
-        final_data.append({
-            "topic": topics_selected2[idx],
-            "question": question2[idx],
-            "answer": text,
-            "system_prompt": sys_prompt_selected[idx],
-            "language": args.lang,
-        })
+        prompts2 = []
+        topics_selected2 = []
+        sys_prompt_selected = []
+        question2 = []
+        for idx, text in enumerate(outputs):
+            print("======")
+            print("prompt", prompts[idx], "text", text)
 
-    dataset = process_and_update_dataset(final_data)
-    dataset.push_to_hub(base_repo, private=True)
+            # Define the regex pattern to match the instructions
+            # instruction_pattern = r'\*([^*]*)\*'
+            # Find all matches for instructions
+            # instructions = re.findall(
+            #     instruction_pattern, text, re.DOTALL)
+
+            instructions = []
+            matches = text.split("\n")
+            for match in matches:
+                if ":*" in match:
+                    ix = match.index(":*")
+                    match = match[ix+1:]
+                else:
+                    ix = match.index(":")
+                    match = match[ix+1:]
+                instructions.append(match.strip())
+
+            topic_selected = topics_selected[idx]
+            topic_instruct_map[topic_selected] = text
+
+            for inst in instructions:
+                print("inst", inst)
+                system_message_number = random.randint(
+                    0, len(SYSTEM_MESSAGES)-1)
+                system_message_selected = SYSTEM_MESSAGES[system_message_number]
+                if args.lang == "hindi":
+                    system_message_selected += "\n\n" + "Answer in hindi only"
+                if args.lang == "hinglish":
+                    system_message_selected += "\n\n" + "Answer in hinglish only"
+                msg_list = []
+                msg_system = {"role": "system",
+                              "content": system_message_selected}
+                msg_list.append(msg_system)
+                msg_prompt = {"role": "user", "content": inst}
+                msg_list.append(msg_prompt)
+                text = tokenizer.apply_chat_template(
+                    msg_list,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                prompts2.append(text)
+                topics_selected2.append(topic_selected)
+                sys_prompt_selected.append(system_message_selected)
+                question2.append(inst)
+
+        
+        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+        for idx, text in enumerate(outputs2):
+            print("======")
+
+            print("topic selected", topics_selected2[idx])
+            print("text", question2[idx])
+            print("text", text)
+            final_data.append({
+                "topic": topics_selected2[idx],
+                "question": question2[idx],
+                "answer": text,
+                "system_prompt": sys_prompt_selected[idx],
+                "language": args.lang,
+            })
+
+        dataset = process_and_update_dataset(final_data)
+        dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
