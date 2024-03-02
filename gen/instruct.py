@@ -211,7 +211,7 @@ code_data = False
 # else:
 SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA # + SYSTEM_MESSAGES_TESS
 PROMPT_1_EN = """
-You are asked to come up with a set of 20 diverse task instructions. 
+You are asked to come up with a set of 20 questions. 
 
 For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. 
 The topic in the question should be important to the SUBJECT_AREA, with known-answers present. 
@@ -220,12 +220,12 @@ Make sure the question is sufficiently harder and multi-part, like a graduate le
 Make sure every instruction captures indian context.
 
 List of 20 tasks:
-1. <instruction>
-2. <instruction>
+1. <question>
+2. <question>
 """
 
 PROMPT_1_HING = """
-You are asked to come up with a set of 20 diverse task instructions. 
+You are asked to come up with a set of 10 diverse questions. 
 
 For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. 
 The topic in the question should be important to the SUBJECT_AREA, with known-answers present. 
@@ -233,13 +233,13 @@ The generated question should be detailed, seek true nature of our universe from
 Make sure the question is sufficiently harder and multi-part, like a graduate level course question.
 Make sure every instruction captures indian context and is in in hinglish language only. 
 
-List of 20 tasks:
-1. <instruction_in_hinglish>
-2. <instruction_in_hinglish>
+List of 10 tasks:
+1. <question_in_hinglish>
+2. <question_in_hinglish>
 """
 
 PROMPT_1_HI = """
-You are asked to come up with a set of 20 diverse task instructions. 
+You are asked to come up with a set of 10 diverse questions. 
 
 For the following SUBJECT_AREA, generate a question that covers a very narrow topic in the SUBJECT_AREA, with sufficient depth and breadth. 
 The topic in the question should be important to the SUBJECT_AREA, with known-answers present. 
@@ -247,9 +247,9 @@ The generated question should be detailed, seek true nature of our universe from
 Make sure the question is sufficiently harder and multi-part, like a graduate level course question.
 Make sure every instruction captures indian context and is in in hindi language only. 
 
-List of 20 tasks:
-1. <instruction>
-2. <instruction>
+List of 10 tasks:
+1. <question_in_hindi>
+2. <question_in_hindi>
 """
 
 @torch.no_grad()
