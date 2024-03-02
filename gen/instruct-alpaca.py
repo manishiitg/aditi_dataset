@@ -243,13 +243,17 @@ def main(args):
         print("prompt", prompts[idx], "text", text)
 
         # Define the regex pattern to match the instructions
-        instruction_pattern = r'\*Instruction:\* (.*?)\n'
-        if args.lang == "hi":
-            instruction_pattern = r'\*निर्देश:\* (.*?)\n'
-
+        # instruction_pattern = r'\*([^*]*)\*'
         # Find all matches for instructions
-        instructions = re.findall(
-            instruction_pattern, text, re.DOTALL)
+        # instructions = re.findall(
+        #     instruction_pattern, text, re.DOTALL)
+
+        instructions = []
+        matches = text.split("\n")
+        for match in matches:
+            ix = match.index(":")
+            match = match[ix+1:].strip()
+            instructions.append(match)
 
         topic_selected = topics_selected[idx]
         topic_instruct_map[topic_selected] = text
