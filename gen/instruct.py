@@ -234,7 +234,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
 
 def main(args):
 
-    base_repo = "manishiitg/indic-synthetic-instruct"
+    base_repo = "manishiitg/indic-synthetic-instruct-reasoning"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -335,8 +335,21 @@ def main(args):
                 for idx, text in enumerate(outputs2):
                     print("======")
 
-                    print("text", prompts2[idx])
+                    print("topic selected", topics_selected[idx])
+                    print("text", prompts[idx])
                     print("text", text)
+                    final_data.append({
+                        "topic": topics_selected[idx],
+                        "question": prompts[idx],
+                        "answer": text,
+                        "system_prompt": sys_prompt_selected[idx],
+                        "language": args.lang,
+                        "type": "reasoning",
+                        "model": args.model_name_or_path,
+                    })
+
+                dataset = process_and_update_dataset(final_data)
+                dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
