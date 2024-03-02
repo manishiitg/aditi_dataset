@@ -178,8 +178,9 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    base_repo = "manishiitg/indic-synthetic-instruct"
 
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     topic_instruct_map = {}
 
     prompts = []
@@ -238,6 +239,9 @@ def main(args):
     outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
 
     prompts2 = []
+    topics_selected2 = []
+    sys_prompt_selected = []
+    question2 = []
     for idx, text in enumerate(outputs):
         print("======")
         print("prompt", prompts[idx], "text", text)
@@ -262,7 +266,7 @@ def main(args):
             print("inst", inst)
             system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
             system_message_selected = SYSTEM_MESSAGES[system_message_number]
-            if args.lang == "hi":
+            if args.lang == "hinglish":
                 system_message_selected + "\n\n" + "Answer in hinglish only"
             msg_list = []
             msg_system = {"role": "system", "content": system_message_selected}
@@ -275,14 +279,36 @@ def main(args):
                 add_generation_prompt=True
             )
             prompts2.append(text)
+            topics_selected2.append(topic_selected)
+            sys_prompt_selected.append(system_message_selected)
+            question2.append(inst)
 
+    final_data = []
     outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
     for idx, text in enumerate(outputs2):
         print("======")
 
-        print("topic selected", topics_selected[idx])
-        print("text", prompts2[idx])
+        print("topic selected", topics_selected2[idx])
+        print("text", question2[idx])
         print("text", text)
+        final_data.append({
+            "topic": topics_selected2[idx],
+            "question": question2[idx],
+            "answer": text,
+            "system_prompt": sys_prompt_selected[idx],
+            "language": args.lang,
+        })
+
+    dataset = process_and_update_dataset(final_data)
+    dataset.push_to_hub(base_repo, private=True)
+
+
+def process_and_update_dataset(new_data):
+    new_data_formatted = {key: [item[key]
+                                for item in new_data] for key in new_data[0].keys()}
+    new_dataset_chunk = Dataset.from_dict(new_data_formatted)
+    dataset2 = new_dataset_chunk
+    return dataset2
 
 
 def process_and_update_dataset(new_data):
