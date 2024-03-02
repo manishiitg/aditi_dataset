@@ -164,7 +164,7 @@ TOPICS = [
     "Medicine - anatomy, diseases, treatments, pharmaceuticals, medical specialties",
     "Religion - Christianity, Islam, Judaism, Buddhism, Hinduism, atheism",
     "Mythology - Greek, Roman, Norse, Egyptian, Native American myths",
-    "Art - art history, painting, sculpture, architecture, music, theater",
+    # "Art - art history, painting, sculpture, architecture, music, theater",
     "Sports - individual and team sports, athletes, championships, training",
     "Cooking - recipes, ingredients, techniques, regional and ethnic cuisine",
     "Movies & TV - genre analysis, directors, actors, awards, popular shows",
@@ -185,16 +185,16 @@ TOPICS = [
     "Space - astronomy, spaceflight, exploration, space technology, universe",
     "Weather & Climate - meteorology, forecasting, natural disasters, seasons",
     "Food & Cooking - nutrition, recipes, diets, food science, restaurants",
-    "Pets & Animals - breeds, care, veterinary medicine, wildlife, animal behavior",
-    "Gardening - plants, landscaping, flowers, vegetables, lawn care, tools",
+    # "Pets & Animals - breeds, care, veterinary medicine, wildlife, animal behavior",
+    # "Gardening - plants, landscaping, flowers, vegetables, lawn care, tools",
     "Home Improvement - repair, decor, renovation, tools, plumbing, electricity",
     "Personal Finance - budgeting, investing, taxes, insurance, retirement",
     "Exercise & Fitness - techniques, equipment, sports medicine, motivation",
     "Health & Medicine - biology, anatomy, diseases, treatments, wellness",
-    "Mental Health - psychology, disorders, counseling, self-help, mindfulness",
+    # "Mental Health - psychology, disorders, counseling, self-help, mindfulness",
     "Race & Ethnicity - cultures, discrimination, identity, immigration, diversity",
     "Gender & Sexuality - LGBTQ issues, feminism, roles, relationships, equality",
-    "Employment - careers, human resources, resumes, workplace culture, unions",
+    # "Employment - careers, human resources, resumes, workplace culture, unions",
     "Crime & Justice - laws, law enforcement, courts, prisons, investigations",
     "Social Issues - poverty, homelessness, human rights, community service",
     "Technology - computers, engineering, artificial intelligence, innovations",
@@ -257,12 +257,12 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-
-    topic_number = random.randint(0, len(TOPICS)-1)
-    topic_selected = TOPICS[topic_number]
     
     prompts = []
     for idx in tqdm(range(20)):
+
+        topic_number = random.randint(0, len(TOPICS)-1)
+        topic_selected = TOPICS[topic_number]
 
         msg_list = []
         msg_system = {"role": "system", "content": PROMPT_2 +
@@ -302,8 +302,8 @@ def main(args):
 
     prompts2 = []
     for idx, text in enumerate(outputs):
-        # print("======")
-        # print("prompt", prompts[idx], "text", text)
+        print("======")
+        print("prompt", prompts[idx], "text", text)
         system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
         system_message_selected = SYSTEM_MESSAGES[system_message_number]
         msg_list = []
