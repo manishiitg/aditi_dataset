@@ -20,12 +20,10 @@ SYSTEM_MESSAGES_ORCA = [
     "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
     "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. Think like you are answering to a five year old.",
     "You are an AI assistant. You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. You might need to use additional knowledge to answer the question.",
     "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
     "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
     "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
-    "Given a definition of a task and a sample input, break the definition into small parts. Each of those parts will have some instruction. Explain their meaning by showing an example that meets the criteria in the instruction. Use the following format:\n\nPart #: a key part of the definition.\nUsage: Sample response that meets the criteria from the key part. Explain why you think it meets the criteria.",
     "You are an AI assistant that helps people find information.",
 ]
 
@@ -269,6 +267,11 @@ def main(args):
                     else:
                         print("skipping instruction", match)
                         continue
+
+                    if match.startswith('"'):
+                        match = match[0:]
+                    if match.endswith('"'):
+                        match = match[:-1]
                     instructions.append(match.strip())
 
                 topic_selected = topics_selected[idx]
