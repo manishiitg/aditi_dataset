@@ -184,7 +184,7 @@ def main(args):
 
     prompts = []
     topics_selected = []
-    for idx in tqdm(range(20)):
+    for idx in tqdm(range(50)):
 
         topic_number = random.randint(0, len(TOPICS)-1)
         topic_selected = TOPICS[topic_number]
@@ -235,7 +235,7 @@ def main(args):
             max_model_len=8196,
         )
 
-    outputs = eval_hf_model(args, model, tokenizer, prompts, .7)
+    outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
 
     prompts2 = []
     for idx, text in enumerate(outputs):
@@ -276,6 +276,7 @@ def main(args):
     for idx, text in enumerate(outputs2):
         print("======")
 
+        print("topic selected", topics_selected[idx])
         print("text", prompts2[idx])
         print("text", text)
 
