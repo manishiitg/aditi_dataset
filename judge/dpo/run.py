@@ -49,7 +49,8 @@ def main(args):
                 final_data.append(row)
                 row["processed_by"][args.model_name_or_path] = True
 
-            row["processed_by"][args.model_name_or_path] = False
+            if args.model_name_or_path not in row["processed_by"]:
+                row["processed_by"][args.model_name_or_path] = False
 
         push_data.append(row)
 
