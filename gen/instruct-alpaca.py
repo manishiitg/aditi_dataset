@@ -110,9 +110,9 @@ PROMPT_2 = """
 
 
 @torch.no_grad()
-def eval_hf_model(args, model, tokenizer, prompts):
+def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
-        temperature=.7,
+        temperature=temperature,
         max_tokens=4096,
         stop=["<|im_end|>"],
     )
@@ -132,18 +132,30 @@ def main(args):
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
+    topic_instruct_map = {}
+
     prompts = []
+    topics_selected = []
     for idx in tqdm(range(20)):
 
         topic_number = random.randint(0, len(TOPICS)-1)
         topic_selected = TOPICS[topic_number]
 
         msg_list = []
-        msg_system = {"role": "system", "content": PROMPT_2 +
-                      "\n Question should only be related to india or indian context."}
+        SYSTEM_PROMPT = PROMPT_2 + \
+            "\n Question should only be related to india or indian context."
+
+        msg_system = {"role": "system", "content": SYSTEM_PROMPT}
         msg_list.append(msg_system)
+
+        user = f"SUBJECT_AREA: {topic_selected}"
+
+        if topic_selected in topic_instruct_map:
+            existing_instruction = topic_instruct_map[topic_selected]
+            user += "\n\n" + "Instruction should be different from " + existing_instruction
+            
         msg_prompt = {"role": "user",
-                      "content": f"SUBJECT_AREA: {topic_selected}"}
+                      "content": user}
         msg_list.append(msg_prompt)
         text = tokenizer.apply_chat_template(
             msg_list,
@@ -151,6 +163,7 @@ def main(args):
             add_generation_prompt=True
         )
         prompts.append(text)
+        topics_selected.append(topic_selected)
 
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -172,7 +185,7 @@ def main(args):
             max_model_len=8196,
         )
 
-    outputs = eval_hf_model(args, model, tokenizer, prompts)
+    outputs = eval_hf_model(args, model, tokenizer, prompts, .7)
 
     prompts2 = []
     for idx, text in enumerate(outputs):
@@ -188,28 +201,31 @@ def main(args):
         instructions = re.findall(
             instruction_pattern, text, re.DOTALL)
 
+        topic_selected = topics_selected[idx]
+        topic_instruct_map[topic_selected] = text
+
         for inst in instructions:
             print("inst", inst)
-            system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
-            system_message_selected = SYSTEM_MESSAGES[system_message_number]
-            msg_list = []
-            msg_system = {"role": "system", "content": system_message_selected}
-            msg_list.append(msg_system)
-            msg_prompt = {"role": "user", "content": inst}
-            msg_list.append(msg_prompt)
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts2.append(text)
+            # system_message_number = random.randint(0, len(SYSTEM_MESSAGES)-1)
+            # system_message_selected = SYSTEM_MESSAGES[system_message_number]
+            # msg_list = []
+            # msg_system = {"role": "system", "content": system_message_selected}
+            # msg_list.append(msg_system)
+            # msg_prompt = {"role": "user", "content": inst}
+            # msg_list.append(msg_prompt)
+            # text = tokenizer.apply_chat_template(
+            #     msg_list,
+            #     tokenize=False,
+            #     add_generation_prompt=True
+            # )
+            # prompts2.append(text)
 
-    outputs2 = eval_hf_model(args, model, tokenizer, prompts2)
-    for idx, text in enumerate(outputs2):
-        print("======")
+    # outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+    # for idx, text in enumerate(outputs2):
+    #     print("======")
 
-        print("text", prompts2[idx])
-        print("text", text)
+    #     print("text", prompts2[idx])
+    #     print("text", text)
 
 
 def process_and_update_dataset(new_data):
