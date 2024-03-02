@@ -204,14 +204,14 @@ def main(args):
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
-        for loop in range(10):
+        for loop in range(3):
 
             prompts = []
             topics_selected = []
-            for idx in tqdm(range(100)):
+            for topic_selected in TOPICS:
 
-                topic_number = random.randint(0, len(TOPICS)-1)
-                topic_selected = TOPICS[topic_number]
+                # topic_number = random.randint(0, len(TOPICS)-1)
+                # topic_selected = TOPICS[topic_number]
 
                 msg_list = []
                 SYSTEM_PROMPT = PROMPT_2
