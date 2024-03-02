@@ -286,17 +286,28 @@ def main(args):
                         system_message_selected += "\n\nAnswer in hindi only"
                     if args.lang == "hinglish":
                         system_message_selected += "\n\nAnswer in hinglish only"
-                    msg_list = []
-                    msg_system = {"role": "system",
-                                  "content": system_message_selected}
-                    msg_list.append(msg_system)
-                    msg_prompt = {"role": "user", "content": inst}
-                    msg_list.append(msg_prompt)
-                    text = tokenizer.apply_chat_template(
-                        msg_list,
-                        tokenize=False,
-                        add_generation_prompt=True
-                    )
+                    if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
+                        msg_list = []
+                        msg_prompt = {
+                            "role": "user", "content": system_message_selected + "\n\n" + inst}
+                        msg_list.append(msg_prompt)
+                        text = tokenizer.apply_chat_template(
+                            msg_list,
+                            tokenize=False,
+                            add_generation_prompt=True
+                        )
+                    else:
+                        msg_list = []
+                        msg_system = {"role": "system",
+                                      "content": system_message_selected}
+                        msg_list.append(msg_system)
+                        msg_prompt = {"role": "user", "content": inst}
+                        msg_list.append(msg_prompt)
+                        text = tokenizer.apply_chat_template(
+                            msg_list,
+                            tokenize=False,
+                            add_generation_prompt=True
+                        )
                     prompts2.append(text)
                     topics_selected2.append(topic_selected)
                     sys_prompt_selected.append(system_message_selected)
