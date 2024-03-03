@@ -54,7 +54,7 @@ def main(args):
     max_rows = 5
     final_data = []
     existing_data = []
-    args.language = "hinglish"
+    args.language = "english"
     existing_ds = load_dataset(base_repo, split="train")
     existing_ds = existing_ds.shuffle().filter(
         lambda x: x["language"] == args.language)
