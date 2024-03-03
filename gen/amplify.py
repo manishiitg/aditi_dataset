@@ -119,6 +119,8 @@ def main(args):
     for r in existing_ds:
         if "messages" not in r:
             r["messages"] = []
+            r["evol_question"] = ""
+            r["eval_answer"] = ""
         if len(final_data) < max_rows and len(r["messages"]) == 0:
             final_data.append(r)
         else:
