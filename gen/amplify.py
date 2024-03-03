@@ -265,6 +265,21 @@ def main(args):
         final_data[idx]["evol_question"] = questions[idx]
         final_data[idx]["evol_answer"] = text
 
+
+    final_data_hash = {}
+    for r in final_data:
+        hash = r["question"] + r["answer"]
+        final_data_hash[hash] = True
+
+    existing_ds = load_dataset(base_repo, split="train")
+    existing_data = []
+    for r in existing_ds:
+        hash = r["question"] + r["answer"]
+
+        if hash not in final_data_hash:
+            existing_data.append(row)
+            
+
     existing_data = final_data + existing_data
     dataset = process_and_update_dataset(existing_data)
     dataset.push_to_hub(base_repo, private=True)
