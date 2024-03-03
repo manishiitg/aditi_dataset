@@ -55,7 +55,7 @@ def main(args):
     existing_ds = existing_ds.shuffle().filter(
         lambda x: x["language"] == args.language)
     for r in existing_ds:
-        if len(final_data) < max_rows:
+        if len(final_data) < max_rows and len(r["messages"]) == 0:
             final_data.append(r)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
@@ -79,65 +79,73 @@ def main(args):
             max_model_len=8196*2,
         )
 
-    prompts = []
-    for row in final_data:
+    for _ in range(3):
+        prompts = []
+        for row in final_data:
 
-        messages = []
-        messages.append({"role": "system", "content": row["system_prompt"]})
-        messages.append({"role": "user", "content": row["question"]})
-        messages.append({"role": "assistant", "content": row["answer"]})
+            if len(row["messages"]) == 0:
+                messages = []
+                messages.append(
+                    {"role": "system", "content": row["system_prompt"]})
+                messages.append({"role": "user", "content": row["question"]})
+                messages.append(
+                    {"role": "assistant", "content": row["answer"]})
+                row["messages"] = messages
+            else:
+                messages = row["messages"]
 
-        instruction = ""
-        for r in messages:
-            instruction += r["role"] + ":" + r["content"] + "\n\n"
+            instruction = ""
+            for r in messages:
+                instruction += r["role"] + ":" + r["content"] + "\n\n"
 
-        system = createDeepenPrompt(args.language)
-        msg_list = [
-            {"role": "system", "content": system},
-            {"role": "user", "content": instruction}
-        ]
+            system = createDeepenPrompt(args.language)
+            msg_list = [
+                {"role": "system", "content": system},
+                {"role": "user", "content": instruction}
+            ]
 
-        text = tokenizer.apply_chat_template(
-            msg_list,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        prompts.append(text)
-        row["messages"] = messages
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
 
-    outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+        outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-    prompts2 = []
-    for idx, text in enumerate(outputs):
-        print("======")
-        print("prompt", prompts[idx], "text", text)
+        prompts2 = []
+        for idx, text in enumerate(outputs):
+            print("======")
+            print("prompt", prompts[idx], "text", text)
 
-        messages = final_data[idx]["messages"]
-        messages.append({"role": "user", "content": text})
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
+            messages = final_data[idx]["messages"]
+            messages.append({"role": "user", "content": text})
+            text = tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
 
-        prompts2.append(text)
+            prompts2.append(text)
 
-    outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-    for idx, text in enumerate(outputs2):
-        print("======")
+        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+        for idx, text in enumerate(outputs2):
+            print("======")
 
-        for r in final_data[idx]["messages"]:
-            print(r["role"] + ":::" + r["content"])
-        print("text", text)
-        # final_data.append({
-        #     "topic": topics_selected2[idx],
-        #     "question": question2[idx],
-        #     "answer": text,
-        #     "system_prompt": sys_prompt_selected[idx],
-        #     "language": args.lang,
-        #     "type": "alpaca",
-        #     "model": args.model_name_or_path,
-        # })
+            for r in final_data[idx]["messages"]:
+                print(r["role"] + ":::" + r["content"])
+            print("text", text)
+            final_data[idx]["messages"].append(
+                {"role": "assistant", "content": text})
+            # final_data.append({
+            #     "topic": topics_selected2[idx],
+            #     "question": question2[idx],
+            #     "answer": text,
+            #     "system_prompt": sys_prompt_selected[idx],
+            #     "language": args.lang,
+            #     "type": "alpaca",
+            #     "model": args.model_name_or_path,
+            # })
 
     # dataset = process_and_update_dataset(final_data)
     # dataset.push_to_hub(base_repo, private=True)
