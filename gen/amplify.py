@@ -18,7 +18,11 @@ def createDeepenPrompt(language):
 
     Your task to generate a next possible question which user can ask based on the conversation.
     If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased
+    If the given conversation contains general concepts replace with more specific concepts.
+    Add one more constraints/requirements
+
     Reply only with question generated, don't add any placeholders.
+    Keep the question short.
     """
     if language == "hinglish":
         prompt += "\n Generate question in hinglish language only."
@@ -141,6 +145,11 @@ def main(args):
             for r in final_data[idx]["messages"]:
                 print(r["role"] + ":::" + r["content"])
             print("text", text)
+            if text.startswith('"'):
+                text = text[1:]
+            if text.endswith('"'):
+                text = text[:-1]
+
             final_data[idx]["messages"].append(
                 {"role": "assistant", "content": text})
 
