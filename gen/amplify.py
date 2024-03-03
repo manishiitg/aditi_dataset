@@ -21,7 +21,7 @@ def createDeepenPrompt(language):
     Reply only with question generated.
     """
     if language == "hinglish":
-        prompt += "\n Generate question in hinglish only."
+        prompt += "\n Generate question in hinglish language only."
     return prompt
 
 
@@ -52,7 +52,7 @@ def main(args):
     final_data = []
     args.language = "hinglish"
     existing_ds = load_dataset(base_repo, split="train")
-    existing_ds = existing_ds.filter(lambda x: x["language"] == args.language)
+    existing_ds = existing_ds.shuffle().filter(lambda x: x["language"] == args.language)
     for r in existing_ds:
         if len(final_data) < max_rows:
             final_data.append(r)
