@@ -112,10 +112,10 @@ def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
 
-    max_rows = 5
+    max_rows = 500
     final_data = []
     existing_data = []
-    args.language = "english"
+    args.language = "hinglish"
     existing_ds = load_dataset(base_repo, split="train")
     existing_ds = existing_ds.shuffle().filter(
         lambda x: x["language"] == args.language)
