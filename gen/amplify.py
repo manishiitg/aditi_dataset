@@ -277,7 +277,7 @@ def main(args):
         hash = r["question"] + r["answer"]
 
         if hash not in final_data_hash:
-            existing_data.append(row)
+            existing_data.append(r)
             
 
     existing_data = final_data + existing_data
