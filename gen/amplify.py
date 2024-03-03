@@ -9,7 +9,6 @@ from datasets import Dataset
 import torch
 import random
 import re
-from huggingface_hub import repo_exists
 
 
 base_instruction = "I want you act as a Prompt Rewriter.\r\n \
@@ -83,9 +82,6 @@ def main(args):
     for r in existing_ds:
         if len(final_data) < max_rows:
             final_data.append(r)
-
-    print(final_data)
-    os.exit(1)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
