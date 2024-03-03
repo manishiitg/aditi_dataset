@@ -36,7 +36,7 @@ def main(args):
                            cache_dir="temp-" + str(time.time()))
 
     final_data = []
-    max_rows = 100
+    max_rows = 5000
 
     if args.model_name_or_path == "Qwen/Qwen1.5-72B-Chat-AWQ":
         key = "chosen"
