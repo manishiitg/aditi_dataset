@@ -116,6 +116,7 @@ def main(args):
     final_data = []
     existing_data = []
     existing_ds = load_dataset(base_repo, split="train")
+    existing_ds = existing_ds.shuffle()
     for r in existing_ds:
         if "messages" not in r:
             r["messages"] = []
