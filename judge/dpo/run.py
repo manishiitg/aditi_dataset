@@ -40,7 +40,7 @@ def main(args):
     # required because will be running in a distributed way
 
     if args.model_name_or_path == "Qwen/Qwen1.5-72B-Chat-AWQ":
-        key = "accepted"
+        key = "chosen"
     else:
         key = "rejected"
 
