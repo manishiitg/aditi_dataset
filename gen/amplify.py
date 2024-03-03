@@ -242,8 +242,6 @@ def main(args):
     prompts2 = []
     questions = []
     for idx, text in enumerate(outputs):
-        print("======")
-        print("question generated prompt", prompts[idx], "text", text)
         questions.append(text)
 
         messages = []
@@ -261,13 +259,13 @@ def main(args):
     outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
     for idx, text in enumerate(outputs2):
         print("======")
-        print("prompt", prompts2[idx], "text", text)
+        print("prompt", questions[idx], "text", text)
         final_data[idx]["evol_question"] = questions[idx]
         final_data[idx]["evol_answer"] = text
 
-    # existing_data = final_data + existing_data
-    # dataset = process_and_update_dataset(existing_data)
-    # dataset.push_to_hub(base_repo, private=True)
+    existing_data = final_data + existing_data
+    dataset = process_and_update_dataset(existing_data)
+    dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
