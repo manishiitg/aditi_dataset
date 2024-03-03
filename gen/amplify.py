@@ -11,14 +11,15 @@ import random
 import re
 
 
-def createDeepenPrompt():
+def createDeepenPrompt(language):
     prompt = """
     Based on the conversion between an ai assistant and user, generate next possible question which a user can ask.
     If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased
     Reply only with question generated.
     """
+    if language == "hinglish":
+        prompt += "\n Generate question in hinglish only."
     return prompt
-
 
 
 @torch.no_grad()
