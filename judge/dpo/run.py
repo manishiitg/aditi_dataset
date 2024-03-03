@@ -36,7 +36,7 @@ def main(args):
                            cache_dir="temp-" + str(time.time()))
 
     final_data = []
-    max_rows = 1000
+    max_rows = 100
     # required because will be running in a distributed way
 
     push_data = []
@@ -90,7 +90,6 @@ def main(args):
         default_system_hi = "आप एक सहायक सहायक हैं."
 
         prompts = []
-        pending_data = []
         for row in tqdm(final_data):
 
             prompt = row["prompt"]
@@ -112,7 +111,6 @@ def main(args):
                 add_generation_prompt=True
             )
             prompts.append(text)
-            pending_data.append(row)
 
         outputs = eval_hf_model(args, model, tokenizer, prompts)
 
@@ -122,12 +120,11 @@ def main(args):
             print("prompt", prompts[idx], "text", text)
 
             uuid = final_data[idx]["uuid"]
-            pending_data[idx] = final_data[idx]
-            pending_data[idx]["processed_count"] += 1
-            processed_by = pending_data[idx]["processed_by"]
+            final_data[idx]["processed_count"] += 1
+            processed_by = final_data[idx]["processed_by"]
             processed_by[args.model_name_or_path] = True
-            pending_data[idx]["responses"][args.model_name_or_path] = text
-            uuid_row_map[uuid] = pending_data[idx]
+            final_data[idx]["responses"][args.model_name_or_path] = text
+            uuid_row_map[uuid] = final_data[idx]
 
         existing_data = []
         dataset = load_dataset(base_repo, split="train",
@@ -136,16 +133,6 @@ def main(args):
             uuid = row["uuid"]
             if uuid in uuid_row_map:
                 processed_row = uuid_row_map[uuid]
-                # if len(processed_row["responses"]) >= 2:
-                #     # "Qwen/Qwen1.5-72B-Chat-AWQ"
-                #     # "manishiitg/open-aditi-hi-v3"
-                #     for k, v in processed_row["responses"].items():
-                #         if v:
-                #             if k == "Qwen/Qwen1.5-72B-Chat-AWQ":
-                #                 processed_row["chosen"] = v
-                #             else:
-                #                 processed_row["rejected"] = v
-
                 existing_data.append(processed_row)
             else:
                 existing_data.append(row)
