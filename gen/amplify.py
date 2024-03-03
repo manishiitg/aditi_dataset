@@ -109,9 +109,9 @@ def main(args):
     for row in final_data:
 
         messages = []
-        messages.append({"role": "system", "content": row["system_prompt"]})
+        # messages.append({"role": "system", "content": row["system_prompt"]})
         messages.append({"role": "user", "content": row["question"]})
-        messages.append({"role": "assistant", "content": row["answer"]})
+        # messages.append({"role": "assistant", "content": row["answer"]})
 
         instruction = ""
         for r in messages:
