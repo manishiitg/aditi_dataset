@@ -146,69 +146,69 @@ def main(args):
             max_model_len=8196*2,
         )
 
-    # for loop in range(3):
-    #     prompts = []
-    #     for row in final_data:
+    for loop in range(3):
+        prompts = []
+        for row in final_data:
 
-    #         if len(row["messages"]) == 0:
-    #             messages = []
-    #             messages.append(
-    #                 {"role": "system", "content": row["system_prompt"]})
-    #             messages.append({"role": "user", "content": row["question"]})
-    #             messages.append(
-    #                 {"role": "assistant", "content": row["answer"]})
-    #             row["messages"] = messages
-    #         else:
-    #             messages = row["messages"]
+            if len(row["messages"]) == 0:
+                messages = []
+                messages.append(
+                    {"role": "system", "content": row["system_prompt"]})
+                messages.append({"role": "user", "content": row["question"]})
+                messages.append(
+                    {"role": "assistant", "content": row["answer"]})
+                row["messages"] = messages
+            else:
+                messages = row["messages"]
 
-    #         instruction = ""
-    #         for r in messages:
-    #             instruction += r["role"] + ":" + r["content"] + "\n\n"
+            instruction = ""
+            for r in messages:
+                instruction += r["role"] + ":" + r["content"] + "\n\n"
 
-    #         system = createGenerateQuestion(args.language)
-    #         msg_list = [
-    #             {"role": "system", "content": system},
-    #             {"role": "user", "content": instruction}
-    #         ]
+            system = createGenerateQuestion(args.language)
+            msg_list = [
+                {"role": "system", "content": system},
+                {"role": "user", "content": instruction}
+            ]
 
-    #         text = tokenizer.apply_chat_template(
-    #             msg_list,
-    #             tokenize=False,
-    #             add_generation_prompt=True
-    #         )
-    #         prompts.append(text)
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
 
-    #     outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+        outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-    #     prompts2 = []
-    #     for idx, text in enumerate(outputs):
-    #         # print("======")
-    #         # print("prompt", prompts[idx], "text", text)
+        prompts2 = []
+        for idx, text in enumerate(outputs):
+            # print("======")
+            # print("prompt", prompts[idx], "text", text)
 
-    #         messages = final_data[idx]["messages"]
-    #         messages.append({"role": "user", "content": text})
-    #         text = tokenizer.apply_chat_template(
-    #             messages,
-    #             tokenize=False,
-    #             add_generation_prompt=True
-    #         )
+            messages = final_data[idx]["messages"]
+            messages.append({"role": "user", "content": text})
+            text = tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
 
-    #         prompts2.append(text)
+            prompts2.append(text)
 
-    #     outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-    #     for idx, text in enumerate(outputs2):
-    #         print("======", loop)
+        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+        for idx, text in enumerate(outputs2):
+            print("======", loop)
 
-    #         for r in final_data[idx]["messages"]:
-    #             print(r["role"] + ":::" + r["content"])
-    #         print("text", text)
-    #         if text.startswith('"'):
-    #             text = text[1:]
-    #         if text.endswith('"'):
-    #             text = text[:-1]
+            for r in final_data[idx]["messages"]:
+                print(r["role"] + ":::" + r["content"])
+            print("text", text)
+            if text.startswith('"'):
+                text = text[1:]
+            if text.endswith('"'):
+                text = text[:-1]
 
-    #         final_data[idx]["messages"].append(
-    #             {"role": "assistant", "content": text})
+            final_data[idx]["messages"].append(
+                {"role": "assistant", "content": text})
 
     prompts = []
     for row in final_data:
