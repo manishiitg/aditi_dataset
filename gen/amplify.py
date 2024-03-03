@@ -11,7 +11,7 @@ import random
 import re
 
 
-def createDeepenPrompt(language):
+def createGenerateQuestion(language):
     prompt = """
     Based on the conversion between an ai assistant and user, generate next possible question which a user can ask.
     In the conversion "user:" means the question as by user and "assistant:" means answer given and "system:" is the instruction for the ai asistant.
@@ -49,6 +49,63 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
                if prompt in prompt_to_output else "" for prompt in prompts]
 
     return outputs
+
+
+base_instruction = "I want you act as a Prompt Rewriter.\r\n \
+					Your objective is to rewrite a given prompt into a more complex version to make those famous AI systems (e.g., chatgpt and GPT4) a bit harder to handle.\r\n \
+					But the rewritten prompt must be reasonable and must be understood and responded by humans.\r\n \
+					Your rewriting cannot omit the non-text parts such as the table and code in #The Given Prompt#:. Also, please do not omit the input in #The Given Prompt#. \r\n \
+					You SHOULD complicate the given prompt using the following method: \r\n\
+					{} \r\n\
+					You should try your best not to make the #Rewritten Prompt# become verbose, #Rewritten Prompt# can only add 10 to 20 words into #The Given Prompt#. \r\n\
+					'#The Given Prompt#', '#Rewritten Prompt#', 'given prompt' and 'rewritten prompt' are not allowed to appear in #Rewritten Prompt#\r\n"
+
+
+def createConstraintsPrompt(instruction):
+    prompt = base_instruction.format(
+        "Please add one more constraints/requirements into #The Given Prompt#'")
+    prompt += "#The Given Prompt#: \r\n {} \r\n".format(instruction)
+    prompt += "#Rewritten Prompt#:\r\n"
+    return prompt
+
+
+def createDeepenPrompt(instruction):
+    prompt = base_instruction.format(
+        "If #The Given Prompt# contains inquiries about certain issues, the depth and breadth of the inquiry can be increased.")
+    prompt += "#The Given Prompt#: \r\n {} \r\n".format(instruction)
+    prompt += "#Rewritten Prompt#:\r\n"
+    return prompt
+
+
+def createConcretizingPrompt(instruction):
+    prompt = base_instruction.format(
+        "Please replace general concepts with more specific concepts.")
+    prompt += "#The Given Prompt#: \r\n {} \r\n".format(instruction)
+    prompt += "#Rewritten Prompt#:\r\n"
+    return prompt
+
+
+def createReasoningPrompt(instruction):
+    prompt = base_instruction.format(
+        "If #The Given Prompt# can be solved with just a few simple thinking processes, you can rewrite it to explicitly request multiple-step reasoning.")
+    prompt += "#The Given Prompt#: \r\n {} \r\n".format(instruction)
+    prompt += "#Rewritten Prompt#:\r\n"
+    return prompt
+
+
+base_instruction_breadth = "I want you act as a Prompt Creator.\r\n\
+Your goal is to draw inspiration from the #Given Prompt# to create a brand new prompt.\r\n\
+This new prompt should belong to the same domain as the #Given Prompt# but be even more rare.\r\n\
+The LENGTH and complexity of the #Created Prompt# should be similar to that of the #Given Prompt#.\r\n\
+The #Created Prompt# must be reasonable and must be understood and responded by humans.\r\n\
+'#Given Prompt#', '#Created Prompt#', 'given prompt' and 'created prompt' are not allowed to appear in #Created Prompt#\r\n"
+
+
+def createBreadthPrompt(instruction):
+    prompt = base_instruction_breadth
+    prompt += "#Given Prompt#: \r\n {} \r\n".format(instruction)
+    prompt += "#Created Prompt#:\r\n"
+    return prompt
 
 
 def main(args):
@@ -89,69 +146,119 @@ def main(args):
             max_model_len=8196*2,
         )
 
-    for loop in range(3):
-        prompts = []
-        for row in final_data:
+    # for loop in range(3):
+    #     prompts = []
+    #     for row in final_data:
 
-            if len(row["messages"]) == 0:
-                messages = []
-                messages.append(
-                    {"role": "system", "content": row["system_prompt"]})
-                messages.append({"role": "user", "content": row["question"]})
-                messages.append(
-                    {"role": "assistant", "content": row["answer"]})
-                row["messages"] = messages
-            else:
-                messages = row["messages"]
+    #         if len(row["messages"]) == 0:
+    #             messages = []
+    #             messages.append(
+    #                 {"role": "system", "content": row["system_prompt"]})
+    #             messages.append({"role": "user", "content": row["question"]})
+    #             messages.append(
+    #                 {"role": "assistant", "content": row["answer"]})
+    #             row["messages"] = messages
+    #         else:
+    #             messages = row["messages"]
 
-            instruction = ""
-            for r in messages:
-                instruction += r["role"] + ":" + r["content"] + "\n\n"
+    #         instruction = ""
+    #         for r in messages:
+    #             instruction += r["role"] + ":" + r["content"] + "\n\n"
 
-            system = createDeepenPrompt(args.language)
-            msg_list = [
-                {"role": "system", "content": system},
-                {"role": "user", "content": instruction}
-            ]
+    #         system = createGenerateQuestion(args.language)
+    #         msg_list = [
+    #             {"role": "system", "content": system},
+    #             {"role": "user", "content": instruction}
+    #         ]
 
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts.append(text)
+    #         text = tokenizer.apply_chat_template(
+    #             msg_list,
+    #             tokenize=False,
+    #             add_generation_prompt=True
+    #         )
+    #         prompts.append(text)
 
-        outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+    #     outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-        prompts2 = []
-        for idx, text in enumerate(outputs):
-            # print("======")
-            # print("prompt", prompts[idx], "text", text)
+    #     prompts2 = []
+    #     for idx, text in enumerate(outputs):
+    #         # print("======")
+    #         # print("prompt", prompts[idx], "text", text)
 
-            messages = final_data[idx]["messages"]
-            messages.append({"role": "user", "content": text})
-            text = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True
-            )
+    #         messages = final_data[idx]["messages"]
+    #         messages.append({"role": "user", "content": text})
+    #         text = tokenizer.apply_chat_template(
+    #             messages,
+    #             tokenize=False,
+    #             add_generation_prompt=True
+    #         )
 
-            prompts2.append(text)
+    #         prompts2.append(text)
 
-        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-        for idx, text in enumerate(outputs2):
-            print("======", loop)
+    #     outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+    #     for idx, text in enumerate(outputs2):
+    #         print("======", loop)
 
-            for r in final_data[idx]["messages"]:
-                print(r["role"] + ":::" + r["content"])
-            print("text", text)
-            if text.startswith('"'):
-                text = text[1:]
-            if text.endswith('"'):
-                text = text[:-1]
+    #         for r in final_data[idx]["messages"]:
+    #             print(r["role"] + ":::" + r["content"])
+    #         print("text", text)
+    #         if text.startswith('"'):
+    #             text = text[1:]
+    #         if text.endswith('"'):
+    #             text = text[:-1]
 
-            final_data[idx]["messages"].append(
-                {"role": "assistant", "content": text})
+    #         final_data[idx]["messages"].append(
+    #             {"role": "assistant", "content": text})
+
+    prompts = []
+    for row in final_data:
+        instruction = row["question"]
+        evol_prompts = []
+        evol_prompts.append(createConstraintsPrompt(instruction))
+        evol_prompts.append(createDeepenPrompt(instruction))
+        evol_prompts.append(createConcretizingPrompt(instruction))
+        evol_prompts.append(createReasoningPrompt(instruction))
+        evol_prompts.append(createBreadthPrompt(instruction))
+
+        selected_evol_prompt = random.choice(evol_prompts)
+
+        messages = []
+        messages.append({"role": "user", "content": selected_evol_prompt})
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+
+        prompts.append(text)
+
+    outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+
+    prompts2 = []
+    questions = []
+    for idx, text in enumerate(outputs):
+        print("======")
+        print("question generated prompt", prompts[idx], "text", text)
+        questions.append(text)
+
+        messages = []
+        messages.append(
+            {"role": "system", "content": row["system_prompt"]})
+        messages.append({"role": "user", "content": text})
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+
+        prompts2.append(text)
+
+    outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+    for idx, text in enumerate(outputs2):
+        print("======")
+        print("prompt", prompts2[idx], "text", text)
+        final_data[idx]["evol_question"] = questions[idx]
+        final_data[idx]["evol_answer"] = text
 
     # existing_data = final_data + existing_data
     # dataset = process_and_update_dataset(existing_data)
