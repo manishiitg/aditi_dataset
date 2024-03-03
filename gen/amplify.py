@@ -79,16 +79,14 @@ def main(args):
 
     max_rows = 5
     final_data = []
-    if repo_exists(base_repo):
-        print(123)
-        existing_ds = load_dataset(base_repo, split="train")
-        for r in existing_ds:
-            if len(final_data) < max_rows:
-                final_data.append(r)
+    existing_ds = load_dataset(base_repo, split="train")
+    for r in existing_ds:
+        if len(final_data) < max_rows:
+            final_data.append(r)
 
     print(final_data)
     os.exit(1)
-    
+
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -164,8 +162,6 @@ def main(args):
         #     if match.endswith('"'):
         #         match = match[:-1]
         #     instructions.append(match.strip())
-
-        
 
     # outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
     # for idx, text in enumerate(outputs2):
