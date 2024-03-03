@@ -126,7 +126,7 @@ def main(args):
     for idx, text in enumerate(outputs2):
         print("======")
 
-        for r in final_data[idx]:
+        for r in final_data[idx]["messages"]:
             print(r["role"] + ":::" + r["content"])
         print("text", text)
         # final_data.append({
