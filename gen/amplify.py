@@ -164,7 +164,7 @@ def main(args):
             for r in messages:
                 instruction += r["role"] + ":" + r["content"] + "\n\n"
 
-            system = createGenerateQuestion(args.language)
+            system = createGenerateQuestion(row["language"])
             msg_list = [
                 {"role": "system", "content": system},
                 {"role": "user", "content": instruction}
