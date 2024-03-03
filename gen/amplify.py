@@ -115,7 +115,7 @@ def main(args):
         messages = final_data[idx]["messages"]
         messages.append({"role": "user", "content": text})
         text = tokenizer.apply_chat_template(
-            msg_list,
+            messages,
             tokenize=False,
             add_generation_prompt=True
         )
@@ -126,7 +126,8 @@ def main(args):
     for idx, text in enumerate(outputs2):
         print("======")
 
-        print("topic selected", final_data[idx]["messages"])
+        for r in final_data[idx]:
+            print(r["role"] + ":::" + r["content"])
         print("text", text)
         # final_data.append({
         #     "topic": topics_selected2[idx],
