@@ -14,6 +14,9 @@ import re
 def createDeepenPrompt(language):
     prompt = """
     Based on the conversion between an ai assistant and user, generate next possible question which a user can ask.
+    In the conversion "user:" means the question as by user and "assistant:" means answer given.
+
+    Your task to generate a next possible question which user can ask based on the conversation.
     If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased
     Reply only with question generated.
     """
@@ -47,8 +50,9 @@ def main(args):
 
     max_rows = 5
     final_data = []
+    args.language = "hinglish"
     existing_ds = load_dataset(base_repo, split="train")
-    existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
+    existing_ds = existing_ds.filter(lambda x: x["language"] == args.language)
     for r in existing_ds:
         if len(final_data) < max_rows:
             final_data.append(r)
@@ -86,7 +90,7 @@ def main(args):
         for r in messages:
             instruction += r["role"] + ":" + r["content"] + "\n\n"
 
-        system = createDeepenPrompt()
+        system = createDeepenPrompt(args.language)
         msg_list = [
             {"role": "system", "content": system},
             {"role": "user", "content": instruction}
