@@ -108,13 +108,11 @@ def main(args):
     outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
     prompts2 = []
-    sys_prompt_selected = []
-    question2 = []
     for idx, text in enumerate(outputs):
         print("======")
         print("prompt", prompts[idx], "text", text)
 
-        messages = final_data["messages"]
+        messages = final_data[idx]["messages"]
         messages.append({"role": "user", "content": text})
         text = tokenizer.apply_chat_template(
             msg_list,
