@@ -221,6 +221,11 @@ def main(args):
         evol_prompts.append(createBreadthPrompt(instruction))
 
         selected_evol_prompt = random.choice(evol_prompts)
+        selected_evol_prompt += "\n Generated question should have indian context if possible."
+        if args.lang == "hindi":
+            selected_evol_prompt += "\n\nAnswer in hindi only"
+        if args.lang == "hinglish":
+            selected_evol_prompt += "\n\nAnswer in hinglish only"
 
         messages = []
         messages.append({"role": "user", "content": selected_evol_prompt})
