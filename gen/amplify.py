@@ -11,24 +11,14 @@ import random
 import re
 
 
-base_instruction = """
-    Based on the conversion between an ai assistant and user, generate next possible question which a user can ask.
-
-"""
-
-
 def createDeepenPrompt():
-    prompt = base_instruction + \
-        "If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased."
+    prompt = """
+    Based on the conversion between an ai assistant and user, generate next possible question which a user can ask.
+    If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased
+    Reply only with question generated.
+    """
     return prompt
 
-
-def createReasoningPrompt(instruction):
-    prompt = base_instruction.format(
-        "If #The Given Prompt# can be solved with just a few simple thinking processes, you can rewrite it to explicitly request multiple-step reasoning.")
-    prompt += "#The Given Prompt#: \r\n {} \r\n".format(instruction)
-    prompt += "#Rewritten Prompt#:\r\n"
-    return prompt
 
 
 @torch.no_grad()
@@ -87,7 +77,7 @@ def main(args):
     for row in final_data:
 
         messages = []
-        messages.append({"role": "system", "content": row["system_prompt"]})
+        # messages.append({"role": "system", "content": row["system_prompt"]})
         messages.append({"role": "user", "content": row["question"]})
         messages.append({"role": "assistant", "content": row["answer"]})
 
