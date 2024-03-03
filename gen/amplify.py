@@ -115,10 +115,7 @@ def main(args):
     max_rows = 500
     final_data = []
     existing_data = []
-    args.language = "hinglish"
     existing_ds = load_dataset(base_repo, split="train")
-    existing_ds = existing_ds.shuffle().filter(
-        lambda x: x["language"] == args.language)
     for r in existing_ds:
         if len(final_data) < max_rows and len(r["messages"]) == 0:
             final_data.append(r)
@@ -222,9 +219,9 @@ def main(args):
 
         selected_evol_prompt = random.choice(evol_prompts)
         selected_evol_prompt += "\n Generated question should have indian context if possible."
-        if args.language == "hindi":
+        if row["language"] == "hindi":
             selected_evol_prompt += "\n\nAnswer in hindi only"
-        if args.language == "hinglish":
+        if row["language"] == "hinglish":
             selected_evol_prompt += "\n\nAnswer in hinglish only"
 
         messages = []
