@@ -79,6 +79,7 @@ def main(args):
     max_rows = 5
     final_data = []
     existing_ds = load_dataset(base_repo, split="train")
+    existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
     for r in existing_ds:
         if len(final_data) < max_rows:
             final_data.append(r)
