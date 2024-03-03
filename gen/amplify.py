@@ -117,6 +117,8 @@ def main(args):
     existing_data = []
     existing_ds = load_dataset(base_repo, split="train")
     for r in existing_ds:
+        if "messages" not in r:
+            r["messages"] = []
         if len(final_data) < max_rows and len(r["messages"]) == 0:
             final_data.append(r)
         else:
