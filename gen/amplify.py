@@ -76,6 +76,18 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
+
+    max_rows = 5
+    final_data = []
+    if repo_exists(base_repo):
+        existing_ds = load_dataset(base_repo, split="train")
+        for r in existing_ds:
+            if len(final_data) < max_rows:
+                final_data.append(r)
+
+    print(final_data)
+    os.exit(1)
+    
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -96,14 +108,6 @@ def main(args):
             tensor_parallel_size=torch.cuda.device_count(),
             max_model_len=8196*2,
         )
-
-    max_rows = 5
-    final_data = []
-    if repo_exists(base_repo):
-        existing_ds = load_dataset(base_repo, split="train")
-        for r in existing_ds:
-            if len(final_data) < max_rows:
-                final_data.append(r)
 
     prompts = []
     for row in final_data:
