@@ -37,43 +37,18 @@ def main(args):
 
     final_data = []
     max_rows = 100
-    # required because will be running in a distributed way
 
     if args.model_name_or_path == "Qwen/Qwen1.5-72B-Chat-AWQ":
         key = "chosen"
     else:
         key = "rejected"
 
-    push_data = []
     for row in dataset:
             
         if len(row[key]) == 0 and len(final_data) < max_rows:
             final_data.append(row)
         
-        push_data.append(row)
-
-
-        # processed_by = row["processed_by"]
-        # if args.model_name_or_path not in processed_by and len(final_data) < max_rows:
-        #     final_data.append(row)
-        #     row["processed_by"][args.model_name_or_path] = True
-        # elif args.model_name_or_path in processed_by and not processed_by[args.model_name_or_path] and len(final_data) < max_rows:
-        #     final_data.append(row)
-        #     row["processed_by"][args.model_name_or_path] = True
-
-        # if args.model_name_or_path not in row["processed_by"]:
-        #     row["processed_by"][args.model_name_or_path] = False
-        # else:
-        #     if row["responses"][args.model_name_or_path]:
-        #         row["processed_by"][args.model_name_or_path] = True
-        #     else:
-        #         row["processed_by"][args.model_name_or_path] = False
-
-        push_data.append(row)
-
-    dataset = process_and_update_dataset(push_data)
-    dataset.push_to_hub(base_repo, private=True)
-
+     
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
@@ -132,10 +107,6 @@ def main(args):
 
             uuid = final_data[idx]["uuid"]
             final_data[idx][key] = text
-            # final_data[idx]["processed_count"] += 1
-            # processed_by = final_data[idx]["processed_by"]
-            # processed_by[args.model_name_or_path] = True
-            # final_data[idx]["responses"][args.model_name_or_path] = text
             uuid_row_map[uuid] = final_data[idx]
 
         existing_data = []
