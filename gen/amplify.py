@@ -18,10 +18,13 @@ def createDeepenPrompt(language):
 
     Your task to generate a next possible question which user can ask based on the conversation.
     If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased
-    Reply only with question generated.
+    Reply only with question generated, don't add any placeholders.
     """
     if language == "hinglish":
         prompt += "\n Generate question in hinglish language only."
+    if language == "hindi":
+        prompt += "\n Generate question in hindi language only."
+
     return prompt
 
 
@@ -50,6 +53,7 @@ def main(args):
 
     max_rows = 5
     final_data = []
+    existing_data = []
     args.language = "hinglish"
     existing_ds = load_dataset(base_repo, split="train")
     existing_ds = existing_ds.shuffle().filter(
@@ -57,6 +61,8 @@ def main(args):
     for r in existing_ds:
         if len(final_data) < max_rows and len(r["messages"]) == 0:
             final_data.append(r)
+        else:
+            existing_data.append(r)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
@@ -79,7 +85,7 @@ def main(args):
             max_model_len=8196*2,
         )
 
-    for _ in range(3):
+    for loop in range(3):
         prompts = []
         for row in final_data:
 
@@ -115,8 +121,8 @@ def main(args):
 
         prompts2 = []
         for idx, text in enumerate(outputs):
-            print("======")
-            print("prompt", prompts[idx], "text", text)
+            # print("======")
+            # print("prompt", prompts[idx], "text", text)
 
             messages = final_data[idx]["messages"]
             messages.append({"role": "user", "content": text})
@@ -130,24 +136,16 @@ def main(args):
 
         outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
         for idx, text in enumerate(outputs2):
-            print("======")
+            print("======", loop)
 
             for r in final_data[idx]["messages"]:
                 print(r["role"] + ":::" + r["content"])
             print("text", text)
             final_data[idx]["messages"].append(
                 {"role": "assistant", "content": text})
-            # final_data.append({
-            #     "topic": topics_selected2[idx],
-            #     "question": question2[idx],
-            #     "answer": text,
-            #     "system_prompt": sys_prompt_selected[idx],
-            #     "language": args.lang,
-            #     "type": "alpaca",
-            #     "model": args.model_name_or_path,
-            # })
 
-    # dataset = process_and_update_dataset(final_data)
+    # existing_data = final_data + existing_data
+    # dataset = process_and_update_dataset(existing_data)
     # dataset.push_to_hub(base_repo, private=True)
 
 
