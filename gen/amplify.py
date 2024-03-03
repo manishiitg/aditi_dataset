@@ -14,7 +14,7 @@ import re
 def createDeepenPrompt(language):
     prompt = """
     Based on the conversion between an ai assistant and user, generate next possible question which a user can ask.
-    In the conversion "user:" means the question as by user and "assistant:" means answer given.
+    In the conversion "user:" means the question as by user and "assistant:" means answer given and "system:" is the instruction for the ai asistant.
 
     Your task to generate a next possible question which user can ask based on the conversation.
     If the given conversation contains inquiries about certain issues, the depth and breadth of the inquiry can be increased
@@ -52,7 +52,8 @@ def main(args):
     final_data = []
     args.language = "hinglish"
     existing_ds = load_dataset(base_repo, split="train")
-    existing_ds = existing_ds.shuffle().filter(lambda x: x["language"] == args.language)
+    existing_ds = existing_ds.shuffle().filter(
+        lambda x: x["language"] == args.language)
     for r in existing_ds:
         if len(final_data) < max_rows:
             final_data.append(r)
@@ -82,7 +83,7 @@ def main(args):
     for row in final_data:
 
         messages = []
-        # messages.append({"role": "system", "content": row["system_prompt"]})
+        messages.append({"role": "system", "content": row["system_prompt"]})
         messages.append({"role": "user", "content": row["question"]})
         messages.append({"role": "assistant", "content": row["answer"]})
 
@@ -102,55 +103,42 @@ def main(args):
             add_generation_prompt=True
         )
         prompts.append(text)
+        row["messages"] = messages
 
     outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
     prompts2 = []
-    topics_selected2 = []
     sys_prompt_selected = []
     question2 = []
     for idx, text in enumerate(outputs):
         print("======")
         print("prompt", prompts[idx], "text", text)
 
-        # Define the regex pattern to match the instructions
-        # instruction_pattern = r'\*([^*]*)\*'
-        # Find all matches for instructions
-        # instructions = re.findall(
-        #     instruction_pattern, text, re.DOTALL)
+        messages = final_data["messages"]
+        messages.append({"role": "user", "content": text})
+        text = tokenizer.apply_chat_template(
+            msg_list,
+            tokenize=False,
+            add_generation_prompt=True
+        )
 
-        # instructions = []
-        # matches = text.split("\n")
-        # for match in matches:
-        #     if "." in match:
-        #         ix = match.index(".")
-        #         match = match[ix+1:]
-        #     else:
-        #         print("skipping instruction", match)
-        #         continue
-        #     match = match.strip()
-        #     if match.startswith('"'):
-        #         match = match[0:]
-        #     if match.endswith('"'):
-        #         match = match[:-1]
-        #     instructions.append(match.strip())
+        prompts2.append(text)
 
-    # outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-    # for idx, text in enumerate(outputs2):
-    #     print("======")
+    outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+    for idx, text in enumerate(outputs2):
+        print("======")
 
-    #     print("topic selected", topics_selected2[idx])
-    #     print("text", question2[idx])
-    #     print("text", text)
-    #     final_data.append({
-    #         "topic": topics_selected2[idx],
-    #         "question": question2[idx],
-    #         "answer": text,
-    #         "system_prompt": sys_prompt_selected[idx],
-    #         "language": args.lang,
-    #         "type": "alpaca",
-    #         "model": args.model_name_or_path,
-    #     })
+        print("topic selected", final_data[idx]["messages"])
+        print("text", text)
+        # final_data.append({
+        #     "topic": topics_selected2[idx],
+        #     "question": question2[idx],
+        #     "answer": text,
+        #     "system_prompt": sys_prompt_selected[idx],
+        #     "language": args.lang,
+        #     "type": "alpaca",
+        #     "model": args.model_name_or_path,
+        # })
 
     # dataset = process_and_update_dataset(final_data)
     # dataset.push_to_hub(base_repo, private=True)
