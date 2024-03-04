@@ -127,67 +127,129 @@ def main(args):
         else:
             existing_data.append(r)
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-    if args.awq:
-        print("Loading model and tokenizer vllm awq...")
-        model = vllm.LLM(
-            model=args.model_name_or_path,
-            tokenizer=args.model_name_or_path,
-            tokenizer_mode="auto",
-            tensor_parallel_size=torch.cuda.device_count(),
-            quantization="AWQ",
-            max_model_len=8196*2,
-        )
-    else:
-        print("Loading model and tokenizer vllm...")
-        model = vllm.LLM(
-            model=args.model_name_or_path,
-            tokenizer=args.model_name_or_path,
-            tokenizer_mode="auto",
-            tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196*2,
-        )
+    if len(final_data) > 0:
+        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+        if args.awq:
+            print("Loading model and tokenizer vllm awq...")
+            model = vllm.LLM(
+                model=args.model_name_or_path,
+                tokenizer=args.model_name_or_path,
+                tokenizer_mode="auto",
+                tensor_parallel_size=torch.cuda.device_count(),
+                quantization="AWQ",
+                max_model_len=8196*2,
+            )
+        else:
+            print("Loading model and tokenizer vllm...")
+            model = vllm.LLM(
+                model=args.model_name_or_path,
+                tokenizer=args.model_name_or_path,
+                tokenizer_mode="auto",
+                tensor_parallel_size=torch.cuda.device_count(),
+                max_model_len=8196*2,
+            )
 
-    for loop in range(3):
+        for loop in range(3):
+            prompts = []
+            for row in final_data:
+
+                if len(row["messages"]) == 0:
+                    messages = []
+                    messages.append(
+                        {"role": "system", "content": row["system_prompt"]})
+                    messages.append({"role": "user", "content": row["question"]})
+                    messages.append(
+                        {"role": "assistant", "content": row["answer"]})
+                    row["messages"] = messages
+                else:
+                    messages = row["messages"]
+
+                instruction = ""
+                for r in messages:
+                    instruction += r["role"] + ":" + r["content"] + "\n\n"
+
+                system = createGenerateQuestion(row["language"])
+                msg_list = [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": instruction}
+                ]
+
+                text = tokenizer.apply_chat_template(
+                    msg_list,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                prompts.append(text)
+
+            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+
+            prompts2 = []
+            for idx, text in enumerate(outputs):
+                # print("======")
+                # print("prompt", prompts[idx], "text", text)
+
+                messages = final_data[idx]["messages"]
+                messages.append({"role": "user", "content": text})
+                text = tokenizer.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+
+                prompts2.append(text)
+
+            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+            for idx, text in enumerate(outputs2):
+                print("======", loop)
+
+                for r in final_data[idx]["messages"]:
+                    print(r["role"] + ":::" + r["content"])
+                print("text", text)
+                if text.startswith('"'):
+                    text = text[1:]
+                if text.endswith('"'):
+                    text = text[:-1]
+
+                final_data[idx]["messages"].append(
+                    {"role": "assistant", "content": text})
+
         prompts = []
         for row in final_data:
+            instruction = row["question"]
+            evol_prompts = []
+            evol_prompts.append(createConstraintsPrompt(instruction))
+            evol_prompts.append(createDeepenPrompt(instruction))
+            evol_prompts.append(createConcretizingPrompt(instruction))
+            evol_prompts.append(createReasoningPrompt(instruction))
+            evol_prompts.append(createBreadthPrompt(instruction))
 
-            if len(row["messages"]) == 0:
-                messages = []
-                messages.append(
-                    {"role": "system", "content": row["system_prompt"]})
-                messages.append({"role": "user", "content": row["question"]})
-                messages.append(
-                    {"role": "assistant", "content": row["answer"]})
-                row["messages"] = messages
-            else:
-                messages = row["messages"]
+            selected_evol_prompt = random.choice(evol_prompts)
+            selected_evol_prompt += "\n Generated question should have indian context if possible."
+            if row["language"] == "hindi":
+                selected_evol_prompt += "\n\nAnswer in hindi only"
+            if row["language"] == "hinglish":
+                selected_evol_prompt += "\n\nAnswer in hinglish only"
 
-            instruction = ""
-            for r in messages:
-                instruction += r["role"] + ":" + r["content"] + "\n\n"
-
-            system = createGenerateQuestion(row["language"])
-            msg_list = [
-                {"role": "system", "content": system},
-                {"role": "user", "content": instruction}
-            ]
-
+            messages = []
+            messages.append({"role": "user", "content": selected_evol_prompt})
             text = tokenizer.apply_chat_template(
-                msg_list,
+                messages,
                 tokenize=False,
                 add_generation_prompt=True
             )
+
             prompts.append(text)
 
         outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
         prompts2 = []
+        questions = []
         for idx, text in enumerate(outputs):
-            # print("======")
-            # print("prompt", prompts[idx], "text", text)
+            questions.append(text)
 
-            messages = final_data[idx]["messages"]
+            messages = []
+            messages.append(
+                {"role": "system", "content": row["system_prompt"]})
             messages.append({"role": "user", "content": text})
             text = tokenizer.apply_chat_template(
                 messages,
@@ -199,90 +261,29 @@ def main(args):
 
         outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
         for idx, text in enumerate(outputs2):
-            print("======", loop)
-
-            for r in final_data[idx]["messages"]:
-                print(r["role"] + ":::" + r["content"])
-            print("text", text)
-            if text.startswith('"'):
-                text = text[1:]
-            if text.endswith('"'):
-                text = text[:-1]
-
-            final_data[idx]["messages"].append(
-                {"role": "assistant", "content": text})
-
-    prompts = []
-    for row in final_data:
-        instruction = row["question"]
-        evol_prompts = []
-        evol_prompts.append(createConstraintsPrompt(instruction))
-        evol_prompts.append(createDeepenPrompt(instruction))
-        evol_prompts.append(createConcretizingPrompt(instruction))
-        evol_prompts.append(createReasoningPrompt(instruction))
-        evol_prompts.append(createBreadthPrompt(instruction))
-
-        selected_evol_prompt = random.choice(evol_prompts)
-        selected_evol_prompt += "\n Generated question should have indian context if possible."
-        if row["language"] == "hindi":
-            selected_evol_prompt += "\n\nAnswer in hindi only"
-        if row["language"] == "hinglish":
-            selected_evol_prompt += "\n\nAnswer in hinglish only"
-
-        messages = []
-        messages.append({"role": "user", "content": selected_evol_prompt})
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-
-        prompts.append(text)
-
-    outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
-
-    prompts2 = []
-    questions = []
-    for idx, text in enumerate(outputs):
-        questions.append(text)
-
-        messages = []
-        messages.append(
-            {"role": "system", "content": row["system_prompt"]})
-        messages.append({"role": "user", "content": text})
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-
-        prompts2.append(text)
-
-    outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-    for idx, text in enumerate(outputs2):
-        print("======")
-        print("prompt", questions[idx], "text", text)
-        final_data[idx]["evol_question"] = questions[idx]
-        final_data[idx]["evol_answer"] = text
+            print("======")
+            print("prompt", questions[idx], "text", text)
+            final_data[idx]["evol_question"] = questions[idx]
+            final_data[idx]["evol_answer"] = text
 
 
-    final_data_hash = {}
-    for r in final_data:
-        hash = r["question"] + r["answer"]
-        final_data_hash[hash] = True
+        final_data_hash = {}
+        for r in final_data:
+            hash = r["question"] + r["answer"]
+            final_data_hash[hash] = True
 
-    existing_ds = load_dataset(base_repo, split="train")
-    existing_data = []
-    for r in existing_ds:
-        hash = r["question"] + r["answer"]
+        existing_ds = load_dataset(base_repo, split="train")
+        existing_data = []
+        for r in existing_ds:
+            hash = r["question"] + r["answer"]
 
-        if hash not in final_data_hash:
-            existing_data.append(r)
-            
+            if hash not in final_data_hash:
+                existing_data.append(r)
+                
 
-    existing_data = final_data + existing_data
-    dataset = process_and_update_dataset(existing_data)
-    dataset.push_to_hub(base_repo, private=True)
+        existing_data = final_data + existing_data
+        dataset = process_and_update_dataset(existing_data)
+        dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
