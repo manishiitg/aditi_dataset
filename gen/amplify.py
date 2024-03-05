@@ -25,9 +25,9 @@ def createGenerateQuestion(language):
     Keep the question short.
     """
     if language == "hinglish":
-        prompt += "\n Generate question in hinglish language only."
+        prompt += "\n Generate question in hinglish only. Translate to hinglish if required."
     if language == "hindi":
-        prompt += "\n Generate question in hindi language only."
+        prompt += "\n Generate question in hindi only. Translate to hinglish if required."
 
     return prompt
 
@@ -112,11 +112,11 @@ def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
 
-    max_rows = 1000
+    max_rows = 10
     final_data = []
     existing_data = []
     existing_ds = load_dataset(base_repo, split="train")
-    existing_ds = existing_ds.filter(lambda x: x["language"] == "hindi")
+    existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
     existing_ds = existing_ds.shuffle()
     for r in existing_ds:
         if "messages" not in r:
@@ -230,7 +230,7 @@ def main(args):
             if row["language"] == "hindi":
                 selected_evol_prompt += "\n\nAnswer in hindi only"
             if row["language"] == "hinglish":
-                selected_evol_prompt += "\n\nAnswer in hinglish only"
+                selected_evol_prompt += "\n\nAnswer in hinglish only. Translate to hinglish if required"
 
             messages = []
             messages.append({"role": "user", "content": selected_evol_prompt})
