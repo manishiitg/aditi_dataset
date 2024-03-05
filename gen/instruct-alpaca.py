@@ -328,8 +328,15 @@ def main(args):
                         idx = t.index(".")
                         if idx != -1:
                             t = t[idx + 1:]
+                            t = t.strip()
                     except ValueError:
                         pass
+
+                    if t.startswith('"'):
+                        t = t[0:]
+                    if t.endswith('"'):
+                        t = t[:-1]
+
                     TOPICS.append(t)
                     print("topic", t)
 
