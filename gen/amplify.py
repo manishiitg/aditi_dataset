@@ -10,6 +10,17 @@ import torch
 import random
 import re
 
+import unicodedata
+def is_hindi(char):
+    try:
+        return unicodedata.name(char).startswith('DEVANAGARI')
+    except ValueError:
+        return False
+
+
+def contains_hindi(s):
+    return any(is_hindi(char) for char in s)
+
 
 def createGenerateQuestion(language):
     prompt = """
@@ -123,7 +134,8 @@ def main(args):
             r["messages"] = []
             r["evol_question"] = ""
             r["eval_answer"] = ""
-        if len(final_data) < max_rows and len(r["messages"]) == 0:
+        is_hindi = contains_hindi(r["question"])
+        if len(final_data) < max_rows and len(r["messages"]) == 0 and not is_hindi:
             final_data.append(r)
         else:
             existing_data.append(r)
