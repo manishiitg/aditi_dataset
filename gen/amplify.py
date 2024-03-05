@@ -218,7 +218,7 @@ def main(args):
 
                 for r in final_data[idx]["messages"]:
                     print(r["role"] + ":::" + r["content"])
-                print("text", text)
+                print("conversation text", text)
                 if text.startswith('"'):
                     text = text[1:]
                 if text.endswith('"'):
@@ -276,7 +276,7 @@ def main(args):
         outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .2)
         for idx, text in enumerate(outputs2):
             print("======")
-            print("prompt", questions[idx], "text", text)
+            print("eval prompt", questions[idx], "text", text)
             final_data[idx]["evol_question"] = questions[idx]
             final_data[idx]["evol_answer"] = text
 
