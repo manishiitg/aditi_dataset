@@ -209,7 +209,7 @@ def main(args):
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
-        for loop in range(2):
+        for loop in range(10):
 
             prompts = []
             topics_selected = []
@@ -231,7 +231,7 @@ def main(args):
                     add_generation_prompt=True
                 )
 
-                outputs = eval_hf_model(args, model, tokenizer, [text], .7)
+                outputs = eval_hf_model(args, model, tokenizer, [text], 1)
                 output = outputs[0]
 
                 topics = output.split("\n")
