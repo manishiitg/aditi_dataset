@@ -123,7 +123,7 @@ def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
 
-    max_rows = 10
+    max_rows = 100
     final_data = []
     existing_data = []
     existing_ds = load_dataset(base_repo, split="train")
