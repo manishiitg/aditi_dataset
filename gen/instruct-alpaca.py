@@ -209,7 +209,7 @@ def main(args):
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
-        for loop in range(10):
+        for loop in range(2):
 
             prompts = []
             topics_selected = []
@@ -220,9 +220,9 @@ def main(args):
                     Give me a numbered list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in india.
                     Generate a diverse list of topics.
                 """
-                if len(topics_generated) > 0:
-                    prompt += "\n Topics should not be related to " + \
-                        ",".join(topics_generated)
+                # if len(topics_generated) > 0:
+                #     prompt += "\n Topics should not be related to " + \
+                #         ",".join(topics_generated)
                 message.append({"role": "user", "content": prompt})
                 text = tokenizer.apply_chat_template(
                     message,
