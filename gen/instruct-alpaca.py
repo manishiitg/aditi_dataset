@@ -328,7 +328,7 @@ def main(args):
                 outputs = eval_hf_model(args, model, tokenizer, [text], .7)
                 output = outputs[0]
                 print("topics generated", output)
-                os.exit(1)
+                
                 topics = output.split("\n")
                 TOPICS = []
                 for t in topics:
@@ -347,7 +347,7 @@ def main(args):
 
                     TOPICS.append(t)
                     print("topic", t)
-
+            os.exit(1)
             for topic_selected in TOPICS:
 
                 # topic_number = random.randint(0, len(TOPICS)-1)
