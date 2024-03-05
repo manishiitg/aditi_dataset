@@ -261,7 +261,7 @@ def main(args):
 
             prompts2.append(text)
 
-        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .2)
         for idx, text in enumerate(outputs2):
             print("======")
             print("prompt", questions[idx], "text", text)
