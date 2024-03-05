@@ -268,7 +268,6 @@ def main(args):
             final_data[idx]["evol_question"] = questions[idx]
             final_data[idx]["evol_answer"] = text
 
-        os.exit(1)
         final_data_hash = {}
         for r in final_data:
             hash = r["question"] + r["answer"]
