@@ -246,7 +246,7 @@ def main(args):
                         pass
 
                     if t.startswith('"'):
-                        t = t[0:]
+                        t = t[1:]
                     if t.endswith('"'):
                         t = t[:-1]
 
@@ -301,7 +301,7 @@ def main(args):
             question2 = []
             for idx, text in enumerate(outputs):
                 print("======")
-                print("prompt", prompts[idx], "text", text)
+                # print("prompt", prompts[idx], "text", text)
 
                 # Define the regex pattern to match the instructions
                 # instruction_pattern = r'\*([^*]*)\*'
@@ -321,7 +321,7 @@ def main(args):
                         continue
                     match = match.strip()
                     if match.startswith('"'):
-                        match = match[0:]
+                        match = match[1:]
                     if match.endswith('"'):
                         match = match[:-1]
                     instructions.append(match.strip())
