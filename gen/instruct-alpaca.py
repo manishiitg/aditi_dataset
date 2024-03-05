@@ -221,9 +221,9 @@ def main(args):
                     Generate a diverse list of topics.
                 """
                 #, related to india, indian culture, indian socity, latest trends in india and what people talk about in india
-                # if len(topics_generated) > 0:
-                #     prompt += "\n Topics should not be related to " + \
-                #         ",".join(topics_generated)
+                if len(topics_generated) > 0:
+                    prompt += "\n Topics should not be related to " + \
+                        ",".join(topics_generated)
                 message.append({"role": "user", "content": prompt})
                 text = tokenizer.apply_chat_template(
                     message,
