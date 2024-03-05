@@ -324,9 +324,12 @@ def main(args):
                 topics = output.split("\n")
                 TOPICS = []
                 for t in topics:
-                    idx = t.index(".")
-                    if idx != -1:
-                        t = t[idx + 1:]
+                    try:
+                        idx = t.index(".")
+                        if idx != -1:
+                            t = t[idx + 1:]
+                    except ValueError:
+                        pass
                     TOPICS.append(t)
                     print("topic", t)
 
