@@ -155,14 +155,14 @@ PROMPT_5 = """
 You are asked to come up with a set of 20 diverse task instructions. 
 These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
 
-The instruction should only be related to "Alien life and the search for extraterrestrial intelligence"
+The instruction should only be related to "The influence of TikTok on social media trends"
 
 Here are the requirements:
 1. Instructions generated should only be in hinglish.
 2. Try not to repeat the verb for each instruction to maximize diversity.
 3. The type of instructions should be diverse. 
     a. The list should include diverse types of tasks like open-ended generation, classification, editing, writing, conversation, trivia, etc.
-4. The type of instructions should be related to only "Alien life and the search for extraterrestrial intelligence"
+4. The type of instructions should be related to only "The influence of TikTok on social media trends"
 5 . A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
 6. The instructions should be 1 to 2 sentences long. Either an imperative sentence or a question is permitted
 7. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
