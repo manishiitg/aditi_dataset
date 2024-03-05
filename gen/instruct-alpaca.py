@@ -317,7 +317,7 @@ def main(args):
             if args.generate_topics:
                 prompt = """Give me a list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in indian"""
 
-                outputs = eval_hf_model(args, model, tokenizer, [prompt], .2)
+                outputs = eval_hf_model(args, model, tokenizer, [prompt], .7)
                 output = outputs[0]
                 print("topics generated", output)
                 topics = output.split("\n")
