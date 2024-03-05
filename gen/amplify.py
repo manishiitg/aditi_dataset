@@ -116,6 +116,7 @@ def main(args):
     final_data = []
     existing_data = []
     existing_ds = load_dataset(base_repo, split="train")
+    existing_ds = existing_ds.filter(lambda x: x["language"] == "hindi")
     existing_ds = existing_ds.shuffle()
     for r in existing_ds:
         if "messages" not in r:
@@ -157,7 +158,8 @@ def main(args):
                     messages = []
                     messages.append(
                         {"role": "system", "content": row["system_prompt"]})
-                    messages.append({"role": "user", "content": row["question"]})
+                    messages.append(
+                        {"role": "user", "content": row["question"]})
                     messages.append(
                         {"role": "assistant", "content": row["answer"]})
                     row["messages"] = messages
@@ -266,7 +268,6 @@ def main(args):
             final_data[idx]["evol_question"] = questions[idx]
             final_data[idx]["evol_answer"] = text
 
-
         final_data_hash = {}
         for r in final_data:
             hash = r["question"] + r["answer"]
@@ -279,7 +280,6 @@ def main(args):
 
             if hash not in final_data_hash:
                 existing_data.append(r)
-                
 
         existing_data = final_data + existing_data
         dataset = process_and_update_dataset(existing_data)
