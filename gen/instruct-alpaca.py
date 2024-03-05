@@ -305,6 +305,7 @@ def main(args):
         for r in existing_ds:
             final_data.append(r)
 
+    global TOPICS
     languages = ["hinglish"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
