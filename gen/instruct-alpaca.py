@@ -316,9 +316,16 @@ def main(args):
             topics_selected = []
             random.shuffle(TOPICS)
             if args.generate_topics:
+                message = []
                 prompt = """Give me a list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in indian"""
+                message.append({"role": "user" , "content" : prompt})
+                text = tokenizer.apply_chat_template(
+                    message,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
 
-                outputs = eval_hf_model(args, model, tokenizer, [prompt], .7)
+                outputs = eval_hf_model(args, model, tokenizer, [text], .7)
                 output = outputs[0]
                 print("topics generated", outputs)
                 os.exit(1)
