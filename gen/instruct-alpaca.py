@@ -317,7 +317,7 @@ def main(args):
             random.shuffle(TOPICS)
             if args.generate_topics:
                 message = []
-                prompt = """Give me a list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in indian"""
+                prompt = """Give me a numbered list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in indian"""
                 message.append({"role": "user" , "content" : prompt})
                 text = tokenizer.apply_chat_template(
                     message,
@@ -327,7 +327,7 @@ def main(args):
 
                 outputs = eval_hf_model(args, model, tokenizer, [text], .7)
                 output = outputs[0]
-                print("topics generated", outputs)
+                print("topics generated", output)
                 os.exit(1)
                 topics = output.split("\n")
                 TOPICS = []
