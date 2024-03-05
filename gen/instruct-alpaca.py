@@ -306,6 +306,9 @@ def main(args):
             final_data.append(r)
 
     global TOPICS
+
+    topics_generated = []
+
     languages = ["hinglish"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
@@ -317,8 +320,14 @@ def main(args):
             random.shuffle(TOPICS)
             if args.generate_topics:
                 message = []
-                prompt = """Give me a numbered list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in indian"""
-                message.append({"role": "user" , "content" : prompt})
+                prompt = """
+                    Give me a numbered list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in india.
+                    Generate a diverse list of topics.
+                """
+                if len(topics_generated) > 0:
+                    prompt += "\n Topics should not be related to " + \
+                        ",".join(topics_generated)
+                message.append({"role": "user", "content": prompt})
                 text = tokenizer.apply_chat_template(
                     message,
                     tokenize=False,
@@ -327,8 +336,7 @@ def main(args):
 
                 outputs = eval_hf_model(args, model, tokenizer, [text], .7)
                 output = outputs[0]
-                print("topics generated", output)
-                
+
                 topics = output.split("\n")
                 TOPICS = []
                 for t in topics:
@@ -346,8 +354,9 @@ def main(args):
                         t = t[:-1]
 
                     TOPICS.append(t)
+                    topics_generated.append(t)
                     print("topic", t)
-            os.exit(1)
+
             for topic_selected in TOPICS:
 
                 # topic_number = random.randint(0, len(TOPICS)-1)
