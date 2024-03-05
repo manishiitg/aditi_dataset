@@ -320,7 +320,8 @@ def main(args):
 
                 outputs = eval_hf_model(args, model, tokenizer, [prompt], .7)
                 output = outputs[0]
-                print("topics generated", output)
+                print("topics generated", outputs)
+                os.exit(1)
                 topics = output.split("\n")
                 TOPICS = []
                 for t in topics:
