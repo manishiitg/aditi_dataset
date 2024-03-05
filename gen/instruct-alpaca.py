@@ -20,7 +20,6 @@ SYSTEM_MESSAGES_ORCA = [
     "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
     "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You are an AI assistant. You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. You might need to use additional knowledge to answer the question.",
     "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
     "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
     "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
@@ -81,6 +80,110 @@ TOPICS = [
     "Entertainment - movies, television, games, comedy, performing arts",
 ]
 
+TOPICS_INDIA = [
+    "Bollywood movies and the influence of Indian cinema",
+    "Yoga and its origins in ancient Indian traditions",
+    "The rise of Indian startups and the tech industry",
+    "Traditional Indian cuisine and the popularity of regional dishes",
+    "The impact of social media on Indian youth culture",
+    "Indian classical music and its rich heritage",
+    "The growing popularity of Indian fashion and textiles",
+    "The role of religion in Indian society",
+    "The challenges of urbanization and rapid development in Indian cities",
+    "The influence of Indian literature and authors",
+    "The rise of Indian influencers and content creators",
+    "The impact of the Indian diaspora on global culture",
+    "The popularity of Indian sports like cricket and kabaddi",
+    "The growth of the Indian film industry beyond Bollywood",
+    "The increasing focus on sustainable living and eco-friendly practices in India",
+    "The impact of the COVID-19 pandemic on Indian society",
+    "The rise of Indian entrepreneurs and business leaders",
+    "The popularity of traditional Indian arts and crafts",
+    "The challenges of gender inequality and women's empowerment in India",
+    "The impact of Indian philosophy and spiritual traditions",
+    "The growth of the Indian education sector and educational reforms",
+    "The popularity of Indian festivals and celebrations",
+    "The impact of the Indian diaspora on global cuisines",
+    "The rise of Indian stand-up comedy and comedians",
+    "The challenges of poverty and income inequality in India",
+    "The popularity of Indian music genres like Bollywood and Punjabi",
+    "The impact of Indian mythology and epics on popular culture",
+    "The growth of the Indian healthcare sector and medical tourism",
+    "The popularity of Indian weddings and their traditions",
+    "The impact of Indian politics and the role of political parties",
+    "The growth of the Indian tourism industry and popular destinations",
+    "The popularity of Indian festivals and their cultural significance",
+    "The impact of Indian architecture and heritage sites",
+    "The rise of Indian-origin tech entrepreneurs and their global impact",
+    "The popularity of Indian dance forms like Bharatanatyam and Kathak",
+    "The impact of Indian spirituality and wellness practices",
+    "The growth of the Indian gaming industry and esports",
+    "The popularity of Indian street food and its regional variations",
+    "The impact of Indian art and artists on the global art scene",
+    "The rise of Indian influencers in the beauty and fashion industry",
+    "The popularity of Indian festivals and their cultural significance",
+    "The impact of Indian music and its influence on global music",
+    "The growth of the Indian automotive industry and electric vehicles",
+    "The popularity of Indian spices and their health benefits",
+    "The impact of Indian literature and its influence on global literature",
+    "The rise of Indian-origin actors and their global success",
+    "The popularity of Indian handicrafts and their cultural significance",
+    "The impact of Indian cuisine on global food trends",
+    "The growth of the Indian media and entertainment industry",
+    "The popularity of Indian festivals and their cultural significance",
+
+    "The rise of online food delivery services in Indian cities",
+    "The popularity of traditional Indian board games like Chaupar and Pachisi",
+    "The impact of the Indian Premier League (IPL) on cricket fandom",
+    "The growth of the Indian beauty and wellness industry",
+    "The popularity of Indian classical dance forms like Kathak and Bharatanatyam",
+    "The challenges of water scarcity and conservation in India",
+    "The rise of Indian-origin entrepreneurs in the tech industry",
+    "The popularity of Indian festivals like Diwali and Holi",
+    "The impact of Bollywood on Indian fashion and style trends",
+    "The growth of the Indian e-commerce and online shopping industry",
+    "The popularity of Indian folk music and its regional variations",
+    "The impact of the Indian caste system on social mobility",
+    "The rise of Indian-origin chefs and their influence on global cuisine",
+    "The popularity of Indian martial arts like Kalaripayattu and Thang-Ta",
+    "The impact of the Indian independence movement on national identity",
+    "The growth of the Indian renewable energy sector",
+    "The popularity of Indian street food and its regional variations",
+    "The impact of Indian mythology and folklore on popular culture",
+    "The rise of Indian stand-up comedy and its popularity among youth",
+    "The popularity of Indian traditional medicine like Ayurveda and Unani",
+    "The impact of the Indian education system on social and economic mobility",
+    "The growth of the Indian textile industry and the popularity of handloom products",
+    "The popularity of Indian music genres like Carnatic and Hindustani classical",
+    "The impact of the Indian diaspora on global culture and cuisine",
+    "The rise of Indian-origin actors and their success in Hollywood",
+    "The popularity of Indian festivals and their cultural significance",
+    "The impact of the Indian IT industry on the global tech landscape",
+    "The growth of the Indian sports industry beyond cricket",
+    "The popularity of Indian spices and their health benefits",
+    "The impact of the Indian caste system on social and economic inequality",
+    "The rise of Indian-origin authors and their influence on global literature",
+    "The popularity of Indian traditional crafts like Zardozi and Phulkari",
+    "The impact of the Indian independence movement on gender equality",
+    "The growth of the Indian tourism industry and popular destinations",
+    "The popularity of Indian vegetarian cuisine and its regional variations",
+    "The impact of the Indian space program on scientific advancement",
+    "The rise of Indian-origin entrepreneurs in the food industry",
+    "The popularity of Indian classical music and its regional variations",
+    "The impact of the Indian film industry on popular culture and social norms",
+    "The growth of the Indian automotive industry and the rise of electric vehicles",
+    "The popularity of Indian festivals and their cultural significance",
+    "The impact of the Indian caste system on social mobility and economic opportunity",
+    "The rise of Indian-origin entrepreneurs in the fashion industry",
+    "The popularity of Indian traditional arts like Rangoli and Mehndi",
+    "The impact of the Indian independence movement on religious harmony",
+    "The growth of the Indian sports industry and the rise of new sports leagues",
+    "The popularity of Indian street food and its regional variations",
+    "The impact of the Indian education system on the growth of the IT industry",
+    "The rise of Indian-origin entrepreneurs in the healthcare industry",
+    "The popularity of Indian festivals and their cultural significance",
+]
+
 SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA
 
 PROMPT_2 = """
@@ -103,29 +206,6 @@ List of 50 tasks:
 
 1. <instruction>
 2. <instruction>
-"""
-
-PROMPT_3 = """
-You are asked to come up with a set of 50 diverse task instructions. 
-These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
-
-The instruction should only be related to India with specific context of SUBJECT_AREA
-
-Here are the requirements:
-1. Try not to repeat the verb for each instruction to maximize diversity.
-2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
-3. The type of instructions should be related to only SUBJECT_AREA
-    3.a The type of instruction should not include poem writing
-3. The type of instructions should be diverse. The list should include diverse types of tasks like open-ended generation, knowledge based questions, classification, editing, etc.
-4. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
-5. The instructions should be in Hindi.
-6. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
-7. Make sure every instruction captures indian context and is in in hindi language only. 
-
-List of 50 tasks:
-
-1. <instruction_in_hindi>
-2. <instruction_in_hindi>
 """
 
 PROMPT_4 = """
@@ -234,6 +314,21 @@ def main(args):
             prompts = []
             topics_selected = []
             random.shuffle(TOPICS)
+            if args.generate_topics:
+                prompt = """Give me a list of 50 completely random topics, related to india, indian culture, indian socity, latest trends in india and what people talk about in indian"""
+
+                outputs = eval_hf_model(args, model, tokenizer, [prompt], .2)
+                output = outputs[0]
+                print("topics generated", output)
+                topics = output.split("\n")
+                TOPICS = []
+                for t in topics:
+                    idx = t.index(".")
+                    if idx != -1:
+                        t = t[idx + 1:]
+                    TOPICS.append(t)
+                    print("topic", t)
+
             for topic_selected in TOPICS:
 
                 # topic_number = random.randint(0, len(TOPICS)-1)
@@ -243,7 +338,7 @@ def main(args):
                 SYSTEM_PROMPT = PROMPT_2
 
                 if args.lang == "hindi":
-                    SYSTEM_PROMPT = PROMPT_3
+                    SYSTEM_PROMPT = PROMPT_5
 
                 if args.lang == "hinglish":
                     SYSTEM_PROMPT = PROMPT_4
@@ -396,5 +491,11 @@ if __name__ == "__main__":
         action="store_true",
         help="Load model as awq"
     )
+    parser.add_argument(
+        "--generate_topics",
+        action="store_true",
+        help="generate topocs"
+    )
+
     args = parser.parse_args()
     main(args)

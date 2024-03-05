@@ -32,8 +32,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
-    dataset = load_dataset(base_repo, split="train",
-                           cache_dir="temp-" + str(time.time()))
+    dataset = load_dataset(base_repo, split="train")
 
     final_data = []
     max_rows = 5000
@@ -44,11 +43,10 @@ def main(args):
         key = "rejected"
 
     for row in dataset:
-            
+
         if len(row[key]) == 0 and len(final_data) < max_rows:
             final_data.append(row)
-        
-     
+
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
