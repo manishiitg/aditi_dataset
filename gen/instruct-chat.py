@@ -217,10 +217,9 @@ def main(args):
         )
 
     final_data = []
-    if repo_exists(base_repo):
-        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-        for r in existing_ds:
-            final_data.append(r)
+    existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+    for r in existing_ds:
+        final_data.append(r)
 
     global TOPICS
 
