@@ -1,7 +1,5 @@
-from tqdm import tqdm
 import argparse
 import torch
-import json
 from datasets import load_dataset
 from transformers import AutoTokenizer
 import vllm
@@ -9,8 +7,6 @@ from datasets import Dataset
 import torch
 import random
 import time
-import re
-from huggingface_hub import repo_exists
 
 
 import unicodedata
@@ -211,13 +207,11 @@ def main(args):
         )
 
     final_data = []
-    if repo_exists(base_repo):
-        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-        for r in existing_ds:
-            final_data.append(r)
+    
+    existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+    for r in existing_ds:
+        final_data.append(r)
 
-    print(len(final_data))
-    os.exit(1)
     global TOPICS
 
     topics_generated = []
