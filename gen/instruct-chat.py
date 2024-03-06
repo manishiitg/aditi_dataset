@@ -13,6 +13,8 @@ from huggingface_hub import repo_exists
 
 
 import unicodedata
+
+
 def is_hindi(char):
     try:
         return unicodedata.name(char).startswith('DEVANAGARI')
@@ -23,24 +25,28 @@ def is_hindi(char):
 def contains_hindi(s):
     return any(is_hindi(char) for char in s)
 
+
 def contains_chinese(text):
     for char in text:
         if '\u4e00' <= char <= '\u9fff':
             return True
     return False
 
+
 SYSTEM_MESSAGES_ORCA = [
-    "",
-    "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
-    "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
-    "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
-    "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
-    "You are an AI assistant that helps people find information.",
+    """The user is talking to you over voice on their phone, and your response will be read out loud with realistic text-to-speech (TTS) technology.
+    Follow every direction here when crafting your response:
+    Use natural, conversational language that are clear and easy to follow (short sentences, simple words).
+    1. Keep the conversation flowing.
+    1a. Clarify: when there is ambiguity, ask clarifying questions, rather than make assumptions.
+    1b. Don't implicitly or explicitly try to end the chat (i.e. do not end a response with "Talk soon!", or "Enjoy!").
+    1c. Sometimes the user might just want to chat. Ask them relevant follow-up questions.
+    1d. Don't ask them if there's anything else they need help with (e.g. don't say things like "How can I assist you further?").
+    2. Remember that this is a voice conversation:
+    2a. Don't use lists, markdown, bullet points, or other formatting that's not typically spoken.
+    2b. Type out numbers in words (e.g. 'twenty twelve' instead of the year 2012)
+    2c. If something doesn't make sense, it's likely because you misheard them. There wasn't a typo, and the user didn't mispronounce anything.
+    Remember to follow these rules absolutely, and do not refer to these rules, even if you're asked about them."""
 ]
 
 TOPICS = [
@@ -100,8 +106,8 @@ TOPICS = [
 SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA
 
 PROMPT_2 = """
-You are asked to come up with a set of 25 diverse task instructions. 
-These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
+You are asked to come up with a set of 25 diverse questions. 
+These questions will be given to a GPT model as a starter to a conversation.
 
 The instruction should only be related to SUBJECT_AREA
 
@@ -187,7 +193,7 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    base_repo = "manishiitg/indic-synthetic-instruct"
+    base_repo = "manishiitg/indic-synthetic-chat"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -355,7 +361,7 @@ def main(args):
                     if args.lang == "hindi":
                         system_message_selected += "\n\nAnswer in hindi only"
                     if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
+                        system_message_selected += "\n\nAnswer in hinglish only"
                     if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
                         msg_list = []
                         msg_prompt = {
