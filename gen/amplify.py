@@ -5,6 +5,7 @@ import json
 from datasets import load_dataset
 from transformers import AutoTokenizer
 import vllm
+import time
 from datasets import Dataset
 import torch
 import random
@@ -125,8 +126,7 @@ def main(args):
 
     max_rows = 100
     final_data = []
-    existing_data = []
-    existing_ds = load_dataset(base_repo, split="train")
+    existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
     existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
     existing_ds = existing_ds.shuffle()
     for r in existing_ds:
@@ -137,8 +137,6 @@ def main(args):
         is_hindi = contains_hindi(r["question"])
         if len(final_data) < max_rows and len(r["messages"]) == 0 and not is_hindi:
             final_data.append(r)
-        else:
-            existing_data.append(r)
 
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
@@ -286,7 +284,7 @@ def main(args):
             hash = r["question"] + r["answer"]
             final_data_hash[hash] = True
 
-        existing_ds = load_dataset(base_repo, split="train")
+        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
         existing_data = []
         for r in existing_ds:
             hash = r["question"] + r["answer"]
