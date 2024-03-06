@@ -12,6 +12,23 @@ import re
 from huggingface_hub import repo_exists
 
 
+import unicodedata
+def is_hindi(char):
+    try:
+        return unicodedata.name(char).startswith('DEVANAGARI')
+    except ValueError:
+        return False
+
+
+def contains_hindi(s):
+    return any(is_hindi(char) for char in s)
+
+def contains_chinese(text):
+    for char in text:
+        if '\u4e00' <= char <= '\u9fff':
+            return True
+    return False
+
 SYSTEM_MESSAGES_ORCA = [
     "",
     "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
@@ -329,6 +346,8 @@ def main(args):
 
                 for inst in instructions:
                     print("inst", inst)
+                    if contains_hindi(inst) or contains_chinese(inst):
+                        continue
                     system_message_number = random.randint(
                         0, len(SYSTEM_MESSAGES)-1)
                     system_message_selected = SYSTEM_MESSAGES[system_message_number]
