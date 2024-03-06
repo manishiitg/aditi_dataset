@@ -7,6 +7,7 @@ from datasets import Dataset
 import torch
 import random
 import time
+from huggingface_hub import repo_exists
 
 
 import unicodedata
@@ -207,11 +208,13 @@ def main(args):
         )
 
     final_data = []
-    
-    existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-    for r in existing_ds:
-        final_data.append(r)
+    if repo_exists(base_repo, repo_type="dataset"):
+        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+        for r in existing_ds:
+            final_data.append(r)
 
+    print(len(final_data))
+    os.exit(1)
     global TOPICS
 
     topics_generated = []
