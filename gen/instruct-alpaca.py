@@ -209,7 +209,7 @@ def main(args):
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
-        for loop in range(10):
+        for loop in range(4):
 
             prompts = []
             topics_selected = []
