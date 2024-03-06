@@ -212,9 +212,7 @@ def main(args):
         existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
         for r in existing_ds:
             final_data.append(r)
-
-    print(len(final_data))
-    os.exit(1)
+            
     global TOPICS
 
     topics_generated = []
