@@ -220,7 +220,7 @@ def main(args):
                     Give me a numbered list of 50 completely random topics.
                     Generate a diverse list of topics.
                 """
-                #, related to india, indian culture, indian socity, latest trends in india and what people talk about in india
+                # , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
                 if len(topics_generated) > 0:
                     prompt += "\n Topics should not be related to " + \
                         ",".join(topics_generated)
@@ -376,6 +376,9 @@ def main(args):
                     "language": args.lang,
                     "type": "alpaca",
                     "model": args.model_name_or_path,
+                    "messages": [],
+                    "evol_question": "",
+                    "evol_answer": "",
                 })
 
             dataset = process_and_update_dataset(final_data)
