@@ -107,7 +107,7 @@ Here are the requirements:
 1. Try not to repeat the verb for each instruction to maximize diversity.
 2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
 3. The type of instructions should be related to only SUBJECT_AREA
-3.a The type of instruction should not include poem writing
+   a. The type of instruction should not include poem writing
 4. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
 5. The instructions should be in English.
 6. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
@@ -128,7 +128,7 @@ Here are the requirements:
 1. Try not to repeat the verb for each instruction to maximize diversity.
 2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
 3. The type of instructions should be related to only SUBJECT_AREA
-    3.a The type of instruction should not include poem writing
+    a. The type of instruction should not include poem writing
 3. The type of instructions should be diverse. The list should include diverse types of tasks like open-ended generation, knowledge based questions, classification, editing, etc.
 4. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
 5. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
@@ -344,11 +344,15 @@ def main(args):
                 topic_instruct_map[topic_selected] = text
 
                 print("topic_selected", topic_selected)
+                dups = {}
                 for inst in instructions:
                     print("inst", inst)
                     if args.lang == "hinglish":
                         if contains_hindi(inst) or contains_chinese(inst):
                             continue
+                    if inst in dups:
+                        continue
+                    dups[inst] = True
                     system_message_number = random.randint(
                         0, len(SYSTEM_MESSAGES)-1)
                     system_message_selected = SYSTEM_MESSAGES[system_message_number]

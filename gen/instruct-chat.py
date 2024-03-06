@@ -116,7 +116,7 @@ Here are the requirements:
 1. Try not to repeat the verb for each instruction to maximize diversity.
 2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
 3. The type of instructions should be related to only SUBJECT_AREA
-3.a The type of instruction should not include poem writing
+   a. The type of instruction should not include poem writing
 4. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
 5. The instructions should be in English.
 6. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
@@ -137,11 +137,11 @@ Here are the requirements:
 1. Try not to repeat the verb for each instruction to maximize diversity.
 2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
 3. The type of instructions should be related to only SUBJECT_AREA
-    3.a The type of instruction should not include poem writing
-3. The type of instructions should be diverse. The list should include diverse types of tasks like open-ended generation, knowledge based questions, classification, editing, etc.
-4. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
-5. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
-6. Make sure every instruction is in hindi language only. 
+   a The type of instruction should not include poem writing
+4. The type of instructions should be diverse. The list should include diverse types of tasks like open-ended generation, knowledge based questions, classification, editing, etc.
+5. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
+6. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
+7. Make sure every instruction is in hindi language only. 
 
 List of 25 tasks:
 
