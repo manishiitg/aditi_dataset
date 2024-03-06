@@ -344,6 +344,7 @@ def main(args):
                 topic_selected = topics_selected[idx]
                 topic_instruct_map[topic_selected] = text
 
+                print("topic_selected", topic_selected)
                 for inst in instructions:
                     print("inst", inst)
                     if contains_hindi(inst) or contains_chinese(inst):
