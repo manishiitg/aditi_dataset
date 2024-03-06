@@ -149,7 +149,7 @@ These task instructions will be given to a GPT model and we will evaluate the GP
 The instruction should only be related to SUBJECT_AREA
 
 Here are the requirements:
-1. Instructions generated should only be in hinglish.
+1. Generate tasks only in hinglish. Translate tasks generated to hinglish if tasks are in hindi.
 2. Try not to repeat the verb for each instruction to maximize diversity.
 3. The type of instructions should be diverse. 
     a. The list should include diverse types of tasks like open-ended generation, classification, editing, writing, conversation, trivia, etc.
@@ -163,7 +163,6 @@ List of 20 tasks:
 1. <instruction_in_hinglish>
 2. <instruction_in_hinglish>
 
-Generate tasks only in hinglish not hindi. Translate tasks generated to hinglish if required.
 """
 
 
