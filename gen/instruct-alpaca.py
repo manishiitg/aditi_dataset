@@ -100,7 +100,7 @@ TOPICS = [
 SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA
 
 PROMPT_2 = """
-You are asked to come up with a set of 20 diverse task instructions. 
+You are asked to come up with a set of 25 diverse task instructions. 
 These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
 
 The instruction should only be related to SUBJECT_AREA
@@ -114,14 +114,14 @@ Here are the requirements:
 5. The instructions should be in English.
 6. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
 
-List of 20 tasks:
+List of 25 tasks:
 
 1. <instruction>
 2. <instruction>
 """
 
 PROMPT_4 = """
-You are asked to come up with a set of 20 diverse task instructions. 
+You are asked to come up with a set of 25 diverse task instructions. 
 These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
 
 The instruction should only be related to India with specific context of SUBJECT_AREA
@@ -136,14 +136,14 @@ Here are the requirements:
 5. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
 6. Make sure every instruction is in hindi language only. 
 
-List of 20 tasks:
+List of 25 tasks:
 
 1. <instruction_in_hindi>
 2. <instruction_in_hindi>
 """
 
 PROMPT_5 = """
-You are asked to come up with a set of 20 diverse task instructions. 
+You are asked to come up with a set of 25 diverse task instructions. 
 These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
 
 The instruction should only be related to SUBJECT_AREA
@@ -154,11 +154,11 @@ Here are the requirements:
 3. The type of instructions should be diverse. 
     a. The list should include diverse types of tasks like open-ended generation, classification, editing, writing, conversation, trivia, etc.
 4. The type of instructions should be related to only SUBJECT_AREA
-5 . A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
+5. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
 6. The instructions should be 1 to 2 sentences long. Either an imperative sentence or a question is permitted
 7. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
 
-List of 20 tasks:
+List of 25 tasks:
 
 1. <instruction_in_hinglish>
 2. <instruction_in_hinglish>
@@ -346,8 +346,9 @@ def main(args):
                 print("topic_selected", topic_selected)
                 for inst in instructions:
                     print("inst", inst)
-                    if contains_hindi(inst) or contains_chinese(inst):
-                        continue
+                    if args.lang == "hinglish":
+                        if contains_hindi(inst) or contains_chinese(inst):
+                            continue
                     system_message_number = random.randint(
                         0, len(SYSTEM_MESSAGES)-1)
                     system_message_selected = SYSTEM_MESSAGES[system_message_number]
