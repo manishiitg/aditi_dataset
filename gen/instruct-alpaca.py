@@ -291,7 +291,7 @@ def main(args):
                 prompts.append(text)
                 topics_selected.append(topic_selected)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
             prompts2 = []
             topics_selected2 = []
