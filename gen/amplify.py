@@ -124,7 +124,7 @@ def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
 
-    max_rows = 100
+    max_rows = 500
     final_data = []
     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
     existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
@@ -226,58 +226,58 @@ def main(args):
                     {"role": "assistant", "content": text})
 
         # evol instruct
-        prompts = []
-        for row in final_data:
-            instruction = row["question"]
-            evol_prompts = []
-            evol_prompts.append(createConstraintsPrompt(instruction))
-            evol_prompts.append(createDeepenPrompt(instruction))
-            evol_prompts.append(createConcretizingPrompt(instruction))
-            evol_prompts.append(createReasoningPrompt(instruction))
-            evol_prompts.append(createBreadthPrompt(instruction))
+        # prompts = []
+        # for row in final_data:
+        #     instruction = row["question"]
+        #     evol_prompts = []
+        #     evol_prompts.append(createConstraintsPrompt(instruction))
+        #     evol_prompts.append(createDeepenPrompt(instruction))
+        #     evol_prompts.append(createConcretizingPrompt(instruction))
+        #     evol_prompts.append(createReasoningPrompt(instruction))
+        #     evol_prompts.append(createBreadthPrompt(instruction))
 
-            selected_evol_prompt = random.choice(evol_prompts)
-            selected_evol_prompt += "\n Generated question should have indian context if possible. Keep the question short to maximum of two lines."
-            if row["language"] == "hindi":
-                selected_evol_prompt += "\n\nAnswer in hindi only"
-            if row["language"] == "hinglish":
-                selected_evol_prompt += "\n\nAnswer in hinglish only. Translate to hinglish if required"
+        #     selected_evol_prompt = random.choice(evol_prompts)
+        #     selected_evol_prompt += "\n Generated question should have indian context if possible. Keep the question short to maximum of two lines."
+        #     if row["language"] == "hindi":
+        #         selected_evol_prompt += "\n\nAnswer in hindi only"
+        #     if row["language"] == "hinglish":
+        #         selected_evol_prompt += "\n\nAnswer in hinglish only. Translate to hinglish if required"
 
-            messages = []
-            messages.append({"role": "user", "content": selected_evol_prompt})
-            text = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True
-            )
+        #     messages = []
+        #     messages.append({"role": "user", "content": selected_evol_prompt})
+        #     text = tokenizer.apply_chat_template(
+        #         messages,
+        #         tokenize=False,
+        #         add_generation_prompt=True
+        #     )
 
-            prompts.append(text)
+        #     prompts.append(text)
 
-        outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+        # outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-        prompts2 = []
-        questions = []
-        for idx, text in enumerate(outputs):
-            questions.append(text)
+        # prompts2 = []
+        # questions = []
+        # for idx, text in enumerate(outputs):
+        #     questions.append(text)
 
-            messages = []
-            messages.append(
-                {"role": "system", "content": row["system_prompt"]})
-            messages.append({"role": "user", "content": text})
-            text = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True
-            )
+        #     messages = []
+        #     messages.append(
+        #         {"role": "system", "content": row["system_prompt"]})
+        #     messages.append({"role": "user", "content": text})
+        #     text = tokenizer.apply_chat_template(
+        #         messages,
+        #         tokenize=False,
+        #         add_generation_prompt=True
+        #     )
 
-            prompts2.append(text)
+        #     prompts2.append(text)
 
-        outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .2)
-        for idx, text in enumerate(outputs2):
-            print("======")
-            print("eval prompt", questions[idx], "text", text)
-            final_data[idx]["evol_question"] = questions[idx]
-            final_data[idx]["evol_answer"] = text
+        # outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .2)
+        # for idx, text in enumerate(outputs2):
+        #     print("======")
+        #     print("eval prompt", questions[idx], "text", text)
+        #     final_data[idx]["evol_question"] = questions[idx]
+        #     final_data[idx]["evol_answer"] = text
 
         final_data_hash = {}
         for r in final_data:
