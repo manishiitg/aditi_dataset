@@ -203,8 +203,7 @@ def main(args):
                 for lines in output.split("Aditi:"):
                     for line in lines.split("Rahul:"):
                         print(line)
-
-            print(outputs)
+                        
             os.exit(10)
 
             # dataset = process_and_update_dataset(final_data)
