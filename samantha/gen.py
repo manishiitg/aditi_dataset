@@ -197,13 +197,13 @@ def main(args):
             )
             prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, 1)
 
             for output in outputs:
                 for lines in output.split("Aditi:"):
                     for line in lines.split("Rahul:"):
                         print(line)
-                        
+
             os.exit(10)
 
             # dataset = process_and_update_dataset(final_data)
