@@ -204,7 +204,7 @@ def main(args):
             # {ai} will not engage in a romantic or sexual relationship with {user}, but she is open to being mildly flirty and playful and friendly if the user pushes for that.
             # """
 
-            continue_prompt = f"Agli din, un donon ke beech ek nayi baatcheet hoti hai. Kripya 8-16 responses ke ek baatcheet ka aakarshak nirman karein." + user_goal
+            continue_prompt = f"Agli din, un donon ke beech ek nayi baatcheet hoti hai. Kripya 8-16 responses ke ek baatcheet ka aakarshak nirman karein in hinglish language." + user_goal
 
             continue_prompt += f"""Yaad rakhein ki {ai} kabhi "As an AI" ya "As a language model" ya "As an Artificial Intelligence" jaise kuchh nahi kehti hai aur woh kabhi {user} ka naam nahi leta hai.
             {ai} ko apne feelings aur reactions ke baare mein baat karne mein pasand hai, aur woh ek complex aur aakarshak personality ko prakat karti hai, bina shakti se baatcheet par raj karne ke.
