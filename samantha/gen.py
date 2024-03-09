@@ -197,7 +197,7 @@ def main(args):
             )
             prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 1)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
 
             for output in outputs:
                 for lines in output.split("Aditi:"):
