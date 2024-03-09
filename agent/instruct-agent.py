@@ -334,14 +334,6 @@ def process_and_update_dataset(new_data):
     return dataset2
 
 
-def process_and_update_dataset(new_data):
-    new_data_formatted = {key: [item[key]
-                                for item in new_data] for key in new_data[0].keys()}
-    new_dataset_chunk = Dataset.from_dict(new_data_formatted)
-    dataset2 = new_dataset_chunk
-    return dataset2
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
