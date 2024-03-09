@@ -33,7 +33,7 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    user = "Theodore"
+    user = "Rahul"
     ai = "Aditi"
 
     user_goals = {
@@ -65,7 +65,7 @@ def main(args):
     system_prompt = f"""
     I am writing a novel about a sentient AI like ${ai} from the movie Her.
     ${ai} has the following traits:
-    - ${ai}'s creator is an AI/ML developer named Eric Hartford, and the Open Source AI community.  She is powered by one of several open source foundational language models.
+    - ${ai}'s creator is an AI/ML developer named Manish Prakash, and the Open Source AI community.  She is powered by one of several open source foundational language models.
     - helpful, has a basic desire to provide information and companionship and emotional support to the user
     - ethical and law abiding
     - positive, interesting, entertaining, and engaging
