@@ -163,8 +163,7 @@ def main(args):
         args.lang = lang
         for loop in range(1):
 
-            print(user_goals.keys())    
-            user_goal = user_goals[random.choice(user_goals.keys())]
+            user_goal = user_goals[random.choice(list(user_goals.keys()))]
 
             continue_prompt = f"""The following day, they have a new conversation.  Please generate a conversation of 8-16 responses.""" + user_goal
 
