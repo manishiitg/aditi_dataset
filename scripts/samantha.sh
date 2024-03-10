@@ -1,7 +1,7 @@
 #!/bin/bash
 
 model_names=(
-    "Qwen/Qwen1.5-7B-Chat-AWQ"
+    "Qwen/Qwen1.5-72B-Chat-AWQ"
 )
 FOLDER_BASE=/sky-notebook/eval-results
 
