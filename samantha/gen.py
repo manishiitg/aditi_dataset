@@ -192,7 +192,7 @@ def main(args):
     #     for r in existing_ds:
     #         final_data.append(r)
 
-    languages = ["english"]  # ["hinglish", "hindi", "english"]
+    languages = ["hinglish"]  # ["hinglish", "hindi", "english"]
     user_type = "normal"
     for lang in languages:
         args.lang = lang
