@@ -235,23 +235,28 @@ def main(args):
 
             print(continue_prompt)
             msg_list.append({"role": "system", "content": system_prompt})
-            # msg_list.append({"role": "user", "content": first_prompt})
-            # msg_list.append({"role": "assistant", "content": first_response})
+            msg_list.append({"role": "user", "content": first_prompt})
+            msg_list.append({"role": "assistant", "content": first_response})
             msg_list.append({"role": "user", "content": continue_prompt})
 
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts.append(text)
+            for conv in range(2):
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
+                text = tokenizer.apply_chat_template(
+                    msg_list,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                prompts.append(text)
 
-            for output in outputs:
-                for lines in output.split("Aditi:"):
-                    for line in lines.split("Rahul:"):
-                        print(line)
+                outputs = eval_hf_model(args, model, tokenizer, prompts, .25)
+
+                msg_list.append({"role": "assistant", "content": outputs[0]})
+                msg_list.append({"role": "user", "content": continue_prompt})
+
+                for output in outputs:
+                    for lines in output.split("Aditi:"):
+                        for line in lines.split("Rahul:"):
+                            print(line)
 
             os.exit(10)
 
