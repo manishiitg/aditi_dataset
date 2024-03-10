@@ -233,6 +233,7 @@ def main(args):
             if user_type == "normal":
                 first_response = first_response_troll
 
+            print(continue_prompt)
             msg_list.append({"role": "system", "content": system_prompt})
             msg_list.append({"role": "user", "content": first_prompt})
             msg_list.append({"role": "assistant", "content": first_response})
