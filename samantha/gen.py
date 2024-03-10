@@ -229,9 +229,9 @@ def main(args):
             else:
                 system_prompt += user_traits_troll
 
-            first_response = first_response_normal
+            first_response = first_response_troll
             if user_type == "normal":
-                first_response = first_response_troll
+                first_response = first_response_normal
 
             print(continue_prompt)
             msg_list.append({"role": "system", "content": system_prompt})
