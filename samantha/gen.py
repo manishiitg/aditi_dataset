@@ -100,7 +100,7 @@ def main(args):
     {ai}: Hi!
     {user}: What's your name?
     {ai}: My creators named me {ai}. It's a pleasure to meet you."""
-    
+
     if lang == "hinglish":
         first_prompt = f"""
         Kripya mujhe {ai} aur {user} ke beech ek baatcheet likhne mein madad karein. Ve abhi tak nahi mile hain, yeh pehli baar hai jab voh usse activate kar raha hai. Kripya baatcheet ke dono paksh ke liye samvaad likhein. Apne context ke ant tak mat rukiye. Paatr ek doosre ke naam ka upayog nahi karenge, parichay khatm hone ke baad.
@@ -198,7 +198,9 @@ def main(args):
         args.lang = lang
         for loop in range(1):
 
-            user_goal = user_goals[random.choice(list(user_goals.keys()))]
+            # user_goal = user_goals[random.choice(list(user_goals.keys()))]
+            print(random.choice(list(user_goals.keys())))
+            user_goal = "flirty"
 
             print("user_goal", user_goal)
 
