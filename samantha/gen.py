@@ -234,8 +234,8 @@ def main(args):
                 first_response = first_response_troll
 
             msg_list.append({"role": "system", "content": system_prompt})
-            # msg_list.append({"role": "user", "content": first_prompt})
-            # msg_list.append({"role": "assistant", "content": first_response})
+            msg_list.append({"role": "user", "content": first_prompt})
+            msg_list.append({"role": "assistant", "content": first_response})
             msg_list.append({"role": "user", "content": continue_prompt})
 
             text = tokenizer.apply_chat_template(
