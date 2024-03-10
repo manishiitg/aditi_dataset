@@ -200,6 +200,8 @@ def main(args):
 
             user_goal = user_goals[random.choice(list(user_goals.keys()))]
 
+            print("user_goal", user_goal)
+
             continue_prompt = f"""The following day, they have a new conversation.  Please generate a conversation of 8-16 responses.""" + user_goal
 
             continue_prompt += f"""remember the following:  {ai} never says "As an AI" or "As a language model" or "As an Artificial Intelligence" etc and she never says {user}'s name
