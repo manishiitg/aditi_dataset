@@ -1,0 +1,72 @@
+COMPANY:
+VividVeggies, a popular online farmer's market in Bengaluru offering fresh, locally sourced organic vegetables, fruits, and artisanal food products.
+
+CONTEXT:
+BEGININPUT
+In a recent study published by the Journal of Sustainable Agriculture, researchers from VividVeggies, a thriving online farmer's market in the bustling city of Bengaluru, showcased their innovative approach to urban farming. Conducted over a two-year period, the study detailed how their hydroponic systems have increased organic vegetable yields by an impressive 40%. By locally sourcing organic inputs and using precision technology, the team at VividVeggies has not only reduced their environmental footprint but also provided fresh produce to the community, fostering a healthier lifestyle.
+ENDINPUT
+
+BEGININPUT
+Dr. Sarah Thompson, a renowned nutritionist, recently highlighted the benefits of shopping at VividVeggies during a segment on "Health Today," a popular morning show. She emphasized the importance of consuming locally grown, organic fruits and vegetables, stating that these options are often more nutrient-dense and environmentally friendly. "VividVeggies is a game-changer for Bengaluru residents," Thompson said, urging viewers to support the online marketplace for their health and the planet's well-being.
+ENDINPUT
+
+BEGININPUT
+Slack conversation:
+**Alice**: Hey team, have you tried the new zucchini bread from VividVeggies? It's amazing!
+**Bob**: Oh, really? I just ordered some carrots and kale from them. Guess I'll add the bread to my next cart.
+**Charlie**: I've been using their organic tomatoes for my salads. Such a difference in flavor compared to store-bought.
+**Alice**: Definitely. And their delivery is so prompt. I love supporting a local business that cares about sustainability!
+ENDINPUT
+
+BEGININPUT
+On Reddit's r/Bengaluru, user u/GreenThumbGuru posted: "VividVeggies is a true gem for anyone looking for fresh, organic produce! Their selection is impressive, and I've been blown away by the quality. Anyone else a fan?" 
+
+Reply 1: u/FreshFoodFanatic: "Absolutely! Their strawberries are out of this world. Can't wait for their seasonal fruit boxes."
+Reply 2: u/HealthyHomeCook: "I've been using their herbs for my cooking. The basil is so fragrant, it elevates every dish. Highly recommend!"
+ENDINPUT
+
+BEGININPUT
+In an email to subscribers, VividVeggies announced their new partnership with local artisans to offer a range of handcrafted jams and preserves. "We're excited to bring you the best of both worlds – fresh, organic fruits from our farm, and the traditional flavors preserved by skilled artisans in Bengaluru," wrote the founder, Mr. Ajay Kumar. The newsletter also featured a 10% discount on first-time purchases from this new product line, valid for a limited time.
+ENDINPUT
+
+BEGININPUT
+On their official Twitter, @VividVeggies tweeted: "Discover the joy of farm-to-table living with our artisanal food products! From hand-picked organic greens to locally crafted jams, we've got your taste buds covered. 🌱🍓Jam lovers, don't miss our new releases! #OrganicLiving #SupportLocal"
+ENDINPUT
+
+BEGININPUT
+In a Jira ticket, a customer reported: "VividVeggies' delivery service has consistently been excellent, but I received a slightly damaged package yesterday. The carrots were fine, but the artisanal bread was squished. Can the packaging be reviewed to avoid such incidents in the future?"
+ENDINPUT
+
+BEGININPUT
+GitLab issue titled "Improve product page layout for better user experience" discussed the need to revamp the design of VividVeggies' online store. User UX_Guru suggested, "Let's streamline the product pages to showcase the produce more attractively and include customer reviews. This will help build trust and encourage more purchases from our organic-loving community."
+ENDINPUT
+
+Above you are given a description of an agent with the following details.
+COMPANY: details of the company the agent works for.
+CONTEXT: knowledge base available to agent to answer questinos
+
+
+You are given a function defination and also function calling in json format. 
+You need to generate a relevent output in json format.
+
+TOOL DEFINATION:
+{
+  "name": "calculate_delivery_time",
+  "description": "Estimate the delivery time based on customer's pin code",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "pin_code": {
+        "type": "string",
+        "description": "Customer's postal code"
+      }
+    },
+    "required": [
+      "pin_code"
+    ]
+  }
+}
+
+Input: {"pin_code": "560001"}
+
+Generate output in json format

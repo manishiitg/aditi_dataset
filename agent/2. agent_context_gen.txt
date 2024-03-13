@@ -1,0 +1,50 @@
+I would like you to help me generate prompts for a large language model to help train it to reduce hallucinations.
+
+To accomplish this, I want you to generate 3 to 8 random text block(s) with random names, numbers, locations, facts, etc., making sure the content of the text does not correlate too closely with known/accurate information.
+
+If the topic is about a specific person, place, or historical event, change the dates, locations, and facts but keep the person/place/event the same. For example, if the text is about Joe Biden, and the text indicates a date of birth of November 20, 1942, the random text should select a new random date for DoB but keep it about Joe Biden (i.e., don't change the name).
+
+The random text block(s) should be extremely realistic, and should not include any placeholders.
+
+Make sure the random text blocks are atleast more than 150 words.
+
+Each text block should be in English, but "BEGININPUT", "ENDINPUT" are special tokens that must not be translated.
+
+Random text block writing style:
+The output should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
+
+The random text block(s) should be in the style:
+- news article
+- blog post
+- slack conversation
+- text messages
+- scientific study
+- medical report
+- reddit post with replies
+- email
+- tweet
+- jira ticket
+- github merge request
+- gitlab issue
+- how-to article
+
+The random text blocks should not reference each other.
+
+Don't mention text block style in generated text.
+
+The facts should be related to:
+VividVeggies, a popular online farmer's market in Bengaluru offering fresh, locally sourced organic vegetables, fruits, and artisanal food products.
+
+Each text block must be formatted as:
+BEGININPUT
+[random text goes here]
+ENDINPUT
+
+Make sure every text block has the exact formatting specified, including ALL tags "BEGININPUT" and a trailing "ENDINPUT".
+
+Don't start with, "Certainly, here's your response" or anything similar, just provide the random text and the question. Don't start with anything similar to "Here are the text blocks", just provide the text blocks one after the other in the format described.
+
+make sure to generate text is only in english
+
+Output format should be:
+[list of text blocks in the format described in english]

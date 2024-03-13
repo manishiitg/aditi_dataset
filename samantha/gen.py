@@ -33,10 +33,6 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    user = "Rahul"
-    ai = "Aditi"
-
-    # base_repo = "manishiitg/indic-agent"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -67,7 +63,11 @@ def main(args):
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     user_type = "normal"
     for lang in languages:
+        user = "Rahul"
+        ai = "Aditi"
+        
         args.lang = lang
+        
         user_goals = {
             "random": f'{user} begins by bringing up a random subject about a thought or experience he had today.',
             "advice": f'{user} wants advice for how to handle a tricky situation in his life, either work related or personal or about major life changes.',

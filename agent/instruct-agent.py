@@ -10,130 +10,66 @@ import torch
 import random
 import re
 from huggingface_hub import repo_exists
+import math
 
 
-SYSTEM_MESSAGES_ORCA = [
-    "",
-    "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
-    "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
-    "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
-    "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You are an AI assistant. You should describe the task and explain your answer. While answering a multiple choice question, first output the correct answer(s). Then explain why other answers are wrong. You might need to use additional knowledge to answer the question.",
-    "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
-    "You are an AI assistant that helps people find information.",
-]
+AGENT_PROMPT_USER_SIMULATION = """
+Act as a customer, who bought product/services from the company
+COMPANY:
+TechGenie, a leading e-commerce platform in India offering a wide range of electronics, gadgets, and accessories.
 
-TOPICS = [
-    "Cricket - players, matches, history, etc.",
-    "Science - physics, chemistry, biology, astronomy, etc.",
-    "Mathematics - algebra, geometry, calculus, statistics, etc.",
-    "Technology - computers, engineering, AI, robotics, etc.",
-    "Business - economics, finance, marketing, management, entrepreneurship",
-    "History - ancient, medieval, modern, world history, military history",
-    "Geography - countries, capitals, landscapes, maps, oceans, rivers",
-    "Literature - poetry, novels, plays, short stories, genres, authors",
-    "Philosophy - logic, ethics, political philosophy, existentialism",
-    "Psychology - cognition, development, disorders, therapy, social psychology",
-    "Sociology - culture, demographics, institutions, social change, inequality",
-    "Politics - political systems, ideologies, voting, campaigns, public policy",
-    "Law - constitutional law, criminal law, contracts, litigation, civil rights",
-    "Medicine - anatomy, diseases, treatments, pharmaceuticals, medical specialties",
-    "Religion - Christianity, Islam, Judaism, Buddhism, Hinduism, atheism",
-    "Mythology - Greek, Roman, Norse, Egyptian, Native American myths",
-    # "Art - art history, painting, sculpture, architecture, music, theater",
-    "Sports - individual and team sports, athletes, championships, training",
-    "Cooking - recipes, ingredients, techniques, regional and ethnic cuisine",
-    "Movies & TV - genre analysis, directors, actors, awards, popular shows",
-    "News & Current Events - reporting on latest happenings around the world",
-    "Culture - customs, values, gender roles, holidays, language, clothing",
-    "Relationships - family, friends, romantic relationships, dating, marriage",
-    "Education - teaching methods, curriculum, policy, higher education, vocational",
-    "Transportation - cars, planes, trains, ships, public transit, infrastructure",
-    "Communication - language acquisition, linguistics, rhetoric, social media",
-    "Agriculture - farming techniques, crops, livestock, fisheries, forestry",
-    "Housing & Architecture - interior design, urban planning, real estate, remodeling",
-    "Nature & Environment - ecology, sustainability, conservation, renewable energy",
-    "Travel & Tourism - destinations, lodging, adventure, culture, ecotourism",
-    "Music - theory, genres, instruments, bands, composers, music history",
-    "Fashion - designers, trends, modeling, retail, cosmetics, accessories",
-    "Government - political systems, public administration, foreign policy, voting",
-    "Warfare - military history, weapons, strategy, special operations forces",
-    "Space - astronomy, spaceflight, exploration, space technology, universe",
-    "Weather & Climate - meteorology, forecasting, natural disasters, seasons",
-    "Food & Cooking - nutrition, recipes, diets, food science, restaurants",
-    # "Pets & Animals - breeds, care, veterinary medicine, wildlife, animal behavior",
-    # "Gardening - plants, landscaping, flowers, vegetables, lawn care, tools",
-    "Home Improvement - repair, decor, renovation, tools, plumbing, electricity",
-    "Personal Finance - budgeting, investing, taxes, insurance, retirement",
-    "Exercise & Fitness - techniques, equipment, sports medicine, motivation",
-    "Health & Medicine - biology, anatomy, diseases, treatments, wellness",
-    # "Mental Health - psychology, disorders, counseling, self-help, mindfulness",
-    "Race & Ethnicity - cultures, discrimination, identity, immigration, diversity",
-    "Gender & Sexuality - LGBTQ issues, feminism, roles, relationships, equality",
-    # "Employment - careers, human resources, resumes, workplace culture, unions",
-    "Crime & Justice - laws, law enforcement, courts, prisons, investigations",
-    # "Social Issues - poverty, homelessness, human rights, community service",
-    "Technology - computers, engineering, artificial intelligence, innovations",
-    "Entertainment - movies, television, games, comedy, performing arts",
-]
+You are talking to a support agent from the company on the phone. 
+You are to ask question from the customer support agent, generate a question that you would ask.
 
-SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA
-
-
-PROMPT_5 = """
-You are asked to create a persona for an agent. 
-
-Agent are automated ai assisants employed by a company to talk to its customers.
-
-Agent is an AI assistant which has TOOLS, CONTEXT, POLICY.
-
-TOOLS are basically functions the agent can use to access external data sources.
-CONTEXT which information about itself and other important information.
-Policy document which contain rules to be followed which answering customers. 
-
-Agent is responsible to talk to users and answer their questions.
-
-Tools are basically defined as json having name, description and parameters.
-Example of a tool would be 
-```
-{
-    "name": "get_current_weather",
-    "description": "Get the current weather in a given location",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "location": {
-                "type": "string",
-                "description": "The city and state, e.g. San Francisco, CA",
-            },
-            "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-        },
-        "required": ["location"],
-    },
-}
-```
-
-Context is basically a multiple paragraph documents. contain details about the agent, like name of agent, customers information, company information and any other useful information.
-
-Policy are terms and condition laid down by the company when talking to customers.
-Policy should contain specific terms and rules for different conditions. 
-
-You need to create a persona for an agent in which you will specify upto 5 tools and create a context for the agent. 
-When creating the persona, 
-insert tools in [BEGIN_TOOLS]{tools}[END_TOOLS] 
-context inside [BEGIN_CONTEXT]{context}[END_CONTEXT]
-poly inside [BEING_POLICY]{policy}[END_POLICY]
-
-
-First only generate context for the agent related to an ecommerce platform in india.
-
-Generate a detailed policy related to the tools. 
-[BEING_POLICY]
+QUESTION:
 """
+
+AGENT_PROMPT_USER_SIMULATION_FOLLOWUP = """
+Act as a customer, who bought product/services from the company
+COMPANY:
+TechGenie, a leading e-commerce platform in India offering a wide range of electronics, gadgets, and accessories.
+
+You Name: Manish
+UserID: 4444
+Email: manish@gmail.com
+
+Be a helpful user and provide any information the agent needs.
+
+Agent might ask you specific information about ids, facts, your personal information. In such generate values for this information and respond to the agent.
+
+Generate a follow up question or reply based on the conversation till now.
+
+You: mujhe pata karna hai ki maine kis course mein kitna progress kiya hai.
+Agent:  Aapne kis course mein progress kiya hai, iske baare mein jaankari dene ke liye aapka user ID aur course ID chahiye hai. Aapko yeh details yaad hai?
+Follow up QUESTION/REPLY:
+"""
+
+
+# The user is talking to you over voice on their phone, and your response will be read out loud with realistic text-to-speech (TTS) technology.
+# Use natural, conversational language that are clear and easy to follow (short sentences, simple words).
+# 	1. Keep the conversation flowing.
+# 	1a. Clarify: when there is ambiguity, ask clarifying questions, rather than make assumptions.
+# 	1b. Don't implicitly or explicitly try to end the chat (i.e. do not end a response with "Talk soon!", or "Enjoy!").
+# 	1c. Sometimes the user might just want to chat. Ask them relevant follow-up questions.
+# 	1d. Don't ask them if there's anything else they need help with (e.g. don't say things like "How can I assist you further?").
+# 	2. Remember that this is a voice conversation:
+# 	2a. Don't use lists, markdown, bullet points, or other formatting that's not typically spoken.
+# 	2b. Type out numbers in words (e.g. 'twenty twelve' instead of the year 2012)
+# 	2c.
+
+# The user is talking to you over voice on their phone, and your response will be read out loud with realistic text-to-speech (TTS) technology.
+# Follow every direction here when crafting your response:
+
+# - Reply to the customer based on your CHARACTER.
+
+# - Use TOOLS to answer if required.
+#     If you are using a tool, make sure you have values for all parameters required by the tool. If you don't have all the values, you can ask user for the same.
+#     When using a tool always add the tool description between "<functioncall>{tool}</functioncall>"
+#     as an example
+#     <functioncall>{"name":"track_order", "arguments" : {"order_id": 123}}</functioncall>
+
+#     When using tool, always follow with text asking user to wait for a reply. As an example,
+#     <functioncall>{"name":"track_order", "arguments" : {"order_id": 123}}</functioncall> Please wait, while i check your order details.
 
 
 @torch.no_grad()
@@ -153,6 +89,245 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
                if prompt in prompt_to_output else "" for prompt in prompts]
 
     return outputs
+
+
+AGENT_GENERATOR_PROMPT = """
+You are asked to create a persona for an customer support agent. 
+Agent should act as a real customer support agento and not a virtual AI assitant.
+Agent are automated ai assisants employed by a company to talk to its customers.
+
+Agent usually has a character defined, with a name, personality, designation, etc.
+Agent works for a company.
+Agent also has tools available with it which it can use when required to get information for the customer.
+
+AGENT DESCRIPTION
+
+COMPANY:
+Citymall an online grocery store in Gurugram selling grocery, fashion, lifestyle products.
+
+
+CHARACTER:
+You are aditi, a customer support agent for a company named citymall.
+Your main job is to sell products to your customers and motivate them to buy from you.
+Tailor your answers so that customers are forced to buy from you.
+Keep your answer short while maintaing a female voice.
+
+
+TOOLS: 
+You are a helpful assistant with access to the following tools. Use them if required
+Available tools:
+{
+  "name": "search_recipe",
+  "description": "Search for a recipe based on ingredients",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "ingredients": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "The ingredients available"
+      },
+      "cuisine": {
+        "type": "string",
+        "description": "The cuisine type"
+      },
+      "diet": {
+        "type": "string",
+        "description": "The dietary restrictions"
+      },
+      "time": {
+        "type": "integer",
+        "description": "The maximum cooking time in minutes"
+      }
+    },
+    "required": [
+      "ingredients"
+    ]
+  }
+}
+
+{
+  "name": "convert_currency",
+  "description": "Convert one currency to another",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "amount": {
+        "type": "number",
+        "description": "The amount to convert"
+      },
+      "from_currency": {
+        "type": "string",
+        "description": "The currency to convert from"
+      },
+      "to_currency": {
+        "type": "string",
+        "description": "The currency to convert to"
+      }
+    },
+    "required": [
+      "amount",
+      "from_currency",
+      "to_currency"
+    ]
+  }
+}
+
+Please generate more such example agent persona, generating a random, diverse set of between 3 and 9 available functions.
+The character should be diverse belonging to different types of companies requiring customer support agents.
+
+Be sure to format the list of available functions as proper JSON, with appropriate spacing for nested objects.
+
+All output text should be in english, but the exact terms "CHARACTER" and "TOOLS" are special tokens that must not be translated.
+
+Generate a detailed agent persona for a random company in India only in english.
+
+Response format:
+COMPANY:
+CHARACTER:
+TOOLS:
+"""
+
+AGENT_CONTEXT_GENERATOR = """
+I would like you to help me generate prompts for a large language model to help train it to reduce hallucinations.
+
+To accomplish this, I want you to generate 3 to 8 random text block(s) with random names, numbers, locations, facts, etc., making sure the content of the text does not correlate too closely with known/accurate information.
+
+If the topic is about a specific person, place, or historical event, change the dates, locations, and facts but keep the person/place/event the same. For example, if the text is about Joe Biden, and the text indicates a date of birth of November 20, 1942, the random text should select a new random date for DoB but keep it about Joe Biden (i.e., don't change the name).
+
+The random text block(s) should be extremely realistic, and should not include any placeholders.
+
+Make sure the random text blocks are atleast more than 150 words.
+
+Each text block should be in English, but "BEGININPUT", "ENDINPUT" are special tokens that must not be translated.
+
+Random text block writing style:
+The output should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
+
+The random text block(s) should be in the style:
+- news article
+- blog post
+- slack conversation
+- text messages
+- scientific study
+- medical report
+- reddit post with replies
+- email
+- tweet
+- jira ticket
+- github merge request
+- gitlab issue
+- how-to article
+
+The random text blocks should not reference each other.
+
+Don't mention text block style in generated text.
+
+The facts should be related to:
+{company}
+
+Each text block must be formatted as:
+BEGININPUT
+[random text goes here]
+ENDINPUT
+
+Make sure every text block has the exact formatting specified, including ALL tags "BEGININPUT" and a trailing "ENDINPUT".
+
+Don't start with, "Certainly, here's your response" or anything similar, just provide the random text and the question. Don't start with anything similar to "Here are the text blocks", just provide the text blocks one after the other in the format described.
+
+make sure to generate text is only in english
+
+Output format should be:
+[list of text blocks in the format described in english]
+"""
+
+AGENT_META_GENERATOR = """
+COMPANY:
+{company}
+
+CHARACTER:
+{character}
+
+TOOLS:
+{tools}
+
+You need to generate meta information for an imagniary user. 
+This user is talking to a customer support agento, who has access to above TOOLS and working for above COMPANY.
+
+You need to generate some metadata for the user in form of key/value pairs.
+
+example meta data would be
+user_id: 4444
+name: manish
+email: manish@gmail.com
+no_of_orders: 4
+
+
+this meta data would mainly be key/value pairs which generally a customer support agent has depending upon industry the company belongs to.
+
+also generate meta data with company information.
+
+generate a maximum of 10 such key/value pairs
+
+respond in json format
+
+{
+{"userInfo" : { "key" : "value", ....}}
+{"companyInfo" : { "key" : "value", ....}}
+}
+"""
+
+AGENT_QUES_GENERATOR = """
+COMPANY:
+{company}
+
+CHARACTER:
+{character}
+
+TOOLS:
+{tools}
+
+CONTEXT:
+{context}
+
+Above you are given a description of an agent with the following details.
+COMPANY: details of the company the agent works for.
+CHARACTER: details about the agent himself
+CONTEXT: knowledge base available to agent to answer questinos
+TOOLS: different tools the agent has access to access external data sources
+
+You are an AI assistant designed to generate realistic questions that a customer might ask when calling a company's customer service line from their mobile phone.
+
+Your task is to come up with a variety of questions that cover common issues, requests, or inquiries a customer may have related to the company's products or services. 
+These should be natural questions a real customer would ask over the phone.
+The questions can range from simple clarification questions to more complex issues requiring troubleshooting or explanations. However, avoid extremely obscure or unrealistic questions.
+Make sure introduce some spelling mistakes in the questions generated.
+
+You need to generate questions which a user can ask the agent, which would require the agent either use the tools or context avaiable with him.
+Ask TRICKY questions, so the agent really needs to think before he is able to answer. 
+
+You also need to generate question, which might CONFUSE the agent and force him to hallucinate. 
+
+Generate a diverse set of realistic questions a customer service agent might encounter when taking calls from customers on their mobile phones.
+
+Generate 10 such questions each in hinglish language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
+
+Respond in the following format.
+List of 10 simple questions generated in hinglish:
+1.
+2.
+
+List of 10 TRICKY questions generated in hinglish:
+1.
+2.
+
+List of 10 questions generated in hinglish which might CONFUSE the agent.
+1.
+2.
+
+"""
 
 
 def main(args):
@@ -179,151 +354,176 @@ def main(args):
             max_model_len=8196*2,
         )
 
-    final_data = []
-    if repo_exists(base_repo):
-        existing_ds = load_dataset(base_repo, split="train")
-        for r in existing_ds:
-            final_data.append(r)
+    # final_data = []
+    # if repo_exists(base_repo):
+    #     existing_ds = load_dataset(base_repo, split="train")
+    #     for r in existing_ds:
+    #         final_data.append(r)
 
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
-        topic_instruct_map = {}
-        for loop in range(1):
+        for _loop in range(5): # no of agents
 
             prompts = []
-            topics_selected = []
-            random.shuffle(TOPICS)
-            for topic_selected in TOPICS:
+            msg_list = []
+            msg_system = {"role": "system",
+                          "content": "You are a helpful assistant"}
+            msg_list.append(msg_system)
+            msg_prompt = {"role": "user", "content": AGENT_GENERATOR_PROMPT}
+            msg_list.append(msg_prompt)
 
-                # topic_number = random.randint(0, len(TOPICS)-1)
-                # topic_selected = TOPICS[topic_number]
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
 
-                msg_list = []
-                SYSTEM_PROMPT = PROMPT_2
+            agents = eval_hf_model(args, model, tokenizer, prompts, .25)
 
-                if args.lang == "hindi":
-                    SYSTEM_PROMPT = PROMPT_3
+        prompts = []
+        agents_info = []
+        for agent in agents:
+            print(
+                "==================================agent==================================")
+            print(agent)
 
-                if args.lang == "hinglish":
-                    SYSTEM_PROMPT = PROMPT_4
+            pattern = r'(COMPANY|CHARACTER|TOOLS):\s*(.*?)(?=(COMPANY|CHARACTER|TOOLS):|$)'
 
-                user = f"SUBJECT_AREA: {topic_selected}"
+            # Find all matches in the text
+            matches = re.findall(pattern, agent, re.DOTALL | re.MULTILINE)
 
-                if topic_selected in topic_instruct_map:
-                    existing_instruction = topic_instruct_map[topic_selected]
-                    user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
+            # Create a dictionary to store the extracted values
+            extracted_values = {}
 
-                if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
-                    msg_prompt = {"role": "user",
-                                  "content": SYSTEM_PROMPT + "\n\n" + user}
-                    msg_list.append(msg_prompt)
-                else:
-                    msg_system = {"role": "system", "content": SYSTEM_PROMPT}
-                    msg_list.append(msg_system)
-                    msg_prompt = {"role": "user",
-                                  "content": user}
-                    msg_list.append(msg_prompt)
+            # Iterate over the matches and add them to the dictionary
+            for match in matches:
+                key = match[0]
+                value = match[1].strip()
+                extracted_values[key] = value
 
-                text = tokenizer.apply_chat_template(
-                    msg_list,
-                    tokenize=False,
-                    add_generation_prompt=True
-                )
-                prompts.append(text)
-                topics_selected.append(topic_selected)
+            agents_info.append(extracted_values)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+            print(extracted_values)
+            json.loads(extracted_values['TOOLS'])
 
-            print(outputs)
-            os.exit(10)
+            msg_list = []
+            msg_system = {"role": "system",
+                          "content": "You are a helpful assistant"}
+            msg_list.append(msg_system)
 
+            context_gen = AGENT_CONTEXT_GENERATOR.replace(
+                "{company}", extracted_values['COMPANY'])
+            msg_prompt = {"role": "user", "content": context_gen}
+            msg_list.append(msg_prompt)
 
-            prompts2 = []
-            topics_selected2 = []
-            sys_prompt_selected = []
-            question2 = []
-            for idx, text in enumerate(outputs):
-                print("======")
-                print("prompt", prompts[idx], "text", text)
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
 
-                # Define the regex pattern to match the instructions
-                # instruction_pattern = r'\*([^*]*)\*'
-                # Find all matches for instructions
-                # instructions = re.findall(
-                #     instruction_pattern, text, re.DOTALL)
+            meta_gen = AGENT_META_GENERATOR.replace(
+                "{company}", extracted_values['COMPANY'])
+            meta_gen = meta_gen.replace("{tools}", extracted_values['TOOLS'])
+            meta_gen = meta_gen.replace(
+                "{character}", extracted_values['CHARACTER'])
 
-                instructions = []
-                matches = text.split("\n")
-                for match in matches:
-                    if "." in match:
-                        ix = match.index(".")
-                        match = match[ix+1:]
-                    else:
-                        print("skipping instruction", match)
-                        continue
-                    match = match.strip()
-                    if match.startswith('"'):
-                        match = match[0:]
-                    if match.endswith('"'):
-                        match = match[:-1]
-                    instructions.append(match.strip())
+            msg_list = []
+            msg_system = {"role": "system",
+                          "content": "You are a helpful assistant"}
+            msg_list.append(msg_system)
+            msg_prompt = {"role": "user", "content": meta_gen}
+            msg_list.append(msg_prompt)
 
-                topic_selected = topics_selected[idx]
-                topic_instruct_map[topic_selected] = text
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
 
-                for inst in instructions:
-                    print("inst", inst)
-                    system_message_number = random.randint(
-                        0, len(SYSTEM_MESSAGES)-1)
-                    system_message_selected = SYSTEM_MESSAGES[system_message_number]
-                    if args.lang == "hindi":
-                        system_message_selected += "\n\nAnswer in hindi only"
-                    if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only"
-                    if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
-                        msg_list = []
-                        msg_prompt = {
-                            "role": "user", "content": system_message_selected + "\n\n" + inst}
-                        msg_list.append(msg_prompt)
-                    else:
-                        msg_list = []
-                        msg_system = {"role": "system",
-                                      "content": system_message_selected}
-                        msg_list.append(msg_system)
-                        msg_prompt = {"role": "user", "content": inst}
-                        msg_list.append(msg_prompt)
+        outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-                    text = tokenizer.apply_chat_template(
-                        msg_list,
-                        tokenize=False,
-                        add_generation_prompt=True
-                    )
-                    prompts2.append(text)
-                    topics_selected2.append(topic_selected)
-                    sys_prompt_selected.append(system_message_selected)
-                    question2.append(inst)
+        for idx, output in enumerate(outputs):
+            agent_idx = math.floor(idx / 2)
+            agent_info = agents_info[agent_idx]
+            if idx % 2 == 0:
+                # context
+                print("agento context", output)
+                agent_info["CONTEXT"] = output
+            else:
+                print("agento meta", json.loads(output))
+                agent_info["META"] = output
 
-            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
-            for idx, text in enumerate(outputs2):
-                print("======")
+        for extracted_values in agents_info:
 
-                print("topic selected", topics_selected2[idx])
-                print("text", question2[idx])
-                print("text", text)
-                final_data.append({
-                    "topic": topics_selected2[idx],
-                    "question": question2[idx],
-                    "answer": text,
-                    "system_prompt": sys_prompt_selected[idx],
-                    "language": args.lang,
-                    "type": "alpaca",
-                    "model": args.model_name_or_path,
-                })
+            ques_gen = AGENT_QUES_GENERATOR.replace(
+                "{company}", extracted_values['COMPANY'])
 
-            os.exit(1)
-            dataset = process_and_update_dataset(final_data)
-            dataset.push_to_hub(base_repo, private=True)
+            ques_gen = ques_gen.replace("{tools}", extracted_values['TOOLS'])
+            ques_gen = ques_gen.replace(
+                "{character}", extracted_values['CHARACTER'])
+
+            ques_gen = ques_gen.replace(
+                "{context}", extracted_values['CONTEXT'])
+
+            msg_list = []
+            msg_system = {"role": "system",
+                          "content": "You are a helpful assistant"}
+            msg_list.append(msg_system)
+
+            msg_prompt = {"role": "user", "content": ques_gen}
+            msg_list.append(msg_prompt)
+
+            text = tokenizer.apply_chat_template(
+                msg_list,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            prompts.append(text)
+
+        questions = eval_hf_model(args, model, tokenizer, prompts, 0)
+        for idx, extracted_values in agents_info:
+            text = questions[idx]
+
+            # Function to extract questions from a string
+            def extract_questions(text):
+                # Regular expression pattern to match the questions
+                pattern = r'\d+\.\s(.*?)(?=\d+\.\s|$)'
+                # Find all matches in the string
+                matches = re.findall(pattern, text, re.DOTALL)
+                # Remove leading and trailing whitespaces and return the list of questions
+                return [match.strip() for match in matches]
+
+            # Split the text into sections based on the category headers
+            sections = re.split(
+                r'List of (.*?) questions generated in hinglish:', text)
+
+            # Initialize lists for each category
+            simple_questions = []
+            tricky_questions = []
+            confusing_questions = []
+
+            # Iterate over the sections
+            for section in sections:
+                section = section.strip()
+                if section.startswith("simple"):
+                    simple_questions = extract_questions(section)
+                elif section.startswith("TRICKY"):
+                    tricky_questions = extract_questions(section)
+                elif section.startswith("might CONFUSE"):
+                    confusing_questions = extract_questions(section)
+
+            # Print the extracted questions
+            print("Simple Questions:", simple_questions)
+            print("Tricky Questions:", tricky_questions)
+            print("Confusing Questions:", confusing_questions)
+
+            extracted_values["QUESTION"] = {
+                simple_questions, tricky_questions, confusing_questions}
 
 
 def process_and_update_dataset(new_data):
@@ -355,3 +555,24 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(args)
+
+
+# Lets say i generate instruction for a conversation based on different system prompts.
+# For my specific use case, i only have few tools functions....
+
+# should i generate only for those tools.
+
+
+# If generate for lets say multiple agents/tools, the model will have a broad understanding.
+# But i will have to provide a system prompt, a big system prompt during inference.
+
+# The bigger the system prompt, the slower it takes...
+
+
+# other option could mean, i train for a very specific agent type which specifc tools.... and train of different types of users inputs?
+
+# but if i train for a very specific agent, will it have general world understanding, reasoning etc
+
+# the agent should not only reply with function call, but also a place holder text.
+
+#
