@@ -2,7 +2,6 @@
 
 model_names=(
     "Qwen/Qwen1.5-72B-Chat-AWQ"
-    # "mistralai/Mixtral-8x7B-Instruct-v0.1"
 )
 FOLDER_BASE=/sky-notebook/eval-results
 
@@ -19,6 +18,6 @@ for model_name_or_path in "${model_names[@]}"; do
         awq_param=""
     fi
     
-    python3 -m gen.instruct-alpaca --model_name_or_path $model_name_or_path --generate_topics $awq_param
+    python3 -m agent.instruct-agent --model_name_or_path $model_name_or_path $awq_param
     
 done
