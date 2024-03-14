@@ -13,6 +13,8 @@ import re
 from huggingface_hub import repo_exists
 import math
 import uuid
+
+
 def is_string(var):
     return isinstance(var, str)
 
@@ -137,7 +139,7 @@ Follow up QUESTION/REPLY:
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
         temperature=temperature,
-        max_tokens=4096,
+        max_tokens=1024,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
@@ -165,6 +167,7 @@ def main(args):
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
             max_model_len=8196,
+
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -233,11 +236,12 @@ def main(args):
             simple_questions = agent['simple_questions_' + lang]
             questions = []
             prompts = []
+            agent_prompts = []
 
             ask_question_system_lang = ask_question_system.replace(
                 "{language}", lang)
 
-            print(ask_question_system_lang)
+            agent_prompts.append(ask_question_system_lang)
 
             for ques in simple_questions:
                 msg_list = []
@@ -259,6 +263,7 @@ def main(args):
                 args, model, tokenizer, prompts, 0)
 
             for idx, reply in enumerate(question_replies):
+                print(agent_prompts[idx])
                 print(questions[idx])
                 print(reply)
 
