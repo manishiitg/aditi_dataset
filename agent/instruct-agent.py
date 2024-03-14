@@ -867,7 +867,7 @@ def main(args):
             extracted_values["simple_questions_" + lang] = simple_questions
             extracted_values["tricky_questions_" + lang] = tricky_questions
 
-    dataset = process_and_update_dataset(agents_info)
+    dataset = process_and_update_dataset(final_data + agents_info)
     dataset.push_to_hub(base_repo, private=False)
 
 
