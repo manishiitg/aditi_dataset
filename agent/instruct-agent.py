@@ -842,7 +842,8 @@ def main(args):
                     continue  # Skip sections that don't match the expected titles
 
                 # Extract questions using a regular expression
-                questions = re.findall(r'\d+\. (.*?)(?=\d+\.|\Z)', section, re.DOTALL)
+                questions = re.findall(
+                    r'\d+\. (.*?)(?=\d+\.|\Z)', section, re.DOTALL)
                 question_type.extend(questions)
 
             # Print the extracted questions
@@ -855,6 +856,9 @@ def main(args):
                 "tricky_questions": tricky_questions,
                 "confusing_questions": confusing_questions
             }
+
+    dataset = process_and_update_dataset(extracted_values)
+    dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):
