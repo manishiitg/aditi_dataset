@@ -118,6 +118,7 @@ Keep your answer short while maintaing a female voice.
 TOOLS: 
 You are a helpful assistant with access to the following tools. Use them if required
 Available tools:
+```json
 [
 {
   "name": "search_recipe",
@@ -177,6 +178,7 @@ Available tools:
   }
 }
 ]
+```
 
 Please generate more such example agent persona, generating a random, diverse set of between 3 and 9 available functions.
 The character should be diverse belonging to different types of companies requiring customer support agents.
@@ -709,6 +711,10 @@ def main(args):
             agents_info.append(extracted_values)
 
             print(extracted_values)
+            TOOLS = extracted_values['TOOLS']
+            TOOLS = TOOLS.replace("```json", "")
+            TOOLS = TOOLS.replace("```", "")
+            extracted_values['TOOLS'] = TOOLS
             json.loads(extracted_values['TOOLS'])
 
             msg_list = []
