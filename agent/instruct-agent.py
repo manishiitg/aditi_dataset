@@ -844,6 +844,7 @@ def main(args):
                 # Extract questions using a regular expression
                 questions = re.findall(
                     r'\d+\. (.*?)(?=\d+\.|\Z)', section, re.DOTALL)
+                questions = [q.strip() for q in questions]
                 question_type.extend(questions)
 
             # Print the extracted questions
@@ -851,13 +852,11 @@ def main(args):
             print("Tricky Questions:", tricky_questions)
             print("Confusing Questions:", confusing_questions)
 
-            extracted_values["QUESTION"] = {
-                "simple_questions": simple_questions,
-                "tricky_questions": tricky_questions,
-                "confusing_questions": confusing_questions
-            }
+            extracted_values["simple_questions"] = simple_questions
+            extracted_values["tricky_questions"] = tricky_questions
+            extracted_values["simple_questions"] = confusing_questions
 
-    dataset = process_and_update_dataset(extracted_values)
+    dataset = process_and_update_dataset(agents_info)
     dataset.push_to_hub(base_repo, private=False)
 
 
