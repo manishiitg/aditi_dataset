@@ -318,6 +318,7 @@ Ask TRICKY questions, so the agent really needs to think before he is able to an
 You also need to generate question, which might CONFUSE the agent and force him to hallucinate. 
 
 Generate a diverse set of realistic questions a customer service agent might encounter when taking calls from customers on their mobile phones.
+Make sure that the questions generated have spelling mistakes similar to what happens in voice chat or text chat.
 
 Generate 10 such questions each in {language} language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
 
