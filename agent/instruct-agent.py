@@ -817,7 +817,7 @@ def main(args):
             confusing_questions = []
 
             # Loop through the sections
-            for idx, section in sections:
+            for section in sections:
                 # Skip the first section which is empty due to the split pattern
                 if not section:
                     continue
