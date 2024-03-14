@@ -815,24 +815,33 @@ def main(args):
                 return [match.strip() for match in matches]
 
             print("text" ,text)
-            # Split the text into sections based on the category headers
-            sections = re.split(
-                r'List of (.*?) questions generated in (.*?):', text)
+            # Split the text into sections based on the "List of" pattern
+            sections = re.split(r'List of \d+ ', text)
 
-            # Initialize lists for each category
+            # Initialize the lists
             simple_questions = []
             tricky_questions = []
             confusing_questions = []
 
-            # Iterate over the sections
+            # Loop through the sections
             for section in sections:
-                section = section.strip()
-                if section.startswith("simple"):
-                    simple_questions = extract_questions(section)
-                elif section.startswith("TRICKY"):
-                    tricky_questions = extract_questions(section)
-                elif section.startswith("might CONFUSE"):
-                    confusing_questions = extract_questions(section)
+                # Skip the first section which is empty due to the split pattern
+                if not section:
+                    continue
+                
+                # Determine the type of questions based on the section title
+                if "simple questions" in section.lower():
+                    question_type = simple_questions
+                elif "tricky questions" in section.lower():
+                    question_type = tricky_questions
+                elif "confusing questions" in section.lower():
+                    question_type = confusing_questions
+                else:
+                    continue  # Skip sections that don't match the expected titles
+
+                # Extract questions using a regular expression
+                questions = re.findall(r'\d+\. (.*?)[\.\?]', section, re.DOTALL)
+                question_type.extend(questions)
 
             # Print the extracted questions
             print("Simple Questions:", simple_questions)
