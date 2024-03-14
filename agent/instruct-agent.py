@@ -382,7 +382,7 @@ def main(args):
             )
             prompts.append(text)
 
-        agents = eval_hf_model(args, model, tokenizer, prompts, .25)
+        agents = eval_hf_model(args, model, tokenizer, prompts, .8)
 
         prompts = []
         agents_info = []
@@ -457,6 +457,9 @@ def main(args):
                 print("agento context", output)
                 agent_info["CONTEXT"] = output
             else:
+                output = output.replace("```json", "")
+                output = output.replace("```", "")
+                output = output.strip()
                 print("agento meta", output)
                 print("agento meta", json.loads(output))
                 agent_info["META"] = output
