@@ -5,6 +5,7 @@ import json
 from datasets import load_dataset
 from transformers import AutoTokenizer
 import vllm
+import time
 from datasets import Dataset
 import torch
 import random
@@ -654,10 +655,11 @@ def main(args):
     #     for r in existing_ds:
     #         final_data.append(r)
 
-    gen_industries = """
-    Generate a list of business industries which would employ a customer support agent.
-    Generate 100 such industries
-    """
+    # gen_industries = """
+    # Generate a list of business industries which would employ a customer support agent.
+    # Generate 100 such industries
+    # """
+    random.seed(time.time())
 
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
@@ -769,7 +771,7 @@ def main(args):
                 print("agento meta", output)
                 print("agento meta", json.loads(output))
                 agent_info["META"] = output
-        
+
         for extracted_values in agents_info:
 
             ques_gen = AGENT_QUES_GENERATOR.replace(
@@ -781,7 +783,7 @@ def main(args):
 
             ques_gen = ques_gen.replace(
                 "{context}", extracted_values['CONTEXT'])
-            
+
             ques_gen = ques_gen.replace("{language}", lang)
 
             msg_list = []
@@ -805,16 +807,7 @@ def main(args):
         for idx, extracted_values in enumerate(agents_info):
             text = questions[idx]
 
-            # Function to extract questions from a string
-            def extract_questions(text):
-                # Regular expression pattern to match the questions
-                pattern = r'\d+\.\s(.*?)(?=\d+\.\s|$)'
-                # Find all matches in the string
-                matches = re.findall(pattern, text, re.DOTALL)
-                # Remove leading and trailing whitespaces and return the list of questions
-                return [match.strip() for match in matches]
-
-            print("text" ,text)
+            print("text", text)
             # Split the text into sections based on the "List of" pattern
             sections = re.split(r'List of \d+ ', text)
 
@@ -828,19 +821,20 @@ def main(args):
                 # Skip the first section which is empty due to the split pattern
                 if not section:
                     continue
-                
+
                 # Determine the type of questions based on the section title
-                if "simple questions" in section.lower():
+                if "simple" in section.lower():
                     question_type = simple_questions
-                elif "tricky questions" in section.lower():
+                elif "tricky" in section.lower():
                     question_type = tricky_questions
-                elif "confusing questions" in section.lower():
+                elif "confuse" in section.lower():
                     question_type = confusing_questions
                 else:
                     continue  # Skip sections that don't match the expected titles
 
                 # Extract questions using a regular expression
-                questions = re.findall(r'\d+\. (.*?)[\.\?]', section, re.DOTALL)
+                questions = re.findall(
+                    r'\d+\. (.*?)[\.\?]', section, re.DOTALL)
                 question_type.extend(questions)
 
             # Print the extracted questions
@@ -849,9 +843,9 @@ def main(args):
             print("Confusing Questions:", confusing_questions)
 
             extracted_values["QUESTION"] = {
-                simple_questions: simple_questions,
-                tricky_questions: tricky_questions,
-                confusing_questions: confusing_questions
+                "simple_questions": simple_questions,
+                "tricky_questions": tricky_questions,
+                "confusing_questions": confusing_questions
             }
 
 
