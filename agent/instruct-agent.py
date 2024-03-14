@@ -319,18 +319,18 @@ You also need to generate question, which might CONFUSE the agent and force him 
 
 Generate a diverse set of realistic questions a customer service agent might encounter when taking calls from customers on their mobile phones.
 
-Generate 10 such questions each in hinglish language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
+Generate 10 such questions each in {language} language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
 
 Respond in the following format.
-List of 10 simple questions generated in hinglish:
+List of 10 simple questions generated in {language}:
 1.
 2.
 
-List of 10 TRICKY questions generated in hinglish:
+List of 10 TRICKY questions generated in {language}:
 1.
 2.
 
-List of 10 questions generated in hinglish which might CONFUSE the agent.
+List of 10 questions generated in {language} which might CONFUSE the agent.
 1.
 2.
 
@@ -662,7 +662,6 @@ def main(args):
 
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
-        args.lang = lang
         prompts = []
         selected_industry = []
         for _loop in range(2):  # no of agents
@@ -782,6 +781,8 @@ def main(args):
 
             ques_gen = ques_gen.replace(
                 "{context}", extracted_values['CONTEXT'])
+            
+            ques_gen = ques_gen.replace("{language}", lang)
 
             msg_list = []
             msg_system = {"role": "system",
