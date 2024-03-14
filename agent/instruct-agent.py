@@ -682,7 +682,7 @@ def main(args):
             prompts.append(text)
             selected_industry.append(industry)
 
-        agents = eval_hf_model(args, model, tokenizer, prompts, .2)
+        agents = eval_hf_model(args, model, tokenizer, prompts, .5)
 
         prompts = []
         agents_info = []
@@ -753,7 +753,8 @@ def main(args):
             )
             prompts.append(text)
 
-        outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+        outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
+        prompts = []
 
         for idx, output in enumerate(outputs):
             agent_idx = math.floor(idx / 2)
@@ -769,7 +770,7 @@ def main(args):
                 print("agento meta", output)
                 print("agento meta", json.loads(output))
                 agent_info["META"] = output
-
+        
         for extracted_values in agents_info:
 
             ques_gen = AGENT_QUES_GENERATOR.replace(
@@ -800,6 +801,8 @@ def main(args):
             prompts.append(text)
 
         questions = eval_hf_model(args, model, tokenizer, prompts, 0)
+        prompts = []
+        
         for idx, extracted_values in enumerate(agents_info):
             text = questions[idx]
 
