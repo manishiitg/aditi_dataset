@@ -13,9 +13,13 @@ import re
 from huggingface_hub import repo_exists
 import math
 import uuid
+def is_string(var):
+    return isinstance(var, str)
 
 
 def contains_chinese(text):
+    if not is_string(text):
+        return False
     for char in text:
         if '\u4e00' <= char <= '\u9fff':
             return True
