@@ -662,6 +662,7 @@ def main(args):
     for lang in languages:
         args.lang = lang
         prompts = []
+        selected_industry = []
         for _loop in range(2):  # no of agents
             industry = random.choice(INDUSTRIES)
             gen = AGENT_GENERATOR_PROMPT.replace('{industry}', industry)
@@ -678,14 +679,17 @@ def main(args):
                 add_generation_prompt=True
             )
             prompts.append(text)
+            selected_industry.append(industry)
 
         agents = eval_hf_model(args, model, tokenizer, prompts, .2)
 
         prompts = []
         agents_info = []
-        for agent in agents:
+        for idx, agent in enumerate(agents):
+
             print(
                 "==================================agent==================================")
+            print(selected_industry[idx])
             print(agent)
 
             pattern = r'(COMPANY|CHARACTER|TOOLS):\s*(.*?)(?=(?:COMPANY|CHARACTER|TOOLS):|\Z)'
