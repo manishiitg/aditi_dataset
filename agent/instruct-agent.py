@@ -842,8 +842,7 @@ def main(args):
                     continue  # Skip sections that don't match the expected titles
 
                 # Extract questions using a regular expression
-                questions = re.findall(
-                    r'\d+\. (.*?)[\.\?]', section, re.DOTALL)
+                questions = re.findall(r'\d+\. (.*?)(?=\d+\.|\Z)', section, re.DOTALL)
                 question_type.extend(questions)
 
             # Print the extracted questions
