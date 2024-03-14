@@ -392,7 +392,7 @@ def main(args):
                 "==================================agent==================================")
             print(agent)
 
-            pattern = r'(COMPANY|CHARACTER|TOOLS):\s*(.*?)(?=(COMPANY|CHARACTER|TOOLS):|$)'
+            pattern = r'(COMPANY|CHARACTER|TOOLS):\s*(.*?)(?=(?:COMPANY|CHARACTER|TOOLS):|\Z)'
 
             # Find all matches in the text
             matches = re.findall(pattern, agent, re.DOTALL | re.MULTILINE)
