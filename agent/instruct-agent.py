@@ -313,17 +313,17 @@ The questions can range from simple clarification questions to more complex issu
 Make sure introduce some spelling mistakes in the questions generated.
 
 You need to generate questions which a user can ask the agent, which would require the agent either use the tools or context avaiable with him.
-Ask TRICKY questions, so the agent really needs to think before he is able to answer. 
+Generate TRICKY questions, so the agent really needs to think before he is able to answer. 
 
 You also need to generate question, which might CONFUSE the agent and force him to hallucinate. 
 
 Generate a diverse set of realistic questions a customer service agent might encounter when taking calls from customers on their mobile phones.
 Make sure that the questions generated have spelling mistakes similar to what happens in voice chat or text chat.
 
-Use natural, conversational language that are clear and easy to follow (short sentences, simple words).
-    1. Remember that this is a voice conversation:
-    1a. Don't use quotes, lists, markdown, bullet points, or other formatting that's not typically spoken.
-    1b. Type out numbers in words (e.g. 'twenty twelve' instead of the year 2012)
+Use natural conversational language to generate question that are clear and easy to follow (short sentences, simple words).
+1. Remember that this is a voice conversation:
+1a. Don't use quotes, lists, markdown, bullet points, or other formatting that's not typically spoken.
+1b. Type out numbers in words (e.g. 'twenty twelve' instead of the year 2012)
 
 Generate 10 such questions each in {language} language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
 
