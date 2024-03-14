@@ -736,7 +736,7 @@ def main(args):
         TOOLS = TOOLS.replace("```", "")
         extracted_values['TOOLS'] = TOOLS
         # try:
-        json5.loads(extracted_values['TOOLS'])
+        # json5.loads(extracted_values['TOOLS'])
         # except json.decoder.JSONDecodeError as e:
         #     print("got error in json decoding", e)
         #     continue
