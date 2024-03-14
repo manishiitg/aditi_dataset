@@ -116,6 +116,7 @@ Keep your answer short while maintaing a female voice.
 TOOLS: 
 You are a helpful assistant with access to the following tools. Use them if required
 Available tools:
+[
 {
   "name": "search_recipe",
   "description": "Search for a recipe based on ingredients",
@@ -146,8 +147,7 @@ Available tools:
       "ingredients"
     ]
   }
-}
-
+},
 {
   "name": "convert_currency",
   "description": "Convert one currency to another",
@@ -174,6 +174,7 @@ Available tools:
     ]
   }
 }
+]
 
 Please generate more such example agent persona, generating a random, diverse set of between 3 and 9 available functions.
 The character should be diverse belonging to different types of companies requiring customer support agents.
