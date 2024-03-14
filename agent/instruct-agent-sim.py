@@ -167,6 +167,7 @@ def main(args):
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
             max_model_len=8196,
+            gpu_memory_utilization=.95,
 
         )
     else:
@@ -177,6 +178,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             max_model_len=8196,
+            gpu_memory_utilization=.95,
         )
 
     final_data = []
@@ -190,7 +192,6 @@ def main(args):
     agents_info = load_dataset("manishiitg/indic-agent", split="train")
 
     prompts = []
-    selected_industry = []
     for agent in agents_info:
 
         company = agent['COMPANY']
