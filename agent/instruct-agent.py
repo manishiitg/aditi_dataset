@@ -280,8 +280,8 @@ generate a maximum of 10 such key/value pairs only in english language
 respond in json format
 
 {
-{"userInfo" : { "key" : "value", ....}}
-{"companyInfo" : { "key" : "value", ....}}
+{"userInfo" : { "key in english" : "value in english", ....}}
+{"companyInfo" : { "key in english" : "value in english", ....}}
 }
 """
 
@@ -817,11 +817,12 @@ def main(args):
             confusing_questions = []
 
             # Loop through the sections
-            for section in sections:
+            for idx, section in sections:
                 # Skip the first section which is empty due to the split pattern
                 if not section:
                     continue
-
+                
+                print("section.lower()", section.lower())
                 # Determine the type of questions based on the section title
                 if "simple" in section.lower():
                     question_type = simple_questions
