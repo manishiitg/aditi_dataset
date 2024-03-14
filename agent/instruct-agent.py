@@ -193,6 +193,8 @@ Generate a detailed agent persona for a random company in India only in english.
 
 Agento persona should be related to industry "{industry}"
 
+{avoid_company}
+
 Response format:
 COMPANY:
 CHARACTER:
@@ -661,11 +663,28 @@ def main(args):
     # """
     random.seed(time.time())
 
+    existing_agents = {}
+    for r in final_data:
+        ind = r["industry"]
+        if ind not in existing_agents:
+            existing_agents[ind] = []
+
+        existing_agents[ind] = existing_agents[ind].append(r['COMPANY'])
+
     prompts = []
     selected_industry = []
     for _loop in range(10):  # no of agents
         industry = random.choice(INDUSTRIES)
+
+        avoid_company = ""
+
+        if industry in existing_agents:
+            existing_companies = existing_agents[industry]
+            avoid_company = "Dont generate companies similar to " + \
+                ", ".join(existing_companies)
+
         gen = AGENT_GENERATOR_PROMPT.replace('{industry}', industry)
+        gen = gen.replace("avoid_company", avoid_company)
         msg_list = []
         msg_system = {"role": "system",
                       "content": "You are a helpful assistant"}
