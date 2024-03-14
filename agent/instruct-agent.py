@@ -12,6 +12,7 @@ import random
 import re
 from huggingface_hub import repo_exists
 import math
+import uuid
 
 
 AGENT_PROMPT_USER_SIMULATION = """
@@ -654,11 +655,11 @@ def main(args):
             max_model_len=8196,
         )
 
-    # final_data = []
-    # if repo_exists(base_repo):
-    #     existing_ds = load_dataset(base_repo, split="train")
-    #     for r in existing_ds:
-    #         final_data.append(r)
+    final_data = []
+    if repo_exists(base_repo):
+        existing_ds = load_dataset(base_repo, split="train")
+        for r in existing_ds:
+            final_data.append(r)
 
     # gen_industries = """
     # Generate a list of business industries which would employ a customer support agent.
@@ -692,6 +693,7 @@ def main(args):
 
         prompts = []
         agents_info = []
+
         for idx, agent in enumerate(agents):
 
             print(
@@ -705,7 +707,9 @@ def main(args):
             matches = re.findall(pattern, agent, re.DOTALL | re.MULTILINE)
 
             # Create a dictionary to store the extracted values
-            extracted_values = {}
+            extracted_values = {
+                "industry": selected_industry[idx]
+            }
 
             # Iterate over the matches and add them to the dictionary
             for match in matches:
@@ -713,9 +717,9 @@ def main(args):
                 value = match[1].strip()
                 extracted_values[key] = value
 
+            extracted_values["uuid"] = uuid.uuid4()
             agents_info.append(extracted_values)
 
-            print(extracted_values)
             TOOLS = extracted_values['TOOLS']
             TOOLS = TOOLS.replace("```json", "")
             TOOLS = TOOLS.replace("```", "")
@@ -826,7 +830,7 @@ def main(args):
                 # Skip the first section which is empty due to the split pattern
                 if not section:
                     continue
-                
+
                 print("section.lower()", section.lower())
                 # Determine the type of questions based on the section title
                 if "simple" in section.lower():
