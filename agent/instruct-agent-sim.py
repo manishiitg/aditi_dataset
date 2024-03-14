@@ -226,13 +226,14 @@ def main(args):
         for lang in languages:
 
             print("agento=----")
-            print(ask_question_system)
             simple_questions = agent['simple_questions_' + lang]
             questions = []
             prompts = []
 
             ask_question_system_lang = ask_question_system.replace(
                 "{language}", lang)
+
+            print(ask_question_system_lang)
 
             for ques in simple_questions:
                 msg_list = []
