@@ -305,14 +305,13 @@ CHARACTER: details about the agent himself
 CONTEXT: knowledge base available to agent to answer questinos
 TOOLS: different tools the agent has access to access external data sources
 
-You are an AI assistant designed to generate realistic questions that a customer might ask when calling a company's customer service line from their mobile phone.
+You are an AI assistant designed to generate realistic questions that a customer might ask when calling a company's customer service from their mobile phone.
 
 Your task is to come up with a variety of questions that cover common issues, requests, or inquiries a customer may have related to the company's products or services. 
 
 The questions can range from simple clarification questions to more complex issues requiring troubleshooting or explanations. However, avoid extremely obscure or unrealistic questions.
-Make sure introduce some spelling mistakes in the questions generated.
 
-You need to generate questions which a user can ask the agent, which would require the agent either use the tools or context avaiable with him.
+You need to generate questions which would require the agent either use the tools or context avaiable with him.
 Generate TRICKY questions, so the agent really needs to think before he is able to answer. 
 
 You also need to generate question, which might CONFUSE the agent and force him to hallucinate. 
