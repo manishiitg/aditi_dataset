@@ -663,7 +663,7 @@ def main(args):
 
     prompts = []
     selected_industry = []
-    for _loop in range(2):  # no of agents
+    for _loop in range(10):  # no of agents
         industry = random.choice(INDUSTRIES)
         gen = AGENT_GENERATOR_PROMPT.replace('{industry}', industry)
         msg_list = []
