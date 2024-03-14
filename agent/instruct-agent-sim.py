@@ -167,8 +167,6 @@ def main(args):
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
             max_model_len=8196,
-            gpu_memory_utilization=.99,
-
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -178,7 +176,6 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             max_model_len=8196,
-            gpu_memory_utilization=.99,
         )
 
     final_data = []
@@ -259,6 +256,8 @@ def main(args):
                 )
                 prompts.append(text)
                 questions.append(ques)
+
+                os.exit(1)
 
                 question_replies = eval_hf_model(
                     args, model, tokenizer, prompts, 0)
