@@ -334,11 +334,6 @@ List of 10 simple questions generated in {language}:
 List of 10 TRICKY questions generated in {language}:
 1.
 2.
-
-List of 10 questions generated in {language} which might CONFUSE the agent.
-1.
-2.
-
 """
 
 
@@ -666,122 +661,121 @@ def main(args):
     # """
     random.seed(time.time())
 
-    languages = ["english"]  # ["hinglish", "hindi", "english"]
+    prompts = []
+    selected_industry = []
+    for _loop in range(2):  # no of agents
+        industry = random.choice(INDUSTRIES)
+        gen = AGENT_GENERATOR_PROMPT.replace('{industry}', industry)
+        msg_list = []
+        msg_system = {"role": "system",
+                      "content": "You are a helpful assistant"}
+        msg_list.append(msg_system)
+        msg_prompt = {"role": "user", "content": gen}
+        msg_list.append(msg_prompt)
+
+        text = tokenizer.apply_chat_template(
+            msg_list,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        prompts.append(text)
+        selected_industry.append(industry)
+
+    agents = eval_hf_model(args, model, tokenizer, prompts, .5)
+
+    prompts = []
+    agents_info = []
+
+    for idx, agent in enumerate(agents):
+
+        print(
+            "==================================agent==================================")
+        print(selected_industry[idx])
+        print(agent)
+
+        pattern = r'(COMPANY|CHARACTER|TOOLS):\s*(.*?)(?=(?:COMPANY|CHARACTER|TOOLS):|\Z)'
+
+        # Find all matches in the text
+        matches = re.findall(pattern, agent, re.DOTALL | re.MULTILINE)
+
+        # Create a dictionary to store the extracted values
+        extracted_values = {
+            "industry": selected_industry[idx]
+        }
+
+        # Iterate over the matches and add them to the dictionary
+        for match in matches:
+            key = match[0]
+            value = match[1].strip()
+            extracted_values[key] = value
+
+        extracted_values["uuid"] = str(uuid.uuid4())
+        agents_info.append(extracted_values)
+
+        TOOLS = extracted_values['TOOLS']
+        TOOLS = TOOLS.replace("```json", "")
+        TOOLS = TOOLS.replace("```", "")
+        extracted_values['TOOLS'] = TOOLS
+        json.loads(extracted_values['TOOLS'])
+
+        msg_list = []
+        msg_system = {"role": "system",
+                      "content": "You are a helpful assistant"}
+        msg_list.append(msg_system)
+
+        context_gen = AGENT_CONTEXT_GENERATOR.replace(
+            "{company}", extracted_values['COMPANY'])
+        msg_prompt = {"role": "user", "content": context_gen}
+        msg_list.append(msg_prompt)
+
+        text = tokenizer.apply_chat_template(
+            msg_list,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        prompts.append(text)
+
+        meta_gen = AGENT_META_GENERATOR.replace(
+            "{company}", extracted_values['COMPANY'])
+        meta_gen = meta_gen.replace("{tools}", extracted_values['TOOLS'])
+        meta_gen = meta_gen.replace(
+            "{character}", extracted_values['CHARACTER'])
+
+        msg_list = []
+        msg_system = {"role": "system",
+                      "content": "You are a helpful assistant"}
+        msg_list.append(msg_system)
+        msg_prompt = {"role": "user", "content": meta_gen}
+        msg_list.append(msg_prompt)
+
+        text = tokenizer.apply_chat_template(
+            msg_list,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        prompts.append(text)
+
+    outputs = eval_hf_model(args, model, tokenizer, prompts, .25)
+    prompts = []
+
+    for idx, output in enumerate(outputs):
+        agent_idx = math.floor(idx / 2)
+        agent_info = agents_info[agent_idx]
+        if idx % 2 == 0:
+            # context
+            print("agento context", output)
+            agent_info["CONTEXT"] = output
+        else:
+            output = output.replace("```json", "")
+            output = output.replace("```", "")
+            output = output.strip()
+            print("agento meta", output)
+            print("agento meta", json.loads(output))
+            agent_info["META"] = output
+
+    languages = ["hinglish", "hindi", "english"]
     for lang in languages:
-        prompts = []
-        selected_industry = []
-        for _loop in range(2):  # no of agents
-            industry = random.choice(INDUSTRIES)
-            gen = AGENT_GENERATOR_PROMPT.replace('{industry}', industry)
-            msg_list = []
-            msg_system = {"role": "system",
-                          "content": "You are a helpful assistant"}
-            msg_list.append(msg_system)
-            msg_prompt = {"role": "user", "content": gen}
-            msg_list.append(msg_prompt)
-
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts.append(text)
-            selected_industry.append(industry)
-
-        agents = eval_hf_model(args, model, tokenizer, prompts, .5)
-
-        prompts = []
-        agents_info = []
-
-        for idx, agent in enumerate(agents):
-
-            print(
-                "==================================agent==================================")
-            print(selected_industry[idx])
-            print(agent)
-
-            pattern = r'(COMPANY|CHARACTER|TOOLS):\s*(.*?)(?=(?:COMPANY|CHARACTER|TOOLS):|\Z)'
-
-            # Find all matches in the text
-            matches = re.findall(pattern, agent, re.DOTALL | re.MULTILINE)
-
-            # Create a dictionary to store the extracted values
-            extracted_values = {
-                "industry": selected_industry[idx]
-            }
-
-            # Iterate over the matches and add them to the dictionary
-            for match in matches:
-                key = match[0]
-                value = match[1].strip()
-                extracted_values[key] = value
-
-            extracted_values["uuid"] = uuid.uuid4()
-            agents_info.append(extracted_values)
-
-            TOOLS = extracted_values['TOOLS']
-            TOOLS = TOOLS.replace("```json", "")
-            TOOLS = TOOLS.replace("```", "")
-            extracted_values['TOOLS'] = TOOLS
-            json.loads(extracted_values['TOOLS'])
-
-            msg_list = []
-            msg_system = {"role": "system",
-                          "content": "You are a helpful assistant"}
-            msg_list.append(msg_system)
-
-            context_gen = AGENT_CONTEXT_GENERATOR.replace(
-                "{company}", extracted_values['COMPANY'])
-            msg_prompt = {"role": "user", "content": context_gen}
-            msg_list.append(msg_prompt)
-
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts.append(text)
-
-            meta_gen = AGENT_META_GENERATOR.replace(
-                "{company}", extracted_values['COMPANY'])
-            meta_gen = meta_gen.replace("{tools}", extracted_values['TOOLS'])
-            meta_gen = meta_gen.replace(
-                "{character}", extracted_values['CHARACTER'])
-
-            msg_list = []
-            msg_system = {"role": "system",
-                          "content": "You are a helpful assistant"}
-            msg_list.append(msg_system)
-            msg_prompt = {"role": "user", "content": meta_gen}
-            msg_list.append(msg_prompt)
-
-            text = tokenizer.apply_chat_template(
-                msg_list,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            prompts.append(text)
-
-        outputs = eval_hf_model(args, model, tokenizer, prompts, .25)
-        prompts = []
-
-        for idx, output in enumerate(outputs):
-            agent_idx = math.floor(idx / 2)
-            agent_info = agents_info[agent_idx]
-            if idx % 2 == 0:
-                # context
-                print("agento context", output)
-                agent_info["CONTEXT"] = output
-            else:
-                output = output.replace("```json", "")
-                output = output.replace("```", "")
-                output = output.strip()
-                print("agento meta", output)
-                print("agento meta", json.loads(output))
-                agent_info["META"] = output
-
         for extracted_values in agents_info:
-
             ques_gen = AGENT_QUES_GENERATOR.replace(
                 "{company}", extracted_values['COMPANY'])
 
@@ -811,7 +805,6 @@ def main(args):
 
         questions_gen = eval_hf_model(args, model, tokenizer, prompts, 0)
         prompts = []
-
         for idx, extracted_values in enumerate(agents_info):
             text = questions_gen[idx]
 
@@ -822,7 +815,6 @@ def main(args):
             # Initialize the lists
             simple_questions = []
             tricky_questions = []
-            confusing_questions = []
 
             # Loop through the sections
             for section in sections:
@@ -830,14 +822,11 @@ def main(args):
                 if not section:
                     continue
 
-                print("section.lower()", section.lower())
                 # Determine the type of questions based on the section title
                 if "simple" in section.lower():
                     question_type = simple_questions
                 elif "tricky" in section.lower():
                     question_type = tricky_questions
-                elif "confuse" in section.lower():
-                    question_type = confusing_questions
                 else:
                     continue  # Skip sections that don't match the expected titles
 
@@ -850,11 +839,9 @@ def main(args):
             # Print the extracted questions
             print("Simple Questions:", simple_questions)
             print("Tricky Questions:", tricky_questions)
-            print("Confusing Questions:", confusing_questions)
 
-            extracted_values["simple_questions"] = simple_questions
-            extracted_values["tricky_questions"] = tricky_questions
-            extracted_values["simple_questions"] = confusing_questions
+            extracted_values["simple_questions_" + lang] = simple_questions
+            extracted_values["tricky_questions_" + lang] = tricky_questions
 
     dataset = process_and_update_dataset(agents_info)
     dataset.push_to_hub(base_repo, private=False)
