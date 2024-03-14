@@ -86,14 +86,14 @@ Rules For Replying in Natural Language:
 
 Ask customer to contact you via email/phone or visit website/mobile only when you are unable to help the customer yourself. I most cases you need to help the customer using TOOLS and CONTEXT you have.
 
-User is taking in hinglish language, so you also need to respond in hinglish.
+User is taking in {language} language, so you also need to respond in {language}.
 
 When replying use the following format
 
 Thought in English: think step by step about what to do in detail.
 Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
 Should Execute Action: do we have all parameter values to execute action reply only yes or no. If yes, i.e executing a tool reply to user should only contain a message asking user to wait.
-Reply to User In Hinglish: a short natural language based message to be sent to the user only in hinglish
+Reply to User In {language}: a short natural language based message to be sent to the user only in {language}
 <END>
 """
 
@@ -229,10 +229,14 @@ def main(args):
             print(ask_question_system)
             simple_questions = agent['simple_questions_' + lang]
             questions = []
+
+            ask_question_system_lang = ask_question_system.replace(
+                "{language}", lang)
+
             for ques in simple_questions:
                 msg_list = []
                 msg_system = {"role": "system",
-                              "content": ask_question_system}
+                              "content": ask_question_system_lang}
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user", "content": ques}
                 msg_list.append(msg_prompt)
@@ -247,6 +251,7 @@ def main(args):
 
             question_replies = eval_hf_model(
                 args, model, tokenizer, prompts, 0)
+
             for idx, reply in enumerate(question_replies):
                 print(questions[idx])
                 print(reply)
