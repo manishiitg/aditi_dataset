@@ -100,6 +100,8 @@ Agent usually has a character defined, with a name, personality, designation, et
 Agent works for a company.
 Agent also has tools available with it which it can use when required to get information for the customer.
 
+
+Sample format of text to generate.
 AGENT DESCRIPTION
 
 COMPANY:
@@ -184,6 +186,8 @@ Be sure to format the list of available functions as proper JSON, with appropria
 All output text should be in english, but the exact terms "CHARACTER" and "TOOLS" are special tokens that must not be translated.
 
 Generate a detailed agent persona for a random company in India only in english.
+
+Agento persona should be related to industry "{industry}"
 
 Response format:
 COMPANY:
@@ -331,6 +335,294 @@ List of 10 questions generated in hinglish which might CONFUSE the agent.
 """
 
 
+INDUSTRIES = [
+    "Retail",
+    "E-commerce",
+    "Banking and finance",
+    "Insurance",
+    "Telecommunications",
+    "Hospitality and hotels",
+    "Travel and tourism",
+    "Healthcare",
+    "Pharmaceutical",
+    "Technology and software",
+    "Internet service providers",
+    "Automotive",
+    "Food and beverage",
+    "Gyms and fitness centers",
+    "Education and tutoring",
+    "Home improvement and construction",
+    "Real estate",
+    "Legal services",
+    "Entertainment (music, movies, streaming)",
+    "Gaming",
+    "Cable and satellite TV",
+    "Energy and utilities",
+    "Waste management",
+    "Public transportation",
+    "Logistics and shipping",
+    "Accounting and bookkeeping",
+    "Human resources",
+    "Event planning and management",
+    "Beauty and personal care",
+    "Fashion and apparel",
+    "Pet services",
+    "Online marketplaces",
+    "Interior design",
+    "Photography and videography",
+    "Graphic design and printing",
+    "Home security and alarm systems",
+    "Pest control",
+    "Landscaping",
+    "Lawn care",
+    "Moving and storage",
+    "Furniture and home decor",
+    "Home appliances",
+    "Health and wellness products",
+    "Nutritional supplements",
+    "Cosmetics and skincare",
+    "Hair salons and spas",
+    "Childcare and nurseries",
+    "Florists and gift shops",
+    "Bookstores and publishing",
+    "News and media",
+    "Fitness equipment and supplies",
+    "Automotive repair and maintenance",
+    "Office supply and equipment",
+    "Recruiting and staffing",
+    "Marketing and advertising",
+    "Public relations",
+    "Web design and development",
+    "Social media management",
+    "Translation and interpretation",
+    "Audio and video production",
+    "Event rental services",
+    "Catering and food services",
+    "Computer repair and IT support",
+    "Printing and signage",
+    "Courier and delivery services",
+    "Language schools",
+    "Plumbing and HVAC",
+    "Electrical services",
+    "Locksmiths",
+    "Fire protection services",
+    "Solar energy",
+    "Waste recycling",
+    "Water treatment",
+    "Chimney cleaning",
+    "Awning and canopy installation",
+    "Home automation",
+    "Tattoo parlors",
+    "Martial arts schools",
+    "Yoga and Pilates studios",
+    "Dance schools",
+    "Music schools",
+    "Art galleries",
+    "Aquarium and pet stores",
+    "Wineries and breweries",
+    "Coffee shops and cafes",
+    "Bakeries and confectioneries",
+    "Ice cream parlors",
+    "Fitness clubs and gyms",
+    "Car rental agencies",
+    "Limousine and taxi services",
+    "Travel agencies",
+    "Bed & Breakfasts",
+    "Theme parks and attractions",
+    "Cruise lines",
+    "Martial arts equipment and supplies",
+    "Skincare and beauty salons",
+    "Art supply stores",
+    "Swimming pool maintenance",
+    "Agriculture and farming",
+    "Environmental consulting",
+    "Renewable energy technology",
+    "Wholesale distribution",
+    "Eco-tourism",
+    "Marine and maritime services",
+    "Aviation and aerospace",
+    "Chemical manufacturing",
+    "Biotechnology",
+    "Pharmaceutical research",
+    "Medical equipment and devices",
+    "Alternative medicine",
+    "Pharmacy",
+    "Building materials",
+    "Construction machinery",
+    "Hardware stores",
+    "Building inspection services",
+    "Property management",
+    "Corporate training",
+    "Coaching and mentoring",
+    "Market research",
+    "Business consulting",
+    "Brand management",
+    "Franchising",
+    "Co-working spaces",
+    "Import and export",
+    "Government contracting",
+    "Non-profit organizations",
+    "Charities",
+    "Social work",
+    "Community development",
+    "Event photography",
+    "Fashion design",
+    "Fashion wholesale",
+    "Jewelry design and manufacturing",
+    "Floral design",
+    "Custom furniture",
+    "Antique and vintage stores",
+    "Garden centers",
+    "Pet grooming",
+    "Pet boarding",
+    "Pet training",
+    "Pet food manufacturing",
+    "Pet insurance",
+    "Aquarium maintenance",
+    "Laser hair removal",
+    "Electrolysis",
+    "Makeup artistry",
+    "Art restoration",
+    "Art appraisals",
+    "Art conservation",
+    "Sculpture and pottery",
+    "Fine arts education",
+    "Furniture restoration",
+    "Antique restoration",
+    "Game development",
+    "App development",
+    "Digital marketing",
+    "SEO and SEM services",
+    "Content creation",
+    "Podcasts production",
+    "Voiceover services",
+    "Video editing",
+    "Animation services",
+    "Live streaming services",
+    "Webcasting",
+    "Product photography",
+    "Virtual reality",
+    "Augmented reality",
+    "E-learning platforms",
+    "Translation services",
+    "Voice translation",
+    "Language interpretation",
+    "Textile manufacturing",
+    "Clothing manufacturing",
+    "Leather goods",
+    "Footwear manufacturing",
+    "Sports equipment",
+    "Sports clothing",
+    "Yoga clothing",
+    "Golf courses",
+    "Ski resorts",
+    "Outdoor adventure parks",
+    "Warehouse management",
+    "Inventory management",
+    "Quality control",
+    "Supply chain consulting",
+    "Logistics software",
+    "Ergonomics consulting",
+    "Workplace safety",
+    "Fire safety services",
+    "Safety equipment",
+    "Health and safety training",
+    "Disaster recovery services",
+    "Security systems integration",
+    "Smart home technology",
+    "Home automation installation",
+    "Waste reduction consulting",
+    "Recycling services",
+    "Green cleaning products",
+    "Sustainable agriculture",
+    "Aquaponics",
+    "Permaculture",
+    "Horticulture",
+    "Aromatherapy",
+    "Herbalism",
+    "Wellness retreats",
+    "Alternative healing centers",
+    "Event technology",
+    "Event sound and lighting",
+    "Live event streaming",
+    "Stage design",
+    "Event fabrication",
+    "Audio equipment rental",
+    "Video production services",
+    "Broadcasting equipment rental",
+    "Media buying and planning",
+    "Public speaking training",
+    "Voiceovers and narration",
+    "Voice acting",
+    "Audio post-production",
+    "Music production",
+    "Audio engineering",
+    "Music publishing",
+    "Audio mastering",
+    "DJ services",
+    "Karaoke services",
+    "Independent music distribution",
+    "Music festivals",
+    "Music venue management",
+    "Entertainment booking agencies",
+    "Fashion show production",
+    "Theater production",
+    "Film festivals",
+    "Film distribution",
+    "Film production services",
+    "Post-production houses",
+    "3D animation",
+    "Motion graphics",
+    "Video editing software development",
+    "Game streaming platforms",
+    "E-sports event organization",
+    "Fashion consulting",
+    "Stylists and wardrobe services",
+    "Personal shopping",
+    "Fashion coordination",
+    "Fashion show coordination",
+    "Fashion trend forecasting",
+    "Fashion public relations",
+    "Fashion digital marketing",
+    "Fashion photography",
+    "Fashion blogging and influencing",
+    "Fashion rental services",
+    "Home staging",
+    "Interior styling",
+    "Furniture rental",
+    "Art consulting",
+    "Art installation",
+    "Art appraisals",
+    "Art curation",
+    "Art conservation",
+    "Art fair organization",
+    "Art galleries",
+    "Art restoration services",
+    "Art investment consulting",
+    "Art education",
+    "Graphic design agencies",
+    "Packaging design",
+    "Environmental graphic design",
+    "3D modeling and visualization",
+    "Illustration services",
+    "Typography design",
+    "Product design",
+    "UX/UI design",
+    "Design research",
+    "Industrial design",
+    "Design thinking workshops",
+    "Design software development",
+    "Design consulting",
+    "Design strategy",
+    "Design education",
+    "Design competitions",
+    "Design events",
+    "Design management",
+    "Design research and development",
+    "Design thinking consultancy"
+]
+
+
 def main(args):
 
     base_repo = "manishiitg/indic-agent"
@@ -355,24 +647,29 @@ def main(args):
             max_model_len=8196,
         )
 
-
-
     # final_data = []
     # if repo_exists(base_repo):
     #     existing_ds = load_dataset(base_repo, split="train")
     #     for r in existing_ds:
     #         final_data.append(r)
 
+    gen_industries = """
+    Generate a list of business industries which would employ a customer support agent.
+    Generate 100 such industries
+    """
+
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
         prompts = []
-        for _loop in range(2): # no of agents
+        for _loop in range(2):  # no of agents
+            industry = random.choice(INDUSTRIES)
+            gen = AGENT_GENERATOR_PROMPT.replace('{industry}', industry)
             msg_list = []
             msg_system = {"role": "system",
                           "content": "You are a helpful assistant"}
             msg_list.append(msg_system)
-            msg_prompt = {"role": "user", "content": AGENT_GENERATOR_PROMPT}
+            msg_prompt = {"role": "user", "content": gen}
             msg_list.append(msg_prompt)
 
             text = tokenizer.apply_chat_template(
@@ -492,7 +789,7 @@ def main(args):
             prompts.append(text)
 
         questions = eval_hf_model(args, model, tokenizer, prompts, 0)
-        for idx, extracted_values in agents_info:
+        for idx, extracted_values in enumerate(agents_info):
             text = questions[idx]
 
             # Function to extract questions from a string
