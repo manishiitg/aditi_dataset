@@ -729,14 +729,18 @@ def main(args):
             extracted_values[key] = value
 
         extracted_values["uuid"] = str(uuid.uuid4())
-        agents_info.append(extracted_values)
 
         TOOLS = extracted_values['TOOLS']
         TOOLS = TOOLS.replace("```json", "")
         TOOLS = TOOLS.replace("```", "")
         extracted_values['TOOLS'] = TOOLS
-        json.loads(extracted_values['TOOLS'])
-
+        try:
+            json.loads(extracted_values['TOOLS'])
+        except json.decoder.JSONDecodeError as e:
+            print("got error in json decoding", e)
+            continue
+        
+        agents_info.append(extracted_values)
         msg_list = []
         msg_system = {"role": "system",
                       "content": "You are a helpful assistant"}
