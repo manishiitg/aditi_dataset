@@ -366,7 +366,7 @@ def main(args):
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
-        for _loop in range(5): # no of agents
+        for _loop in range(2): # no of agents
 
             prompts = []
             msg_list = []
