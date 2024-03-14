@@ -811,6 +811,7 @@ def main(args):
                 # Remove leading and trailing whitespaces and return the list of questions
                 return [match.strip() for match in matches]
 
+            print("text" ,text)
             # Split the text into sections based on the category headers
             sections = re.split(
                 r'List of (.*?) questions generated in hinglish:', text)
@@ -836,7 +837,10 @@ def main(args):
             print("Confusing Questions:", confusing_questions)
 
             extracted_values["QUESTION"] = {
-                simple_questions, tricky_questions, confusing_questions}
+                simple_questions: simple_questions,
+                tricky_questions: tricky_questions,
+                confusing_questions: confusing_questions
+            }
 
 
 def process_and_update_dataset(new_data):
