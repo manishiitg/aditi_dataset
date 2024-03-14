@@ -307,7 +307,7 @@ TOOLS: different tools the agent has access to access external data sources
 You are an AI assistant designed to generate realistic questions that a customer might ask when calling a company's customer service line from their mobile phone.
 
 Your task is to come up with a variety of questions that cover common issues, requests, or inquiries a customer may have related to the company's products or services. 
-These should be natural questions a real customer would ask over the phone.
+
 The questions can range from simple clarification questions to more complex issues requiring troubleshooting or explanations. However, avoid extremely obscure or unrealistic questions.
 Make sure introduce some spelling mistakes in the questions generated.
 
@@ -318,6 +318,11 @@ You also need to generate question, which might CONFUSE the agent and force him 
 
 Generate a diverse set of realistic questions a customer service agent might encounter when taking calls from customers on their mobile phones.
 Make sure that the questions generated have spelling mistakes similar to what happens in voice chat or text chat.
+
+Use natural, conversational language that are clear and easy to follow (short sentences, simple words).
+    1. Remember that this is a voice conversation:
+    1a. Don't use quotes, lists, markdown, bullet points, or other formatting that's not typically spoken.
+    1b. Type out numbers in words (e.g. 'twenty twelve' instead of the year 2012)
 
 Generate 10 such questions each in {language} language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
 
