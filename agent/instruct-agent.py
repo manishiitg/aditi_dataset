@@ -219,12 +219,10 @@ The random text block(s) should be in the style:
 - slack conversation
 - text messages
 - scientific study
-- medical report
 - reddit post with replies
 - email
 - tweet
 - jira ticket
-- github merge request
 - gitlab issue
 - how-to article
 
@@ -237,7 +235,7 @@ The random text blocks should be related to:
 
 Each text block must be formatted as:
 BEGININPUT
-[random text goes here]
+[random text goes here in english]
 ENDINPUT
 
 Make sure every text block has the exact formatting specified, including ALL tags "BEGININPUT" and a trailing "ENDINPUT".
@@ -276,7 +274,7 @@ this meta data would mainly be key/value pairs which generally a customer suppor
 
 also generate meta data with company information.
 
-generate a maximum of 10 such key/value pairs
+generate a maximum of 10 such key/value pairs only in english language
 
 respond in json format
 
@@ -754,7 +752,7 @@ def main(args):
             )
             prompts.append(text)
 
-        outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
+        outputs = eval_hf_model(args, model, tokenizer, prompts, .25)
         prompts = []
 
         for idx, output in enumerate(outputs):
