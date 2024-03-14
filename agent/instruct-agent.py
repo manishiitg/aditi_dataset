@@ -342,7 +342,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196*2,
+            max_model_len=8196,
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -351,7 +351,7 @@ def main(args):
             tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196*2,
+            max_model_len=8196,
         )
 
     # final_data = []
