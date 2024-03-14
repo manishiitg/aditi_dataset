@@ -200,7 +200,7 @@ TOOLS:
 AGENT_CONTEXT_GENERATOR = """
 I would like you to help me generate prompts for a large language model to help train it to reduce hallucinations.
 
-To accomplish this, I want you to generate 3 to 8 random text block(s) with random names, numbers, locations, facts, etc., making sure the content of the text does not correlate too closely with known/accurate information.
+To accomplish this, I want you to generate 5 to 10 random text block(s) with random names, numbers, locations, facts, etc., making sure the content of the text does not correlate too closely with known/accurate information.
 
 If the topic is about a specific person, place, or historical event, change the dates, locations, and facts but keep the person/place/event the same. For example, if the text is about Joe Biden, and the text indicates a date of birth of November 20, 1942, the random text should select a new random date for DoB but keep it about Joe Biden (i.e., don't change the name).
 
