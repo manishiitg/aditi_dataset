@@ -12,6 +12,7 @@ import random
 import re
 from huggingface_hub import repo_exists
 import math
+import json5
 import uuid
 
 
@@ -734,12 +735,12 @@ def main(args):
         TOOLS = TOOLS.replace("```json", "")
         TOOLS = TOOLS.replace("```", "")
         extracted_values['TOOLS'] = TOOLS
-        try:
-            json.loads(extracted_values['TOOLS'])
-        except json.decoder.JSONDecodeError as e:
-            print("got error in json decoding", e)
-            continue
-        
+        # try:
+        json5.loads(extracted_values['TOOLS'])
+        # except json.decoder.JSONDecodeError as e:
+        #     print("got error in json decoding", e)
+        #     continue
+
         agents_info.append(extracted_values)
         msg_list = []
         msg_system = {"role": "system",
