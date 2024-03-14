@@ -366,9 +366,8 @@ def main(args):
     languages = ["english"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
+        prompts = []
         for _loop in range(2): # no of agents
-
-            prompts = []
             msg_list = []
             msg_system = {"role": "system",
                           "content": "You are a helpful assistant"}
@@ -383,7 +382,7 @@ def main(args):
             )
             prompts.append(text)
 
-            agents = eval_hf_model(args, model, tokenizer, prompts, .25)
+        agents = eval_hf_model(args, model, tokenizer, prompts, .25)
 
         prompts = []
         agents_info = []
@@ -458,6 +457,7 @@ def main(args):
                 print("agento context", output)
                 agent_info["CONTEXT"] = output
             else:
+                print("agento meta", output)
                 print("agento meta", json.loads(output))
                 agent_info["META"] = output
 
