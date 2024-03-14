@@ -232,7 +232,7 @@ The random text blocks should not reference each other.
 
 Don't mention text block style in generated text.
 
-The facts should be related to:
+The random text blocks should be related to:
 {company}
 
 Each text block must be formatted as:
@@ -802,7 +802,7 @@ def main(args):
 
         questions = eval_hf_model(args, model, tokenizer, prompts, 0)
         prompts = []
-        
+
         for idx, extracted_values in enumerate(agents_info):
             text = questions[idx]
 
@@ -818,7 +818,7 @@ def main(args):
             print("text" ,text)
             # Split the text into sections based on the category headers
             sections = re.split(
-                r'List of (.*?) questions generated in hinglish:', text)
+                r'List of (.*?) questions generated in (.*?):', text)
 
             # Initialize lists for each category
             simple_questions = []
