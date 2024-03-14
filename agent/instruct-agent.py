@@ -679,7 +679,7 @@ def main(args):
             )
             prompts.append(text)
 
-        agents = eval_hf_model(args, model, tokenizer, prompts, .8)
+        agents = eval_hf_model(args, model, tokenizer, prompts, .2)
 
         prompts = []
         agents_info = []
