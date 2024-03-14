@@ -801,11 +801,11 @@ def main(args):
             )
             prompts.append(text)
 
-        questions = eval_hf_model(args, model, tokenizer, prompts, 0)
+        questions_gen = eval_hf_model(args, model, tokenizer, prompts, 0)
         prompts = []
 
         for idx, extracted_values in enumerate(agents_info):
-            text = questions[idx]
+            text = questions_gen[idx]
 
             print("text", text)
             # Split the text into sections based on the "List of" pattern
