@@ -260,15 +260,17 @@ def main(args):
                 prompts.append(text)
                 questions.append(ques)
 
-            question_replies = eval_hf_model(
-                args, model, tokenizer, prompts, 0)
+                question_replies = eval_hf_model(
+                    args, model, tokenizer, prompts, 0)
 
-            for idx, reply in enumerate(question_replies):
-                print(agent_prompts[idx])
-                print(questions[idx])
-                print(reply)
+                for idx, reply in enumerate(question_replies):
+                    print(agent_prompts[idx])
+                    print(questions[idx])
+                    print(reply)
 
-            break
+                questions = []
+                prompts = []
+                agent_prompts = []
 
 
 def process_and_update_dataset(new_data):
