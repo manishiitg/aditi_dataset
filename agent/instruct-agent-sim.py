@@ -229,6 +229,7 @@ def main(args):
             print(ask_question_system)
             simple_questions = agent['simple_questions_' + lang]
             questions = []
+            prompts = []
 
             ask_question_system_lang = ask_question_system.replace(
                 "{language}", lang)
@@ -255,6 +256,8 @@ def main(args):
             for idx, reply in enumerate(question_replies):
                 print(questions[idx])
                 print(reply)
+
+            break
 
 
 def process_and_update_dataset(new_data):
