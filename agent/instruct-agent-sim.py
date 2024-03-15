@@ -322,7 +322,7 @@ def main(args):
 
             print("agento=----")
             simple_questions = agent['simple_questions_' + lang]
-            random.shuffle(simple_questions)
+            # random.shuffle(simple_questions)
 
             ask_question_system_lang = ask_question_system.replace(
                 "{language}", lang)
@@ -337,7 +337,7 @@ def main(args):
                 question = re.sub(r'\s*\(.*?\)\s*', '', question)
                 existing_conversation = [{"role": "user", "content": question}]
 
-                for _loop in range(4):
+                for _loop in range(10):
 
                     print("loop no####", _loop)
 
