@@ -177,7 +177,7 @@ Use natural, conversational language that are clear and easy to follow (short se
 
 
 
-Ask customer to contact you via email/phone or visit website/mobile only when you are unable to help the customer yourself. I most cases you need to help the customer using TOOLS and CONTEXT you have.
+Never Ask customer to contact you via email/phone or visit website/mobile. In most cases you need to help the customer using TOOLS and CONTEXT you have.
 
 User is taking in hinglish language, so you also need to respond in hinglish.
 
@@ -398,6 +398,7 @@ def main(args):
                     print("Should Execute Action:", should_execute_action)
                     print("Reply to User Language:", reply_to_user_language)
                     print("Reply to User Text:", reply_to_user_text)
+                    print("------------------------------------------------")
 
                     existing_conversation.append({"role": "assistant", "content": reply_to_user_text})
 
@@ -446,7 +447,7 @@ def main(args):
                                         "content": question})
                         msg_list.append({"role": "assistant",
                                         "content": reply_to_user_text})
-                        msg_list.append({"role": "assistant",
+                        msg_list.append({"role": "user",
                                         "content": tool_gen_answer})
 
                         text = tokenizer.apply_chat_template(
