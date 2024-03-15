@@ -339,10 +339,11 @@ def main(args):
                     print("loop no####", _loop)
 
                     msg_list = []
-                    msg_system = {"role": "system",
-                                  "content": ask_question_system_lang}
-                    msg_list.append(msg_system)
+                    msg_list.append({"role": "system",
+                                     "content": ask_question_system_lang})
                     msg_list.extend(existing_conversation)
+
+                    print("existing_conversation", existing_conversation)
 
                     text = tokenizer.apply_chat_template(
                         msg_list,
