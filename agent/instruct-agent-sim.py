@@ -240,6 +240,7 @@ def main(args):
                 "{language}", lang)
 
             agent_prompts.append(ask_question_system_lang)
+            print(ask_question_system_lang)
 
             for ques in simple_questions:
                 msg_list = []
