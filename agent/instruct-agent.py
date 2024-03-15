@@ -674,7 +674,7 @@ def main(args):
 
     prompts = []
     selected_industry = []
-    for _loop in range(10):  # no of agents
+    for _loop in range(5):  # no of agents
         industry = random.choice(INDUSTRIES)
 
         avoid_company = ""
