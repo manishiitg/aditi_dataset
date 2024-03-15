@@ -92,14 +92,12 @@ Rules For Replying in Natural Language:
 
 Ask customer to contact you via email/phone or visit website/mobile only when you are unable to help the customer yourself. I most cases you need to help the customer using TOOLS and CONTEXT you have.
 
-User is taking in {language} language, so you also need to respond in {language}. Don't generate english translation of the reply.
-
 When replying use the following format
 
 Thought in English: think step by step about what to do in detail.
 Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
 Should Execute Action: do we have all parameter values to execute action reply only yes or no. If yes, i.e executing a tool reply to user should only contain a message asking user to wait.
-Reply to User In {language}: a short natural language based message to be sent to the user only in {language}
+Reply to User In {language}: a short natural language based message to be sent to the user only in {language}. Don't generate english translation of the reply.
 <END>
 """
 
