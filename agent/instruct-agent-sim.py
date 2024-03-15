@@ -339,7 +339,7 @@ def main(args):
                 question = re.sub(r'\s*\(.*?\)\s*', '', question)
                 existing_conversation = [{"role": "user", "content": question}]
 
-                for _loop in range(10):
+                for _loop in range(5):
 
                     print("loop no####", _loop)
 
@@ -412,7 +412,7 @@ def main(args):
 
                     existing_conversation.append({"role": "assistant", "content": reply_to_user_text})
 
-                    if should_execute_action.lower() == "yes" and action != "no_tools":
+                    if should_execute_action is not None and should_execute_action.lower() == "yes" and action != "no_tools":
 
                         tool_gen = AGENT_TOOL_RESPONSE_GEN.replace(
                             "{company}", company)
@@ -512,7 +512,7 @@ def main(args):
                     print("follow up text", follow_up)
                     existing_conversation.append({"role": "user", "content": follow_up})
 
-                os.exit(1)
+            os.exit(1)
 
 
 def process_and_update_dataset(new_data):
