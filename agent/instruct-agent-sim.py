@@ -507,9 +507,10 @@ def main(args):
 
                     print("follow up text", follow_up)
                     existing_conversation.append({"role": "user", "content": follow_up})
-
-                break
-        break
+                    
+                os.exit(1)
+            
+        
 
 
 def process_and_update_dataset(new_data):
