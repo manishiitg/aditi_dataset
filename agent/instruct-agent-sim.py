@@ -334,6 +334,8 @@ def main(args):
                 if contains_chinese(question):
                     continue
 
+                print("====new conversation started")
+
                 question = re.sub(r'\s*\(.*?\)\s*', '', question)
                 existing_conversation = [{"role": "user", "content": question}]
 
