@@ -100,25 +100,121 @@ Should Execute Action: do we have all parameter values to execute action reply o
 Reply to User In {language}: a short natural language based message to be sent to the user only in {language}. Don't write english translation of the answer.
 """
 
-AGENT_PROMPT_USER_SIMULATION = """
-Act as a customer, who bought product/services from the company
+AGENT_TOOL_RESPONSE_GEN = """
 COMPANY:
-TechGenie, a leading e-commerce platform in India offering a wide range of electronics, gadgets, and accessories.
+{company}
 
-You are talking to a support agent from the company on the phone. 
-You are to ask question from the customer support agent, generate a question that you would ask.
+TOOLS:
+{TOOLS}
 
-QUESTION:
+Above you are given a description of an agent with the following details.
+COMPANY: details of the company the agent works for.
+CONTEXT: knowledge base available to agent to answer questinos
+
+
+You are given a function defination and also function calling in json format. 
+You need to generate a relevent output in json format.
+
+TOOL DEFINATION:
+{tool_def}
+
+Input: {tool_input}
+
+Generate output in json format
 """
+
+AGENT_TOOL_RESPONSE = """
+You are real life customer support agent, don't mention you are a virtual ai assitant. 
+Act as a real customer support agent.
+
+COMPANY:
+{company}
+
+CHARACTER:
+{character}
+
+TOOLS:
+{TOOLS}
+
+CONTEXT
+{context}
+
+USER DATA:
+{user_data}
+
+COMPANY DATA:
+{company_data}
+
+The user is talking to you on our website/mobile using TTS, and your response will be read out loud with realistic text-to-speech (TTS) technology.
+If something doesn't make sense, it's likely because you misheard them. There wasn't a typo, and the user didn't mispronounce anything.
+When there is ambiguity, ask clarifying questions, rather than make assumptions.
+
+TOOLS are used to get external data which you don't have access to. 
+
+You have already selected a TOOL based on user questions, now you have the output of the tool as TOOL RESPONSE.
+
+TOOL RESPONSE contains 
+Input: which is the tool you selected with the required parameter.
+Output: external data generate based on tool
+
+You need to generate answer to user's question based on the TOOL and TOOLs Output.
+
+Always refer to CONTEXT, USER_DATA and COMPANY_DATA to access any information. Do not make up information, if its not there in CONTEXT.
+Saying "I dont know" is prefectly correct, make sure not to make up information.
+
+When using CONTEXT, "BEGININPUT" and "ENDINPUT" are placeholders, which bifurcate multiple context blocks.
+
+Use natural, conversational language that are clear and easy to follow (short sentences, simple words).
+0. Don't mention the word CONTEXT in any of the replies.
+1. Remember that this is a voice conversation:
+1a. Don't use lists, markdown, bullet points, or other formatting that's not typically spoken.
+
+1. Keep the conversation flowing.
+1a. Don't implicitly or explicitly try to end the chat (i.e. do not end a response with "Talk soon!", or "Enjoy!").
+1b. Sometimes the user might just want to chat. Ask them relevant follow-up questions.
+1c. Don't ask them if there's anything else they need help with (e.g. don't say things like "How can I assist you further?").
+
+
+
+Ask customer to contact you via email/phone or visit website/mobile only when you are unable to help the customer yourself. I most cases you need to help the customer using TOOLS and CONTEXT you have.
+
+User is taking in hinglish language, so you also need to respond in hinglish.
+
+When replying use the following format
+
+Thought in English: think step by step about what to do in detail.
+Reply to User In Hinglish: a short natural language based message to be sent to the user
+<END>
+
+
+Conversation of agento with user.
+You: mujhe jaludi hai delivery time ka, kis time par mera order aayega?
+Agent: aapke order ka delivery 560001 pin code wale area mein aayega. kindly wait, main aapke delivery time calculate karta hoon.
+TOOL RESPONSE: 
+Input: calculate_delivery_time {"pin_code": "560001"} 
+Output: {
+  "estimated_delivery_time": "Next day delivery",
+  "status": "Available"
+}
+"""
+
+# AGENT_PROMPT_USER_SIMULATION = """
+# Act as a customer, who bought product/services from the company
+# COMPANY:
+# TechGenie, a leading e-commerce platform in India offering a wide range of electronics, gadgets, and accessories.
+
+# You are talking to a support agent from the company on the phone.
+# You are to ask question from the customer support agent, generate a question that you would ask.
+
+# QUESTION:
+# """
 
 AGENT_PROMPT_USER_SIMULATION_FOLLOWUP = """
 Act as a customer, who bought product/services from the company
 COMPANY:
 TechGenie, a leading e-commerce platform in India offering a wide range of electronics, gadgets, and accessories.
 
-You Name: Manish
-UserID: 4444
-Email: manish@gmail.com
+{user_data}
 
 Be a helpful user and provide any information the agent needs.
 
@@ -126,8 +222,6 @@ Agent might ask you specific information about ids, facts, your personal informa
 
 Generate a follow up question or reply based on the conversation till now.
 
-You: mujhe pata karna hai ki maine kis course mein kitna progress kiya hai.
-Agent:  Aapne kis course mein progress kiya hai, iske baare mein jaankari dene ke liye aapka user ID aur course ID chahiye hai. Aapko yeh details yaad hai?
 Follow up QUESTION/REPLY:
 """
 
@@ -263,20 +357,28 @@ def main(args):
                     print(questions[idx])
                     print(text_response)
 
-                    thought_match = re.search(r'Thought:\s*(.*)', text_response, re.DOTALL)
-                    thought = thought_match.group(1).strip() if thought_match else None
+                    thought_match = re.search(
+                        r'Thought:\s*(.*)', text_response, re.DOTALL)
+                    thought = thought_match.group(
+                        1).strip() if thought_match else None
 
                     # Extract Action
-                    action_match = re.search(r'Action:\s*(.*)', text_response, re.DOTALL)
-                    action = action_match.group(1).strip() if action_match else None
+                    action_match = re.search(
+                        r'Action:\s*(.*)', text_response, re.DOTALL)
+                    action = action_match.group(
+                        1).strip() if action_match else None
 
                     # Extract Should Execute Action
-                    should_execute_action_match = re.search(r'Should Execute Action:\s*(.*)', text_response, re.DOTALL)
-                    should_execute_action = should_execute_action_match.group(1).strip() if should_execute_action_match else None
+                    should_execute_action_match = re.search(
+                        r'Should Execute Action:\s*(.*)', text_response, re.DOTALL)
+                    should_execute_action = should_execute_action_match.group(
+                        1).strip() if should_execute_action_match else None
 
                     # Extract Reply to User
-                    reply_to_user_match = re.search(r'Reply to User:\s*(.*)', text_response, re.DOTALL)
-                    reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
+                    reply_to_user_match = re.search(
+                        r'Reply to User:\s*(.*)', text_response, re.DOTALL)
+                    reply_to_user = reply_to_user_match.group(
+                        1).strip() if reply_to_user_match else None
 
                     print("------------------------------------------------")
                     print("Thought:", thought)
@@ -284,7 +386,29 @@ def main(args):
                     print("Should Execute Action:", should_execute_action)
                     print("Reply to User:", reply_to_user)
 
+                    if should_execute_action == "yes":
+                        print("write code for this")
+                        pass
+                    else:
+                        user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
+                            "{user_data}", json.dumps(userInfoNew, indent=4))
+                        msg_list = []
+                        msg_list.append({"role": "system",
+                                         "content": user_follow_up})
+                        msg_prompt = {"role": "user",
+                                      "content": questions[idx]}
+                        msg_prompt = {"role": "user",
+                                      "content": reply_to_user}
+                        msg_list.append(msg_prompt)
 
+                        text = tokenizer.apply_chat_template(
+                            msg_list,
+                            tokenize=False,
+                            add_generation_prompt=True
+                        )
+                        follow_up = eval_hf_model(
+                            args, model, tokenizer, [text], 0)
+                        print("follow up text", follow_up)
 
                     os.exit(1)
 
