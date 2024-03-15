@@ -181,10 +181,10 @@ Never Ask customer to contact you via email/phone or visit website/mobile. In mo
 
 User is taking in hinglish language, so you also need to respond in hinglish.
 
-When replying use the following format
+Reply only in below format:
 
-Thought in English: think step by step about what to do in detail.
-Reply to User In Hinglish: a short natural language based message to be sent to the user
+Thought in English: think step by step about what to do in detail
+Reply to User In {language}: a short natural language based message to be sent to the user only in {language}. Don't write english translation of the answer.
 """
 
 # Conversation of agento with user.
@@ -422,7 +422,7 @@ def main(args):
                             add_generation_prompt=True
                         )
                         tool_gen_answer = eval_hf_model(
-                            args, model, tokenizer, [text], 0)[0]
+                            args, model, tokenizer, [text], .2)[0]
 
                         print("tool_gen_answer", tool_gen_answer)
 
