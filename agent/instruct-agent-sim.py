@@ -278,6 +278,7 @@ def main(args):
                     reply_to_user_match = re.search(r'Reply to User:\s*(.*)', text_response, re.DOTALL)
                     reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
 
+                    print("------------------------------------------------")
                     print("Thought:", thought)
                     print("Action:", action)
                     print("Should Execute Action:", should_execute_action)
