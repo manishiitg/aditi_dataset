@@ -427,13 +427,12 @@ def main(args):
                         msg_list = []
                         msg_list.append({"role": "system",
                                          "content": agent_tool_response_gen})
-                        msg_prompt = {"role": "user",
-                                      "content": questions[idx]}
-                        msg_prompt = {"role": "assistant",
-                                      "content": reply_to_user}
-                        msg_prompt = {"role": "assistant",
-                                      "content": tool_gen_answer}
-                        msg_list.append(msg_prompt)
+                        msg_list.append({"role": "user",
+                                         "content": questions[idx]})
+                        msg_list.append({"role": "assistant",
+                                         "content": reply_to_user})
+                        msg_list.append({"role": "assistant",
+                                         "content": tool_gen_answer})
 
                         text = tokenizer.apply_chat_template(
                             msg_list,
