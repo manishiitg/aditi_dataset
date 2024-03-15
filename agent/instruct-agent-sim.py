@@ -330,6 +330,10 @@ def main(args):
             print(ask_question_system_lang)
 
             for question in simple_questions:
+                
+                if contains_chinese(question):
+                    continue
+
                 question = re.sub(r'\s*\(.*?\)\s*', '', question)
                 existing_conversation = [{"role": "user", "content": question}]
 
