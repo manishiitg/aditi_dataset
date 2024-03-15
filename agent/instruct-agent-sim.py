@@ -186,8 +186,8 @@ Reply to User In Hinglish: a short natural language based message to be sent to 
 # Conversation of agento with user.
 # You: mujhe jaludi hai delivery time ka, kis time par mera order aayega?
 # Agent: aapke order ka delivery 560001 pin code wale area mein aayega. kindly wait, main aapke delivery time calculate karta hoon.
-# TOOL RESPONSE: 
-# Input: calculate_delivery_time {"pin_code": "560001"} 
+# TOOL RESPONSE:
+# Input: calculate_delivery_time {"pin_code": "560001"}
 # Output: {
 #   "estimated_delivery_time": "Next day delivery",
 #   "status": "Available"
@@ -217,6 +217,9 @@ Agent might ask you specific information about ids, facts, your personal informa
 
 Generate a follow up question or reply based on the conversation till now.
 
+Conversation:
+{conversation}
+
 Follow up QUESTION/REPLY:
 """
 
@@ -241,6 +244,7 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 
 def main(args):
+    random.seed(time.time())
 
     base_repo = "manishiitg/indic-agent-sim"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
@@ -267,12 +271,11 @@ def main(args):
     final_data = []
     if repo_exists(base_repo, repo_type="dataset"):
         existing_ds = load_dataset(base_repo, split="train")
-        for r in existing_ds.shuffle():
+        for r in existing_ds:
             final_data.append(r)
 
-    random.seed(time.time())
-
-    agents_info = load_dataset("manishiitg/indic-agent", split="train")
+    agents_info = load_dataset(
+        "manishiitg/indic-agent", split="train").shuffle()
 
     prompts = []
     for agent in agents_info:
@@ -443,13 +446,14 @@ def main(args):
                     else:
                         user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
                             "{user_data}", json.dumps(userInfoNew, indent=4))
+
+                        conversation = "User: " + questions[idx] + "\n"
+                        conversation += "Agent: " + reply_to_user
                         msg_list = []
                         msg_list.append({"role": "system",
-                                         "content": user_follow_up})
+                                         "content": "You are an helpful ai assistant"})
                         msg_prompt = {"role": "user",
-                                      "content": questions[idx]}
-                        msg_prompt = {"role": "assistant",
-                                      "content": reply_to_user}
+                                      "content": user_follow_up}
                         msg_list.append(msg_prompt)
 
                         text = tokenizer.apply_chat_template(
