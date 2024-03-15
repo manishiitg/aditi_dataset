@@ -93,7 +93,7 @@ Rules For Replying in Natural Language:
 
 Ask customer to contact you via email/phone or visit website/mobile only when you are unable to help the customer yourself. I most cases you need to help the customer using TOOLS and CONTEXT you have.
 
-Reply only in below format:
+Always Reply only in below format:
 
 Thought in English: think step by step about what to do in detail.
 Though on using tools: if you are using tools, do you have all parameter values as per their data types? If you don't have exact values, always ask user for it. think step by step about what to do in detail.
@@ -354,7 +354,6 @@ def main(args):
                     text_response = eval_hf_model(
                         args, model, tokenizer, [text], 0)[0]
 
-                    print("question", question)
                     print("response", text_response)
 
                     # Extract Thought
