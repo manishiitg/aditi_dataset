@@ -357,28 +357,22 @@ def main(args):
                     print(questions[idx])
                     print(text_response)
 
-                    thought_match = re.search(
-                        r'Thought:\s*(.*)', text_response, re.DOTALL)
-                    thought = thought_match.group(
-                        1).strip() if thought_match else None
+                    # Extract Thought
+                    thought_match = re.search(r'Thought.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                    thought = thought_match.group(1).strip() if thought_match else None
 
                     # Extract Action
-                    action_match = re.search(
-                        r'Action:\s*(.*)', text_response, re.DOTALL)
-                    action = action_match.group(
-                        1).strip() if action_match else None
+                    action_match = re.search(r'Action:\s*(.+?)(?=Should Execute Action:|$)', text_response, re.DOTALL)
+                    action = action_match.group(1).strip() if action_match else None
 
                     # Extract Should Execute Action
-                    should_execute_action_match = re.search(
-                        r'Should Execute Action:\s*(.*)', text_response, re.DOTALL)
-                    should_execute_action = should_execute_action_match.group(
-                        1).strip() if should_execute_action_match else None
+                    should_execute_action_match = re.search(r'Should Execute Action:\s*(.+?)(?=Reply to User|Thought:|$)', text_response, re.DOTALL)
+                    should_execute_action = should_execute_action_match.group(1).strip() if should_execute_action_match else None
 
                     # Extract Reply to User
-                    reply_to_user_match = re.search(
-                        r'Reply to User:\s*(.*)', text_response, re.DOTALL)
-                    reply_to_user = reply_to_user_match.group(
-                        1).strip() if reply_to_user_match else None
+                    reply_to_user_match = re.search(r'Reply to User.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                    reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
+
 
                     print("------------------------------------------------")
                     print("Thought:", thought)
