@@ -658,6 +658,7 @@ def main(args):
         for r in existing_ds:
             final_data.append(r)
 
+    final_data = []
     # gen_industries = """
     # Generate a list of business industries which would employ a customer support agent.
     # Generate 100 such industries
