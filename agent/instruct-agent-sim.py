@@ -39,7 +39,7 @@ CHARACTER:
 {character}
 
 TOOLS:
-{TOOLS}
+{tools}
 
 CONTEXT
 {context}
@@ -105,20 +105,17 @@ COMPANY:
 {company}
 
 TOOLS:
-{TOOLS}
+{tools}
 
 Above you are given a description of an agent with the following details.
 COMPANY: details of the company the agent works for.
 CONTEXT: knowledge base available to agent to answer questinos
 
 
-You are given a function defination and also function calling in json format. 
+You are given an tool name and input to the tool. 
 You need to generate a relevent output in json format.
 
-TOOL DEFINATION:
-{tool_def}
-
-Input: {tool_input}
+Tool Input: {tool_input}
 
 Generate output in json format
 """
@@ -134,7 +131,7 @@ CHARACTER:
 {character}
 
 TOOLS:
-{TOOLS}
+{tools}
 
 CONTEXT
 {context}
@@ -184,19 +181,17 @@ When replying use the following format
 
 Thought in English: think step by step about what to do in detail.
 Reply to User In Hinglish: a short natural language based message to be sent to the user
-<END>
-
-
-Conversation of agento with user.
-You: mujhe jaludi hai delivery time ka, kis time par mera order aayega?
-Agent: aapke order ka delivery 560001 pin code wale area mein aayega. kindly wait, main aapke delivery time calculate karta hoon.
-TOOL RESPONSE: 
-Input: calculate_delivery_time {"pin_code": "560001"} 
-Output: {
-  "estimated_delivery_time": "Next day delivery",
-  "status": "Available"
-}
 """
+
+# Conversation of agento with user.
+# You: mujhe jaludi hai delivery time ka, kis time par mera order aayega?
+# Agent: aapke order ka delivery 560001 pin code wale area mein aayega. kindly wait, main aapke delivery time calculate karta hoon.
+# TOOL RESPONSE: 
+# Input: calculate_delivery_time {"pin_code": "560001"} 
+# Output: {
+#   "estimated_delivery_time": "Next day delivery",
+#   "status": "Available"
+# }
 
 # AGENT_PROMPT_USER_SIMULATION = """
 # Act as a customer, who bought product/services from the company
@@ -272,7 +267,7 @@ def main(args):
     final_data = []
     if repo_exists(base_repo, repo_type="dataset"):
         existing_ds = load_dataset(base_repo, split="train")
-        for r in existing_ds:
+        for r in existing_ds.shuffle():
             final_data.append(r)
 
     random.seed(time.time())
@@ -358,21 +353,28 @@ def main(args):
                     print(text_response)
 
                     # Extract Thought
-                    thought_match = re.search(r'Thought.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
-                    thought = thought_match.group(1).strip() if thought_match else None
+                    thought_match = re.search(
+                        r'Thought.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                    thought = thought_match.group(
+                        1).strip() if thought_match else None
 
                     # Extract Action
-                    action_match = re.search(r'Action:\s*(.+?)(?=Should Execute Action:|$)', text_response, re.DOTALL)
-                    action = action_match.group(1).strip() if action_match else None
+                    action_match = re.search(
+                        r'Action:\s*(.+?)(?=Should Execute Action:|$)', text_response, re.DOTALL)
+                    action = action_match.group(
+                        1).strip() if action_match else None
 
                     # Extract Should Execute Action
-                    should_execute_action_match = re.search(r'Should Execute Action:\s*(.+?)(?=Reply to User|Thought:|$)', text_response, re.DOTALL)
-                    should_execute_action = should_execute_action_match.group(1).strip() if should_execute_action_match else None
+                    should_execute_action_match = re.search(
+                        r'Should Execute Action:\s*(.+?)(?=Reply to User|Thought:|$)', text_response, re.DOTALL)
+                    should_execute_action = should_execute_action_match.group(
+                        1).strip() if should_execute_action_match else None
 
                     # Extract Reply to User
-                    reply_to_user_match = re.search(r'Reply to User.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
-                    reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
-
+                    reply_to_user_match = re.search(
+                        r'Reply to User.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                    reply_to_user = reply_to_user_match.group(
+                        1).strip() if reply_to_user_match else None
 
                     print("------------------------------------------------")
                     print("Thought:", thought)
@@ -381,8 +383,62 @@ def main(args):
                     print("Reply to User:", reply_to_user)
 
                     if should_execute_action == "yes":
-                        print("write code for this")
-                        pass
+
+                        tool_gen = AGENT_TOOL_RESPONSE_GEN.replace(
+                            "{company}", company)
+                        tool_gen = tool_gen.replace("{tools}", tools)
+                        tool_gen = tool_gen.replace("{tool_input}", action)
+
+                        msg_list = []
+                        msg_list.append({"role": "system",
+                                         "content": "You are an helpful AI assistant"})
+                        msg_prompt = {"role": "user",
+                                      "content": tool_gen}
+                        msg_list.append(msg_prompt)
+
+                        text = tokenizer.apply_chat_template(
+                            msg_list,
+                            tokenize=False,
+                            add_generation_prompt=True
+                        )
+                        tool_gen_answer = eval_hf_model(
+                            args, model, tokenizer, [text], 0)
+
+                        print("tool_gen_answer", tool_gen_answer)
+
+                        agent_tool_response_gen = AGENT_TOOL_RESPONSE.replace(
+                            "{company}", company)
+                        agent_tool_response_gen = agent_tool_response_gen.replace(
+                            "{character}", character)
+                        agent_tool_response_gen = agent_tool_response_gen.replace(
+                            "{tools}", tools)
+                        agent_tool_response_gen = agent_tool_response_gen.replace(
+                            "{context}", context)
+
+                        agent_tool_response_gen = agent_tool_response_gen.replace(
+                            "{user_data}", json.dumps(userInfoNew, indent=4))
+                        agent_tool_response_gen = agent_tool_response_gen.replace(
+                            "{company_data}", json.dumps(companyInfoNew, indent=4))
+
+                        msg_list = []
+                        msg_list.append({"role": "system",
+                                         "content": agent_tool_response_gen})
+                        msg_prompt = {"role": "user",
+                                      "content": questions[idx]}
+                        msg_prompt = {"role": "assistant",
+                                      "content": reply_to_user}
+                        msg_prompt = {"role": "assistant",
+                                      "content": tool_gen_answer}
+                        msg_list.append(msg_prompt)
+
+                        text = tokenizer.apply_chat_template(
+                            msg_list,
+                            tokenize=False,
+                            add_generation_prompt=True
+                        )
+                        follow_up_tool = eval_hf_model(
+                            args, model, tokenizer, [text], 0)
+                        print("follow up tool text", follow_up_tool)
                     else:
                         user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
                             "{user_data}", json.dumps(userInfoNew, indent=4))
@@ -391,7 +447,7 @@ def main(args):
                                          "content": user_follow_up})
                         msg_prompt = {"role": "user",
                                       "content": questions[idx]}
-                        msg_prompt = {"role": "user",
+                        msg_prompt = {"role": "assistant",
                                       "content": reply_to_user}
                         msg_list.append(msg_prompt)
 
