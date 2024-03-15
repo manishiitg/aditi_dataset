@@ -258,10 +258,32 @@ def main(args):
                 question_replies = eval_hf_model(
                     args, model, tokenizer, prompts, 0)
 
-                for idx, reply in enumerate(question_replies):
+                for idx, text_response in enumerate(question_replies):
                     print(agent_prompts[idx])
                     print(questions[idx])
-                    print(reply)
+                    print(text_response)
+
+                    thought_match = re.search(r'Thought:\s*(.*)', text_response, re.DOTALL)
+                    thought = thought_match.group(1).strip() if thought_match else None
+
+                    # Extract Action
+                    action_match = re.search(r'Action:\s*(.*)', text_response, re.DOTALL)
+                    action = action_match.group(1).strip() if action_match else None
+
+                    # Extract Should Execute Action
+                    should_execute_action_match = re.search(r'Should Execute Action:\s*(.*)', text_response, re.DOTALL)
+                    should_execute_action = should_execute_action_match.group(1).strip() if should_execute_action_match else None
+
+                    # Extract Reply to User
+                    reply_to_user_match = re.search(r'Reply to User:\s*(.*)', text_response, re.DOTALL)
+                    reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
+
+                    print("Thought:", thought)
+                    print("Action:", action)
+                    print("Should Execute Action:", should_execute_action)
+                    print("Reply to User:", reply_to_user)
+
+
 
                     os.exit(1)
 
