@@ -333,6 +333,7 @@ def main(args):
                 msg_system = {"role": "system",
                               "content": ask_question_system_lang}
                 msg_list.append(msg_system)
+                ques = re.sub(r'\s*\(.*?\)\s*', '', ques)
                 msg_prompt = {"role": "user", "content": ques}
                 msg_list.append(msg_prompt)
 
