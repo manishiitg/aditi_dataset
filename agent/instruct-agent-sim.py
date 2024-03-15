@@ -121,6 +121,7 @@ Tool Input: {tool_input}
 
 If you do not have proper values for tool parameters, you can also generate an error message in json format.
 
+Only generate the json output, don't generate any other extra text.
 Generate output in json format
 """
 
@@ -179,9 +180,9 @@ Use natural, conversational language that are clear and easy to follow (short se
 
 Never Ask customer to contact you via email/phone or visit website/mobile. In most cases you need to help the customer using TOOLS and CONTEXT you have.
 
-User is taking in hinglish language, so you also need to respond in hinglish.
+User is taking in {language} language, so you also need to respond in {language}.
 
-Reply to User In {language}: a short natural language based message to be sent to the user only in {language}. Don't write english translation of the answer.
+Write a short natural language based message to be sent to the user only in {language}. Don't write english translation of the answer.
 """
 
 # Conversation of agento with user.
