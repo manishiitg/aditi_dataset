@@ -119,6 +119,8 @@ You need to generate a relevent output in json format.
 
 Tool Input: {tool_input}
 
+If you do not have proper values for tool parameters, you can also generate an error message in json format.
+
 Generate output in json format
 """
 
@@ -277,7 +279,6 @@ def main(args):
     agents_info = load_dataset(
         "manishiitg/indic-agent", split="train").shuffle()
 
-    prompts = []
     for agent in agents_info:
 
         company = agent['COMPANY']
@@ -322,45 +323,50 @@ def main(args):
             print("agento=----")
             simple_questions = agent['simple_questions_' + lang]
             random.shuffle(simple_questions)
-            questions = []
-            prompts = []
-            agent_prompts = []
 
             ask_question_system_lang = ask_question_system.replace(
                 "{language}", lang)
 
-            agent_prompts.append(ask_question_system_lang)
+            print(ask_question_system_lang)
 
-            for ques in simple_questions:
-                msg_list = []
-                msg_system = {"role": "system",
-                              "content": ask_question_system_lang}
-                msg_list.append(msg_system)
-                ques = re.sub(r'\s*\(.*?\)\s*', '', ques)
-                msg_prompt = {"role": "user", "content": ques}
-                msg_list.append(msg_prompt)
+            for question in simple_questions:
+                question = re.sub(r'\s*\(.*?\)\s*', '', question)
+                existing_conversation = [{"role": "user", "content": question}]
 
-                text = tokenizer.apply_chat_template(
-                    msg_list,
-                    tokenize=False,
-                    add_generation_prompt=True
-                )
-                prompts.append(text)
-                questions.append(ques)
+                for _loop in range(3):
 
-                question_replies = eval_hf_model(
-                    args, model, tokenizer, prompts, 0)
+                    print("loop no####", _loop)
 
-                for idx, text_response in enumerate(question_replies):
-                    print(agent_prompts[idx])
-                    print(questions[idx])
-                    print(text_response)
+                    msg_list = []
+                    msg_system = {"role": "system",
+                                  "content": ask_question_system_lang}
+                    msg_list.append(msg_system)
+                    msg_list.extend(existing_conversation)
+                    msg_list.append(msg_prompt)
+
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+
+                    text_response = eval_hf_model(
+                        args, model, tokenizer, [text], 0)[0]
+
+                    print("question", question)
+                    print("response", text_response)
 
                     # Extract Thought
                     thought_match = re.search(
-                        r'Thought.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                        r'(Thought.*?):\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
                     thought = thought_match.group(
-                        1).strip() if thought_match else None
+                        2).strip() if thought_match else None
+
+                    # Extract Thought on using tools
+                    thought_on_tools_match = re.search(
+                        r'(Though on using tools.*?):\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                    thought_on_tools = thought_on_tools_match.group(
+                        2).strip() if thought_on_tools_match else None
 
                     # Extract Action
                     action_match = re.search(
@@ -376,15 +382,21 @@ def main(args):
 
                     # Extract Reply to User
                     reply_to_user_match = re.search(
-                        r'Reply to User.*?:\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
-                    reply_to_user = reply_to_user_match.group(
+                        r'Reply to User In (.*?):\s*(.+?)(?=Action:|$)', text_response, re.DOTALL)
+                    reply_to_user_language = reply_to_user_match.group(
                         1).strip() if reply_to_user_match else None
+                    reply_to_user_text = reply_to_user_match.group(
+                        2).strip() if reply_to_user_match else None
 
                     print("------------------------------------------------")
                     print("Thought:", thought)
+                    print("Thought on using tools:", thought_on_tools)
                     print("Action:", action)
                     print("Should Execute Action:", should_execute_action)
-                    print("Reply to User:", reply_to_user)
+                    print("Reply to User Language:", reply_to_user_language)
+                    print("Reply to User Text:", reply_to_user_text)
+
+                    existing_conversation.append({"role": "assistant", "content": reply_to_user_text})
 
                     if should_execute_action == "yes":
 
@@ -395,7 +407,7 @@ def main(args):
 
                         msg_list = []
                         msg_list.append({"role": "system",
-                                         "content": "You are an helpful AI assistant"})
+                                        "content": "You are an helpful AI assistant"})
                         msg_prompt = {"role": "user",
                                       "content": tool_gen}
                         msg_list.append(msg_prompt)
@@ -426,49 +438,59 @@ def main(args):
 
                         msg_list = []
                         msg_list.append({"role": "system",
-                                         "content": agent_tool_response_gen})
+                                        "content": agent_tool_response_gen})
                         msg_list.append({"role": "user",
-                                         "content": questions[idx]})
+                                        "content": question})
                         msg_list.append({"role": "assistant",
-                                         "content": reply_to_user})
+                                        "content": reply_to_user_text})
                         msg_list.append({"role": "assistant",
-                                         "content": tool_gen_answer})
-                        
-                        text = tokenizer.apply_chat_template(
-                            msg_list,
-                            tokenize=False,
-                            add_generation_prompt=True
-                        )
-                        follow_up_tool = eval_hf_model(
-                            args, model, tokenizer, [text], 0)[0]
-                        print("follow up tool text", follow_up_tool)
-                    else:
-                        user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
-                            "{user_data}", json.dumps(userInfoNew, indent=4))
-
-                        conversation = "User: " + questions[idx] + "\n"
-                        conversation += "Agent: " + reply_to_user
-                        msg_list = []
-                        msg_list.append({"role": "system",
-                                         "content": "You are an helpful ai assistant"})
-                        msg_prompt = {"role": "user",
-                                      "content": user_follow_up}
-                        msg_list.append(msg_prompt)
+                                        "content": tool_gen_answer})
 
                         text = tokenizer.apply_chat_template(
                             msg_list,
                             tokenize=False,
                             add_generation_prompt=True
                         )
-                        follow_up = eval_hf_model(
+                        text_response = eval_hf_model(
                             args, model, tokenizer, [text], 0)[0]
-                        print("follow up text", follow_up)
+                        print("follow up tool text", text_response)
 
-                    os.exit(1)
+                        # Extract Thought
+                        thought_match = re.search(r'Thought.*?:\s*(.+?)(?=Reply to User|$)', text_response, re.DOTALL)
+                        thought = thought_match.group(1).strip() if thought_match else None
 
-                questions = []
-                prompts = []
-                agent_prompts = []
+                        # Extract Reply to User
+                        reply_to_user_match = re.search(r'Reply to User.*?:\s*(.+?)(?=Thought|$)', text_response, re.DOTALL)
+                        reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
+
+                        print("Thought: via Tool", thought)
+                        print("Reply to User: via Tool", reply_to_user)
+
+                        existing_conversation.append({"role": "assistant", "content": reply_to_user})
+
+                    user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
+                        "{user_data}", json.dumps(userInfoNew, indent=4))
+
+                    conversation = ""
+                    for r in existing_conversation:
+                        conversation += r["role"] + ": " + r["content"] + "\n"
+
+                    msg_list = []
+                    msg_list.append({"role": "system",
+                                    "content": "You are an helpful ai assistant"})
+                    msg_prompt = {"role": "user",
+                                  "content": user_follow_up}
+                    msg_list.append(msg_prompt)
+
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+                    follow_up = eval_hf_model(
+                        args, model, tokenizer, [text], 0)[0]
+
+                    print("follow up text", follow_up)
 
                 break
         break
