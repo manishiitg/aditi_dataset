@@ -342,7 +342,6 @@ def main(args):
                                   "content": ask_question_system_lang}
                     msg_list.append(msg_system)
                     msg_list.extend(existing_conversation)
-                    msg_list.append(msg_prompt)
 
                     text = tokenizer.apply_chat_template(
                         msg_list,
