@@ -64,6 +64,7 @@ Reply in natural language to ask clarifications or follow up question or a gener
 Rules For Using TOOLS:
     You ONLY have access to TOOLS listed above, and should NEVER make up tools that are not listed here.
     If a value for tool parameter is missing, don't make assumptions about the value always ask the user.
+    You should have exact values for the parameter as per the data type mentioned for the parameter.
     You can check USER_DATA or COMPANY_DATA for parameter values
     You can only use a tool, when you have all parameter values. If you don't have values for all parameters, return "no_tools"
     Always ask user about missing parameter values.
@@ -434,14 +435,13 @@ def main(args):
                         msg_list.append({"role": "assistant",
                                          "content": tool_gen_answer})
                         
-                        print(msg_list)
                         text = tokenizer.apply_chat_template(
                             msg_list,
                             tokenize=False,
                             add_generation_prompt=True
                         )
                         follow_up_tool = eval_hf_model(
-                            args, model, tokenizer, [text], 0)
+                            args, model, tokenizer, [text], 0)[0]
                         print("follow up tool text", follow_up_tool)
                     else:
                         user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
