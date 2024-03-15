@@ -258,8 +258,6 @@ def main(args):
                 prompts.append(text)
                 questions.append(ques)
 
-                os.exit(1)
-
                 question_replies = eval_hf_model(
                     args, model, tokenizer, prompts, 0)
 
@@ -267,6 +265,8 @@ def main(args):
                     print(agent_prompts[idx])
                     print(questions[idx])
                     print(reply)
+
+                    os.exit(1)
 
                 questions = []
                 prompts = []
