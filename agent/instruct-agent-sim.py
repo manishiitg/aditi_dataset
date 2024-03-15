@@ -229,6 +229,7 @@ def main(args):
 
             print("agento=----")
             simple_questions = agent['simple_questions_' + lang]
+            random.shuffle(simple_questions)
             questions = []
             prompts = []
             agent_prompts = []
@@ -237,7 +238,6 @@ def main(args):
                 "{language}", lang)
 
             agent_prompts.append(ask_question_system_lang)
-            print(ask_question_system_lang)
 
             for ques in simple_questions:
                 msg_list = []
