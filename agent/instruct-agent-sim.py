@@ -181,9 +181,6 @@ Never Ask customer to contact you via email/phone or visit website/mobile. In mo
 
 User is taking in hinglish language, so you also need to respond in hinglish.
 
-Reply only in below format:
-
-Thought in English: think step by step about what to do in detail
 Reply to User In {language}: a short natural language based message to be sent to the user only in {language}. Don't write english translation of the answer.
 """
 
@@ -330,7 +327,7 @@ def main(args):
             print(ask_question_system_lang)
 
             for question in simple_questions:
-                
+
                 if contains_chinese(question):
                     continue
 
@@ -436,6 +433,9 @@ def main(args):
                             "{context}", context)
 
                         agent_tool_response_gen = agent_tool_response_gen.replace(
+                            "{language}", lang)
+
+                        agent_tool_response_gen = agent_tool_response_gen.replace(
                             "{user_data}", json.dumps(userInfoNew, indent=4))
                         agent_tool_response_gen = agent_tool_response_gen.replace(
                             "{company_data}", json.dumps(companyInfoNew, indent=4))
@@ -455,20 +455,20 @@ def main(args):
                             tokenize=False,
                             add_generation_prompt=True
                         )
-                        text_response = eval_hf_model(
+                        reply_to_user = eval_hf_model(
                             args, model, tokenizer, [text], 0)[0]
-                        print("follow up tool text", text_response)
+                        print("follow up tool text", reply_to_user)
 
-                        # Extract Thought
-                        thought_match = re.search(r'Thought.*?:\s*(.+?)(?=Reply to User|$)', text_response, re.DOTALL)
-                        thought = thought_match.group(1).strip() if thought_match else None
+                        # # Extract Thought
+                        # thought_match = re.search(r'Thought.*?:\s*(.+?)(?=Reply to User|$)', text_response, re.DOTALL)
+                        # thought = thought_match.group(1).strip() if thought_match else None
 
-                        # Extract Reply to User
-                        reply_to_user_match = re.search(r'Reply to User.*?:\s*(.+?)(?=Thought|$)', text_response, re.DOTALL)
-                        reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
+                        # # Extract Reply to User
+                        # reply_to_user_match = re.search(r'Reply to User.*?:\s*(.+?)(?=Thought|$)', text_response, re.DOTALL)
+                        # reply_to_user = reply_to_user_match.group(1).strip() if reply_to_user_match else None
 
-                        print("Thought: via Tool", thought)
-                        print("Reply to User: via Tool", reply_to_user)
+                        # print("Thought: via Tool", thought)
+                        # print("Reply to User: via Tool", reply_to_user)
 
                         existing_conversation.append({"role": "assistant", "content": reply_to_user})
 
