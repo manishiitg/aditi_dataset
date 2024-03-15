@@ -177,12 +177,11 @@ Use natural, conversational language that are clear and easy to follow (short se
 1c. Don't ask them if there's anything else they need help with (e.g. don't say things like "How can I assist you further?").
 
 
-
 Never Ask customer to contact you via email/phone or visit website/mobile. In most cases you need to help the customer using TOOLS and CONTEXT you have.
 
 User is taking in {language} language, so you also need to respond in {language}.
 
-Write a short natural language based message to be sent to the user only in {language}. Don't write english translation of the answer.
+Write a short natural conversational based message to be sent to the user only in {language}. Don't write english translation of the answer.
 """
 
 # Conversation of agento with user.
@@ -484,7 +483,7 @@ def main(args):
                     msg_list.append({"role": "system",
                                     "content": "You are an helpful ai assistant"})
                     msg_prompt = {"role": "user",
-                                  "content": user_follow_up}
+                                  "content": user_follow_up.replace("{conversation}", conversation)}
                     msg_list.append(msg_prompt)
 
                     text = tokenizer.apply_chat_template(
