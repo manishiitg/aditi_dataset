@@ -246,8 +246,6 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 
 def main(args):
-    random.seed(time.time())
-
     base_repo = "manishiitg/indic-agent-sim"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
