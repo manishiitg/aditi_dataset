@@ -224,7 +224,7 @@ Generate a follow up question or reply based on the conversation till now.
 Conversation:
 {conversation}
 
-Follow up QUESTION/REPLY:
+Follow up QUESTION/REPLY in {language} only:
 """
 
 
@@ -454,10 +454,10 @@ def main(args):
                         msg_list = []
                         msg_list.append({"role": "system",
                                         "content": agent_tool_response_gen})
-                        msg_list.append({"role": "user",
-                                        "content": question})
-                        msg_list.append({"role": "assistant",
-                                        "content": reply_to_user_text})
+                        # msg_list.append({"role": "user",
+                        #                 "content": question})
+                        # msg_list.append({"role": "assistant",
+                        #                 "content": reply_to_user_text})
                         msg_list.append({"role": "user",
                                         "content": tool_gen_answer})
 
@@ -486,6 +486,8 @@ def main(args):
                     user_follow_up = AGENT_PROMPT_USER_SIMULATION_FOLLOWUP.replace(
                         "{user_data}", json.dumps(userInfoNew, indent=4))
 
+                    user_follow_up = user_follow_up.replace("{language}", lang)
+
                     conversation = ""
                     for r in existing_conversation:
                         conversation += r["role"] + ": " + r["content"] + "\n"
@@ -509,8 +511,6 @@ def main(args):
                     existing_conversation.append({"role": "user", "content": follow_up})
 
                 os.exit(1)
-            
-        
 
 
 def process_and_update_dataset(new_data):
