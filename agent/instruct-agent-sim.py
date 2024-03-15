@@ -277,7 +277,7 @@ def main(args):
             final_data.append(r)
 
     agents_info = load_dataset(
-        "manishiitg/indic-agent", split="train").shuffle()
+        "manishiitg/indic-agent", split="train")
 
     for agent in agents_info:
 
@@ -367,7 +367,7 @@ def main(args):
                     text_response = eval_hf_model(
                         args, model, tokenizer, [text], 0)[0]
 
-                    print("response", text_response)
+                    # print("response", text_response)
 
                     # Extract Thought
                     thought_match = re.search(
@@ -412,7 +412,7 @@ def main(args):
 
                     existing_conversation.append({"role": "assistant", "content": reply_to_user_text})
 
-                    if should_execute_action.lower() == "yes":
+                    if should_execute_action.lower() == "yes" and action != "no_tools":
 
                         tool_gen = AGENT_TOOL_RESPONSE_GEN.replace(
                             "{company}", company)
