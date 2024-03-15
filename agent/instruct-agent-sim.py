@@ -397,7 +397,7 @@ def main(args):
 
                     existing_conversation.append({"role": "assistant", "content": reply_to_user_text})
 
-                    if should_execute_action == "yes":
+                    if should_execute_action.lower() == "yes":
 
                         tool_gen = AGENT_TOOL_RESPONSE_GEN.replace(
                             "{company}", company)
@@ -490,6 +490,7 @@ def main(args):
                         args, model, tokenizer, [text], 0)[0]
 
                     print("follow up text", follow_up)
+                    existing_conversation.append({"role": "user", "content": follow_up})
 
                 break
         break
