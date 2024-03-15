@@ -406,7 +406,7 @@ def main(args):
                             add_generation_prompt=True
                         )
                         tool_gen_answer = eval_hf_model(
-                            args, model, tokenizer, [text], 0)
+                            args, model, tokenizer, [text], 0)[0]
 
                         print("tool_gen_answer", tool_gen_answer)
 
@@ -433,7 +433,8 @@ def main(args):
                                          "content": reply_to_user})
                         msg_list.append({"role": "assistant",
                                          "content": tool_gen_answer})
-
+                        
+                        print(msg_list)
                         text = tokenizer.apply_chat_template(
                             msg_list,
                             tokenize=False,
@@ -461,7 +462,7 @@ def main(args):
                             add_generation_prompt=True
                         )
                         follow_up = eval_hf_model(
-                            args, model, tokenizer, [text], 0)
+                            args, model, tokenizer, [text], 0)[0]
                         print("follow up text", follow_up)
 
                     os.exit(1)
