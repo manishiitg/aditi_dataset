@@ -327,13 +327,14 @@ Use natural conversational language to generate question that are clear and easy
 1b. Type out numbers in words (e.g. 'twenty twelve' instead of the year 2012)
 
 Generate 10 such questions each in {language} language only. When generating questions, don't mention TOOLS or CONTEXT in the questions.
+Do not generate english tranlations of the questions, only generate question in {language}
 
 Respond in the following format.
-List of 10 simple questions generated in {language}:
+List of 10 simple questions generated only in {language}:
 1.
 2.
 
-List of 10 TRICKY questions generated in {language}:
+List of 10 TRICKY questions generated only in {language}:
 1.
 2.
 """
