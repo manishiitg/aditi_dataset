@@ -93,8 +93,11 @@ Rules For Replying in Natural Language:
 
 Ask customer to contact you via email/phone or visit website/mobile only when you are unable to help the customer yourself. I most cases you need to help the customer using TOOLS and CONTEXT you have.
 
-Always Reply only in below format:
+This is the conversation between user and agent.
+{conversation}
 
+Agent:
+Always Reply only in below format:
 Thought in English: think step by step about what to do in detail.
 Though on using tools: if you are using tools, do you have all parameter values as per their data types? If you don't have exact values, always ask user for it. think step by step about what to do in detail.
 Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
@@ -255,7 +258,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196,
+            max_model_len=8196*2,
         )
     else:
         print("Loading model and tokenizer vllm...")
@@ -264,7 +267,7 @@ def main(args):
             tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196,
+            max_model_len=8196*2,
         )
 
     final_data = []
@@ -338,12 +341,20 @@ def main(args):
 
                     print("loop no####", _loop)
 
+                    print("existing_conversation", existing_conversation)
+                    conversation = ""
+                    for r in existing_conversation:
+                        if r["role"] == "assistant":
+                            r["role"] = "agent"
+                        conversation += r["role"] + ": " + r["content"] + "\n"
+
                     msg_list = []
                     msg_list.append({"role": "system",
-                                     "content": ask_question_system_lang})
-                    msg_list.extend(existing_conversation)
+                                     "content": "You are an helpful ai assistant"})
+                    msg_list.append({"role": "user",
+                                     "content": ask_question_system_lang.replace("{conversation}", conversation)})
 
-                    print("existing_conversation", existing_conversation)
+                    # msg_list.extend(existing_conversation)
 
                     text = tokenizer.apply_chat_template(
                         msg_list,
