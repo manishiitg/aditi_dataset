@@ -337,7 +337,7 @@ def main(args):
                 question = re.sub(r'\s*\(.*?\)\s*', '', question)
                 existing_conversation = [{"role": "user", "content": question}]
 
-                for _loop in range(3):
+                for _loop in range(4):
 
                     print("loop no####", _loop)
 
@@ -507,7 +507,7 @@ def main(args):
 
                     print("follow up text", follow_up)
                     existing_conversation.append({"role": "user", "content": follow_up})
-                    
+
                 os.exit(1)
             
         
