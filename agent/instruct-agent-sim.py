@@ -228,6 +228,16 @@ Follow up QUESTION/REPLY in {language} only:
 """
 
 
+# to fix
+# 1. subsequent conversation usually don't require using a tool .need to ask question related to tools again
+# 2. Thought: The user is looking for eco-friendly equipment for Karate. I can use the 'findGear' tool to suggest suitable equipment, but I need to confirm their level and if they're looking for a specific gender option.
+# Thought on using tools: I need to ask for the user's current level in Karate and their preferred gender for the equipment.
+# Thought on using tools: None
+# Action: None
+# Should Execute Action: no
+# Reply to User Language: Hinglish
+
+
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
