@@ -43,7 +43,7 @@ SYSTEM_MESSAGES_ORCA = [
 
 TOPICS = [
     # "Cricket - players, matches, history, etc.",
-    "Science - physics, chemistry, biology, astronomy, etc.",
+    # "Science - physics, chemistry, biology, astronomy, etc.",
     "Mathematics - algebra, geometry, calculus, statistics, etc.",
     "Programming - coding",
     # "Technology - computers, engineering, AI, robotics, etc.",
@@ -61,7 +61,7 @@ TOPICS = [
     # "Mythology - Greek, Roman, Norse, Egyptian, Native American myths",
     # "Art - art history, painting, sculpture, architecture, music, theater",
     # "Sports - individual and team sports, athletes, championships, training",
-    "Cooking - recipes, ingredients, techniques, regional and ethnic cuisine",
+    # "Cooking - recipes, ingredients, techniques, regional and ethnic cuisine",
     # "Movies & TV - genre analysis, directors, actors, awards, popular shows",
     # "News & Current Events - reporting on latest happenings around the world",
     # "Culture - customs, values, gender roles, holidays, language, clothing",
