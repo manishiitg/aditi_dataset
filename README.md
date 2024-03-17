@@ -13,9 +13,10 @@ inspired for methods like alpaca, evol instruct, amplify instruct.
 
 This folder contains scripts to generate instruct and multi turn chat dataset. 
 
-
 run this using `scripts/gen.sh` and `scripts/gen-amplify.sh`
 
+
+Used to generate https://huggingface.co/datasets/manishiitg/aditi-syn-v1
 
 
 2. judge/
