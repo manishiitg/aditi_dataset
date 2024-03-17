@@ -2,7 +2,7 @@ Synthetic Dataset Generation For Aditi LLM
 ===========================================
 
 
-This repo contains script used to create synthetic datasets in Hindi/Hinglish/English for Aditi OSS and localized towards India. 
+This repo contains script used to create synthetic datasets in Hindi/Hinglish/English for Aditi LLM and localized towards India. 
 
 
 Folders
