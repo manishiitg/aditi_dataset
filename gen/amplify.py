@@ -124,7 +124,7 @@ def main(args):
 
     base_repo = "manishiitg/indic-synthetic-instruct"
 
-    max_rows = 100
+    max_rows = 1000
     final_data = []
     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
     existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
