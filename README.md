@@ -35,3 +35,10 @@ this is still a work in progress, its an attempt to create similar dataset in hi
 this is work in progress. 
 
 this is an attempt to enable RAG and TOOLs support for hindi/hinglish language.
+
+5. dpo/
+
+creating dpo data 
+
+https://huggingface.co/datasets/manishiitg/aditi-dpo-prompts
+

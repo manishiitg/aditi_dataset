@@ -19,6 +19,7 @@ for model_name_or_path in "${model_names[@]}"; do
         awq_param=""
     fi
     
-    python3 -m gen.instruct-alpaca --model_name_or_path $model_name_or_path --generate_topics $awq_param
+    python3 -m gen.instruct-alpaca --model_name_or_path $model_name_or_path $awq_param
+    # python3 -m gen.instruct-alpaca --model_name_or_path $model_name_or_path --generate_topics $awq_param
     
 done
