@@ -127,7 +127,7 @@ def main(args):
     max_rows = 1000
     final_data = []
     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-    existing_ds = existing_ds.filter(lambda x: x["language"] == "hinglish")
+    existing_ds = existing_ds.filter(lambda x: x["language"] == "hindi")
     existing_ds = existing_ds.shuffle()
     for r in existing_ds:
         if "messages" not in r:
