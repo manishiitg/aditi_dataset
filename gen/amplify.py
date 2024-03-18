@@ -12,6 +12,8 @@ import random
 import re
 
 import unicodedata
+
+
 def is_hindi(char):
     try:
         return unicodedata.name(char).startswith('DEVANAGARI')
@@ -135,7 +137,7 @@ def main(args):
             r["evol_question"] = ""
             r["eval_answer"] = ""
         is_hindi = contains_hindi(r["question"])
-        if len(final_data) < max_rows and len(r["messages"]) == 0 and not is_hindi:
+        if len(final_data) < max_rows and len(r["messages"]) == 0 and (not is_hindi and r["language"] != "hindi"):
             final_data.append(r)
 
     if len(final_data) > 0:
