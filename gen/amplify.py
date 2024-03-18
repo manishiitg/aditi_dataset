@@ -136,8 +136,8 @@ def main(args):
             r["messages"] = []
             r["evol_question"] = ""
             r["eval_answer"] = ""
-        is_hindi = contains_hindi(r["question"])
-        if len(final_data) < max_rows and len(r["messages"]) == 0 and (not is_hindi and r["language"] != "hindi"):
+        # is_hindi = contains_hindi(r["question"])
+        if len(final_data) < max_rows and len(r["messages"]) == 0:
             final_data.append(r)
 
     if len(final_data) > 0:
