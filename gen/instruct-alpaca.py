@@ -281,7 +281,7 @@ def main(args):
                 for r in final_data:
                     if r["language"] == lang:
                         if r["topic"] == topic_selected:
-                            existing_instruction.append(r["question"])
+                            existing_instructions.append(r["question"])
 
                 random.shuffle(existing_instructions)
                 if len(existing_instruction) > 25:
