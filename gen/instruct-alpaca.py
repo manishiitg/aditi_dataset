@@ -284,7 +284,7 @@ def main(args):
                             existing_instructions.append(r["question"])
 
                 random.shuffle(existing_instructions)
-                if len(existing_instruction) > 25:
+                if len(existing_instructions) > 25:
                     topic_instruct_map[r["topic"]] = ",".join(existing_instructions[:25])
                 else:
                     topic_instruct_map[r["topic"]] = ",".join(existing_instructions)
