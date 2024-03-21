@@ -11,6 +11,8 @@ from huggingface_hub import repo_exists
 
 
 import unicodedata
+
+
 def is_hindi(char):
     try:
         return unicodedata.name(char).startswith('DEVANAGARI')
@@ -21,14 +23,16 @@ def is_hindi(char):
 def contains_hindi(s):
     return any(is_hindi(char) for char in s)
 
+
 def contains_chinese(text):
     for char in text:
         if '\u4e00' <= char <= '\u9fff':
             return True
     return False
 
+
 SYSTEM_MESSAGES_ORCA = [
-    "",
+    # "",
     "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
     "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
@@ -213,15 +217,16 @@ def main(args):
         existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
         for r in existing_ds:
             final_data.append(r)
-            
+
     global TOPICS
 
     topics_generated = []
 
-    languages = ["hinglish","hindi"]  # ["hinglish", "hindi", "english"]
+    languages = ["hinglish", "hindi"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
+
         for loop in range(10):
 
             prompts = []
@@ -271,6 +276,18 @@ def main(args):
 
                 # topic_number = random.randint(0, len(TOPICS)-1)
                 # topic_selected = TOPICS[topic_number]
+
+                existing_instructions = []
+                for r in final_data:
+                    if r["language"] == lang:
+                        if r["topic"] == topic_selected:
+                            existing_instruction.append(r["question"])
+
+                random.shuffle(existing_instructions)
+                if len(existing_instruction) > 25:
+                    topic_instruct_map[r["topic"]] = ",".join(existing_instructions[:25])
+                else:
+                    topic_instruct_map[r["topic"]] = ",".join(existing_instructions)
 
                 msg_list = []
                 SYSTEM_PROMPT = PROMPT_2
