@@ -48,7 +48,7 @@ SYSTEM_MESSAGES_ORCA = [
 TOPICS = [
     # "Cricket - players, matches, history, etc.",
     # "Science - physics, chemistry, biology, astronomy, etc.",
-    "Mathematics - algebra, geometry, calculus, statistics, etc.",
+    # "Mathematics - algebra, geometry, calculus, statistics, etc.",
     "Programming - coding",
     # "Technology - computers, engineering, AI, robotics, etc.",
     # "Business - economics, finance, marketing, management, entrepreneurship",
