@@ -45,6 +45,59 @@ SYSTEM_MESSAGES_ORCA = [
     "You are an AI assistant that helps people find information.",
 ]
 
+PROGRAMMING_TOPICS = [
+    "Functional Programming Paradigms",
+    "Garbage Collection Algorithms",
+    "Concurrent Programming Models",
+    "Compiler Design and Optimization",
+    "Cryptography and Security in Software",
+    "Distributed Systems and Cloud Computing",
+    "Data Structures for Spatial Applications",
+    "Artificial Intelligence and Machine Learning",
+    "Quantum Computing and its Applications",
+    "Web Assembly and its Potential",
+    "Reactive Programming and Event-Driven Architectures",
+    "Software Testing and Debugging Techniques",
+    "Code Refactoring and Maintainability",
+    "Embedded Systems and Real-Time Programming",
+    "Interpreters and Virtual Machines",
+    "Parallel Programming and GPU Computing",
+    "Algorithmic Complexity Analysis",
+    "Programming Language Design and Implementation",
+    "Software Reverse Engineering and Decompilation",
+    "Blockchain Technology and Decentralized Applications",
+    "Game Development and Computer Graphics",
+    "Database Systems and Query Optimization",
+    "Compilers and Parsers for Domain-Specific Languages",
+    "Software Visualization and Program Understanding",
+    "Formal Methods and Program Verification",
+    "Mobile Application Development and Cross-Platform Frameworks",
+    "Low-Level Programming and System Programming",
+    "Genetic Algorithms and Evolutionary Computation",
+    "Software Architecture and Design Patterns",
+    "Networking and Communication Protocols",
+    "Scripting Languages and Automation Tools",
+    "Serverless Computing and Function-as-a-Service",
+    "Memory Management and Performance Optimization",
+    "Graphical User Interface (GUI) Development",
+    "Code Generation and Metaprogramming",
+    "Software Containerization and Virtualization",
+    "Aspect-Oriented Programming and Cross-Cutting Concerns",
+    "Computer Vision and Image Processing",
+    "Computational Geometry and Spatial Algorithms",
+    "Programming Language Interoperability and Polyglot Programming",
+    "Software Security and Vulnerability Analysis",
+    "Markup Languages and Document Processing",
+    "Concurrent and Parallel Programming Patterns",
+    "Microservices and Service-Oriented Architectures",
+    "Functional Reactive Programming and Dataflow Programming",
+    "Domain-Specific Languages and Language Workbenches",
+    "Software Internationalization and Localization",
+    "Static and Dynamic Code Analysis",
+    "Declarative Programming and Domain-Specific Languages",
+    "Software Visualization and Program Comprehension"
+]
+
 TOPICS = [
     # "Cricket - players, matches, history, etc.",
     # "Science - physics, chemistry, biology, astronomy, etc.",
@@ -277,7 +330,7 @@ def main(args):
                     topics_generated.append(t)
                     print("topic", t)
 
-            for topic_selected in TOPICS:
+            for topic_selected in PROGRAMMING_TOPICS:
 
                 # topic_number = random.randint(0, len(TOPICS)-1)
                 # topic_selected = TOPICS[topic_number]
