@@ -127,7 +127,7 @@ PROMPT_4 = """
 You are asked to come up with a set of 25 diverse task instructions. 
 These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
 
-The instruction should only be related to India with specific context of SUBJECT_AREA
+The instruction should only be related to SUBJECT_AREA
 
 Here are the requirements:
 1. Try not to repeat the verb for each instruction to maximize diversity.
