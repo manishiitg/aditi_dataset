@@ -48,7 +48,7 @@ SYSTEM_MESSAGES_ORCA = [
 TOPICS = [
     # "Cricket - players, matches, history, etc.",
     # "Science - physics, chemistry, biology, astronomy, etc.",
-    # "Mathematics - algebra, geometry, calculus, statistics, etc.",
+    "Mathematics - algebra, geometry, calculus, statistics, etc.",
     "Programming - coding",
     # "Technology - computers, engineering, AI, robotics, etc.",
     # "Business - economics, finance, marketing, management, entrepreneurship",
@@ -222,7 +222,7 @@ def main(args):
 
     topics_generated = []
 
-    languages = ["hinglish", "hindi"]  # ["hinglish", "hindi", "english"]
+    languages = ["hindi", "hinglish"]  # ["hinglish", "hindi", "english"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
