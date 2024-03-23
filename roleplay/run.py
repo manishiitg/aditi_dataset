@@ -92,8 +92,8 @@ Make sure to generate diverse instructions.
 All output task should be in hinglish language.
 
 Response format:
-TSK 1. [task 1 in hinglish language]
-TSK 2. [task 2 in hinglish language]
+TSK 1. task 1 in hinglish language
+TSK 2. task 2 in hinglish language
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
