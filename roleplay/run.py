@@ -155,7 +155,7 @@ def main(args):
         args.lang = lang
         topic_instruct_map = {}
 
-        for loop in range(10):
+        for loop in range(50):
 
             prompts = []
 
