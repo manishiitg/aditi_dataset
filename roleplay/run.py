@@ -145,7 +145,7 @@ def main(args):
             final_data.append(r)
 
     languages = ["hinglish", "hindi"]
-    topic_selected = "cot"
+    topic_selected = "roleplay"
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
