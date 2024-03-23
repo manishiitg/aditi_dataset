@@ -131,7 +131,6 @@ Be sure to include "TSK", untranslated, as a prefix as described in response for
 """
 
 
-
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
@@ -181,8 +180,7 @@ def main(args):
     #     for r in existing_ds:
     #         final_data.append(r)
 
-
-    languages = ["hindi" ,"hinglish"] 
+    languages = ["hinglish", "hindi"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -191,7 +189,7 @@ def main(args):
 
             prompts = []
             topics_selected = []
-            
+
             PROGRAMMING_TOPICS = [
                 "python",
                 # "javascript",
@@ -204,7 +202,6 @@ def main(args):
                 # "powershell",
                 # "SQL",
             ]
-            
 
             for topic_selected in PROGRAMMING_TOPICS:
                 existing_instructions = []
@@ -225,18 +222,16 @@ def main(args):
                 if args.lang == "hinglish":
                     USER_PROMPT = PROMPT_2
 
-
                 if topic_selected in topic_instruct_map:
                     existing_instruction = topic_instruct_map[topic_selected]
                     USER_PROMPT += "\n\n" + "Generated Instructions should be different from " + existing_instruction
-
 
                 user = USER_PROMPT.replace("{programming_language}", topic_selected)
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user",
-                                "content": user}
+                              "content": user}
                 msg_list.append(msg_prompt)
 
                 text = tokenizer.apply_chat_template(
@@ -258,7 +253,6 @@ def main(args):
                 print("prompt", prompts[idx], "text", text)
                 topic_selected = topics_selected[idx]
 
-
                 instructions = []
                 for instruction in re.findall(
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
@@ -274,7 +268,7 @@ def main(args):
 
                     msg_list = []
                     msg_system = {"role": "system",
-                                    "content": system_message_selected}
+                                  "content": system_message_selected}
                     msg_list.append(msg_system)
                     msg_prompt = {"role": "user", "content": instruction}
                     msg_list.append(msg_prompt)
@@ -285,7 +279,7 @@ def main(args):
                         add_generation_prompt=True
                     )
 
-                    prompts2.append(text)   
+                    prompts2.append(text)
                     topics_selected2.append(topic_selected)
                     sys_prompt_selected.append(system_message_selected)
                     question2.append(instruction)
