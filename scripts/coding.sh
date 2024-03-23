@@ -18,7 +18,9 @@ for model_name_or_path in "${model_names[@]}"; do
         awq_param=""
     fi
     
-    python3 -m code.run --model_name_or_path $model_name_or_path $awq_param
+    cd code
+    python3 run.py --model_name_or_path $model_name_or_path $awq_param
+    cd ..
     # python3 -m code.run --model_name_or_path $model_name_or_path --generate_topics $awq_param
     
 done
