@@ -76,7 +76,7 @@ The tasks should be in Hindi language.
 
 None of the tasks should be about reading from or writing to csvs.
 
-Give me a numbered list of 5 new coding tasks in hindi.
+Give me a numbered list of 10 new coding tasks in hindi.
 
 Don't mention the word "hindi" in tasks generated.
 
@@ -122,7 +122,7 @@ The tasks should be in Hinglish language.
 
 None of the tasks should be about reading from or writing to csvs.
 
-Give me a numbered list of 5 new coding tasks in hinglish.
+Give me a numbered list of 10 new coding tasks in hinglish.
 
 Don't mention the word "hinglish" in tasks generated.
 
