@@ -87,6 +87,8 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 Be appropriately loquacious for the task, e.g. stories should be long, complex, and detailed, whereas a haiku should be the standard three/5-7-5 format.
 
+Make sure to generate diverse instructions.
+
 All output task should be in hinglish language.
 
 Response format:
