@@ -206,7 +206,7 @@ def main(args):
             if args.generate_topics or True:
                 message = []
                 prompt = """
-                    Give me a numbered list of 50 completely random topics , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
+                    Give me a numbered list of 50 completely random topics related to programing, coding.
                     Generate a diverse list of topics in english.
                 """
 
