@@ -442,7 +442,7 @@ def main(args):
                     "answer": text,
                     "system_prompt": sys_prompt_selected[idx],
                     "language": args.lang,
-                    "type": "coding",
+                    "type": "orca",
                     "model": args.model_name_or_path,
                     "messages": [],
                     "evol_question": "",

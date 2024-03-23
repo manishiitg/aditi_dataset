@@ -190,7 +190,7 @@ def main(args):
             )
             prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             print(outputs)
 
@@ -245,7 +245,7 @@ def main(args):
                     "answer": text,
                     "system_prompt": sys_prompt_selected[idx],
                     "language": args.lang,
-                    "type": "coding",
+                    "type": "cot",
                     "model": args.model_name_or_path,
                     "messages": [],
                     "evol_question": "",

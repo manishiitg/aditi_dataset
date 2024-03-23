@@ -69,12 +69,15 @@ Be sure to include "TSK", untranslated, as a prefix as described in response for
 
 PROMPT_2 = """
 Here are a few example prompts:
-Example 1: Write a poem about peacocks in the style of Rabindranath Tagore.
-Example 2: Imagine you are Amitabh Bachchan's character Vijay Deenanath Chauhan from the film Agneepath. In his style, write a speech denouncing corruption.
-Example 3: Create a humorous dialogue between Akbar and Birbal, with Birbal using his wit to answer one of Akbar's challenging questions.
-Example 4: Explain the meaning of "dharma" using the words and style of a wise old sadhu (holy man) dispensing advice to a youth.
-Example 5: Imagine you are Shah Rukh Khan's character Rahul from Dilwale Dulhania Le Jayenge. In his style, write a letter to Simran expressing your feelings before leaving for London.
+Example 1: Rabindranath Tagore ke andaaz mein peacocks ke baare mein ek kavita likhiye.
 
+Example 2: Aap Amitabh Bachchan ke character Vijay Deenanath Chauhan se imagine karo, film Agneepath se. Uske andaaz mein, bhrashtachar ke khilaaf ek bhashan likhiye.  
+
+Example 3: Akbar aur Birbal ke beech ek haasya-paripurna samvad likhiye, jismein Birbal apni buddhi se Akbar ke ek kathin sawal ka uttar deta hai.
+
+Example 4: "Dharma" ka arth ek budhhe sadhu (sant purush) ke shabd aur andaaz ka prayog karke samjhaiye, jaisa ki woh ek yuvak ko salah de raha ho.
+
+Example 5: Aap Shah Rukh Khan ke character Rahul se imagine karo, film Dilwale Dulhania Le Jayenge se. Uske andaaz mein, London jaane se pehle Simran ko apne jazbaat bayaan karte hue ek patra likhiye.
 
 Generate a set of {batch_size} new similar prompts.
 
@@ -192,7 +195,7 @@ def main(args):
             )
             prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             prompts2 = []
             topics_selected2 = []
@@ -245,7 +248,7 @@ def main(args):
                     "answer": text,
                     "system_prompt": sys_prompt_selected[idx],
                     "language": args.lang,
-                    "type": "coding",
+                    "type": "roleplay",
                     "model": args.model_name_or_path,
                     "messages": [],
                     "evol_question": "",
