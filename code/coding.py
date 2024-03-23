@@ -207,7 +207,7 @@ def main(args):
                 "powershell",
                 "SQL",
             ]
-            if args.generate_topics or True:
+            if args.generate_topics:
                 message = []
                 prompt = """
                     Give me a numbered list of 50 completely random topics related to programing, coding for which code can be written.
@@ -349,7 +349,6 @@ def main(args):
                     "evol_answer": "",
                 })
 
-            os.exit(1)
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=True)
 
