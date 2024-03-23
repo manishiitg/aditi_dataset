@@ -105,7 +105,7 @@ def main(args):
 
     base_repo = "manishiitg/indic-synthetic-code"
 
-    max_rows = 500
+    max_rows = 5000
     final_data = []
     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
     # existing_ds = existing_ds.shuffle()
