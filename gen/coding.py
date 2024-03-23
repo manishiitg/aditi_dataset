@@ -182,7 +182,7 @@ def main(args):
     #         final_data.append(r)
 
 
-    languages = ["hinglish", "hindi"] 
+    languages = ["hindi" ,"hinglish"] 
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
