@@ -209,9 +209,9 @@ def main(args):
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
                 ):
                     instructions.append(instruction)
-                    if instruction.startsWith("["):
+                    if instruction.startswith("["):
                         instructions = instructions[0:]
-                    if instruction.endsWith("]"):
+                    if instruction.endswith("]"):
                         instructions = instructions[:-1]
                     
 

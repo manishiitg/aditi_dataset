@@ -192,70 +192,74 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
-            # print(outputs)
+            print(outputs)
 
-            # prompts2 = []
-            # topics_selected2 = []
-            # sys_prompt_selected = []
-            # question2 = []
-            # for idx, text in enumerate(outputs):
-            #     print("======")
-            #     print("prompt", prompts[idx], "text", text)
+            prompts2 = []
+            topics_selected2 = []
+            sys_prompt_selected = []
+            question2 = []
+            for idx, text in enumerate(outputs):
+                print("======")
+                print("prompt", prompts[idx], "text", text)
 
-            #     instructions = []
-            #     for instruction in re.findall(
-            #         r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
-            #     ):
-            #         instructions.append(instruction)
+                instructions = []
+                for instruction in re.findall(
+                    r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
+                ):
+                    instructions.append(instruction)
+                    if instruction.startswith("["):
+                        instructions = instructions[0:]
+                    if instruction.endswith("]"):
+                        instructions = instructions[:-1]
 
-            #         system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
-            #         if args.lang == "hindi":
-            #             system_message_selected += "\n\nAnswer in hindi only."
-            #         if args.lang == "hinglish":
-            #             system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
+                    system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
+                    if args.lang == "hindi":
+                        system_message_selected += "\n\nAnswer in hindi only."
+                    if args.lang == "hinglish":
+                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
 
-            #         msg_list = []
-            #         msg_system = {"role": "system",
-            #                       "content": system_message_selected}
-            #         msg_list.append(msg_system)
-            #         msg_prompt = {"role": "user", "content": instruction}
-            #         msg_list.append(msg_prompt)
+                    msg_list = []
+                    msg_system = {"role": "system",
+                                  "content": system_message_selected}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": instruction}
+                    msg_list.append(msg_prompt)
 
-            #         text = tokenizer.apply_chat_template(
-            #             msg_list,
-            #             tokenize=False,
-            #             add_generation_prompt=True
-            #         )
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
 
-            #         prompts2.append(text)
-            #         topics_selected2.append(topic_selected)
-            #         sys_prompt_selected.append(system_message_selected)
-            #         question2.append(instruction)
+                    prompts2.append(text)
+                    topics_selected2.append(topic_selected)
+                    sys_prompt_selected.append(system_message_selected)
+                    question2.append(instruction)
 
-            # outputs2 = eval_hf_model(args, model, tokenizer, prompts2, 0)
-            # for idx, text in enumerate(outputs2):
-            #     print("======")
+            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, 0)
+            for idx, text in enumerate(outputs2):
+                print("======")
 
-            #     print("topic selected", topics_selected2[idx])
-            #     print("text", question2[idx])
-            #     print("text", text)
-            #     final_data.append({
-            #         "topic": topics_selected2[idx],
-            #         "question": question2[idx],
-            #         "answer": text,
-            #         "system_prompt": sys_prompt_selected[idx],
-            #         "language": args.lang,
-            #         "type": "cot",
-            #         "model": args.model_name_or_path,
-            #         "messages": [],
-            #         "evol_question": "",
-            #         "evol_answer": "",
-            #     })
+                print("topic selected", topics_selected2[idx])
+                print("text", question2[idx])
+                print("text", text)
+                final_data.append({
+                    "topic": topics_selected2[idx],
+                    "question": question2[idx],
+                    "answer": text,
+                    "system_prompt": sys_prompt_selected[idx],
+                    "language": args.lang,
+                    "type": "cot",
+                    "model": args.model_name_or_path,
+                    "messages": [],
+                    "evol_question": "",
+                    "evol_answer": "",
+                })
 
-            # os.exit(1)
+            os.exit(1)
 
-            # dataset = process_and_update_dataset(final_data)
-            # dataset.push_to_hub(base_repo, private=True)
+            dataset = process_and_update_dataset(final_data)
+            dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
