@@ -304,7 +304,6 @@ def main(args):
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
                 ):
                     instructions.append(instruction)
-                    print(instruction)
 
                     system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
                     if args.lang == "hindi":
