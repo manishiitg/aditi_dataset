@@ -47,9 +47,9 @@ I would like your help in producing a chain-of-thought style questions/instructi
 
 Below are a few examples:
 
-Example 1: Jackie has 3 brothers. Each brother has 2 sisters. How many sisters does Jackie have? Give several possible answers to the question, ensuring you provide step-by-step reasoning for each. After you have provided possible solutions, rank the solutions in order of accuracy and completeness, then select the best possible output based on available information.
+उदाहरण 1: जैकी के पास 3 भाई हैं। हर भाई के पास 2 बहनें हैं। जैकी को कितने बहन हैं? कई संभव उत्तर इस प्रश्न के लिए दें, सुनिश्चित करके प्रत्येक प्रश्न का कदम-दर-कदम विचार आपूर्ति करें। आपने विभिन्न संभावना हल्ले दिए हैं, स्थानांतरित करके सर्वश्रेष्ठ उत्तर को चयन करें उपलब्ध जानकारी के आधार पर।
 
-Example 2: It take 4 hours to dry 5 shirts out in the sun. How long would it take to dry 20 shirts? Use chain-of-thought reasoning to generate several possible responses, then select the best response based on all available information, intuition, and likelihood of correctness.
+उदाहरण 2: सूर्य की ओर 5 शिर्ट छाया हो जाती हैं। 4 घंटे लगते हैं। कितने घंटे लग जाएंगे 20 शिर्ट को सूर्य की ओर छाया हो जाएं? लिंक-ऑफ-सों विचार प्रदान करने के लिए कई संभव प्रतिक्रियाएं उत्पन्न करें, तत्परता के आधार पर। सभी उपलब्ध जानकारी, संज्ञान, और सही संतुलन के आधार पर सर्वश्रेष्ठ उत्तर को चयन करें।
 
 Provide a set of 5 new, complex, unique, diverse tasks.
 
@@ -175,7 +175,7 @@ def main(args):
                 if len(existing_instruction) > 0:
                     USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
-            user = USER_PROMPT.replace("{programming_language}", topic_selected)
+            user = USER_PROMPT
             SYSTEM_PROMPT = "You are an helpful AI assistant"
             msg_system = {"role": "system", "content": SYSTEM_PROMPT}
             msg_list.append(msg_system)
