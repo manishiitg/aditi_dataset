@@ -255,8 +255,6 @@ def main(args):
                     "evol_answer": "",
                 })
 
-            os.exit(1)
-
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=True)
 
