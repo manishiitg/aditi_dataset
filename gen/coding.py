@@ -95,11 +95,25 @@ PROMPT_2 = """
 I would like you to help me create a set of coding and/or scripting tasks in hinglish language.
 
 Here are a few example tasks:
-Example 1. jaavaaskript mein bee*tree elgoridam laagoo karen.
+Example 1. Ek async python FastAPI server likho. Yeh webserver port, listening IP, aur files ko serve aur save karne ke liye ek static directory ke liye command line arguments ka support karna chahiye. Static files ke alava, webserver ko ek upload endpoint ka support karna chahiye, jo files ko specified directory mein save karta hai, file name ke liye content ka sha256 hexdigest ka use karke. Agar file pahle se exist karta hai, to upload ko discard kar diya jana chahiye. Iske alava, sabhi files ko list karne aur ID dwara file prapt karne ke liye ek endpoint hona chahiye.
 
-Example 2: golang mein jikastra ke elgoridam ka samaadhaan likhen.
+Example 2: "Person" ke liye ek python model banao jo workplace context mein achhe se kaam kare, saath hi validators, aur person se related remote information jaise ki social media profiles/content fetch karne ka tarika. Dhyaan dein ki aap profile image ko include karein remote file aur crop/resize support ke saath.
 
-Example 3: bina kisee graaphikal laibreree ke, paayathan mein ek eesaseeaeeaee snek gem banaen.
+Example 3: Javascript mein B*tree algorithm ko implement karo.
+
+Example 4: GoLang mein Djikstra's algorithm ka solution likho.
+
+Example 5. Koi bhi graphical libraries ke bina, Python mein ek ascii snake game banayo.
+
+Example 6. Python ka use karke ek text-based solitaire implementation banayo. Yahaan kuch additional requirements hain:
+ - Game state ko mariadb mein save kiya jaana chahiye.
+ - Har move ke baad game ek screenshot lekar record kare.
+ - Game sirf keyboard input accept kare, mouse nahi.
+
+Example 7. Niche diye gaye points ke saath ek python script banayo:
+ a. Ek single word ko input ke roop mein accept kare.
+ b. Agar user ek se zyada word input karta hai, ya word 10 characters se zyada hai, toh ek error message print kare aur stop kar de.
+ c. Input word ka bada ascii art version generate kare.
 
 The tasks must be something a coding language model can complete without access to additional resources.
 
