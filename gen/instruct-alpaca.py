@@ -287,12 +287,8 @@ def main(args):
             random.shuffle(TOPICS)
             if args.generate_topics:
                 message = []
-                # prompt = """
-                #     Give me a numbered list of 50 completely random topics , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
-                #     Generate a diverse list of topics in english.
-                # """
                 prompt = """
-                    Give me a numbered list of 50 completely random topics , related to programming, coding. 
+                    Give me a numbered list of 50 completely random topics , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
                     Generate a diverse list of topics in english.
                 """
 
