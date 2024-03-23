@@ -194,9 +194,6 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-            print(outputs)
-            os.exit(1)
-
             prompts2 = []
             topics_selected2 = []
             sys_prompt_selected = []
