@@ -429,7 +429,7 @@ def main(args):
                     sys_prompt_selected.append(system_message_selected)
                     question2.append(instruction)
 
-            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, 0)
             for idx, text in enumerate(outputs2):
                 print("======")
 
