@@ -202,7 +202,6 @@ def main(args):
             sys_prompt_selected = []
             question2 = []
             for idx, text in enumerate(outputs):
-                print("======")
                 # print("prompt", prompts[idx], "text", text)
 
                 instructions = []
@@ -210,6 +209,8 @@ def main(args):
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
                 ):
                     instructions.append(instruction)
+                    print("=======")
+                    print(instruction)
 
                     system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
                     if args.lang == "hindi":
