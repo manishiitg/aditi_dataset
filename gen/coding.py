@@ -155,6 +155,7 @@ def main(args):
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
             max_model_len=8196*2,
+            gpu_memory_utilization=.95,
         )
     else:
         print("Loading model and tokenizer vllm...")
