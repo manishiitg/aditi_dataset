@@ -154,7 +154,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196,
+            max_model_len=4096,
             gpu_memory_utilization=.95,
         )
     else:
