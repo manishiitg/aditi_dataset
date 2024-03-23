@@ -114,7 +114,7 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    base_repo = "manishiitg/indic-synthetic-code"
+    base_repo = "manishiitg/indic-synthetic-cot"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
