@@ -38,12 +38,7 @@ SYSTEM_MESSAGES_ORCA = [
     "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
     "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
     "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
-    "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
-    "You are an AI assistant that helps people find information.",
 ]
 
 
@@ -261,6 +256,8 @@ def main(args):
             for idx, text in enumerate(outputs):
                 print("======")
                 print("prompt", prompts[idx], "text", text)
+                topic_selected = topics_selected[idx]
+
 
                 instructions = []
                 for instruction in re.findall(
@@ -268,8 +265,17 @@ def main(args):
                 ):
                     instructions.append(instruction)
                     print(instruction)
-                
-                os.exit(1)
+
+                    system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
+                    if args.lang == "hindi":
+                        system_message_selected += "\n\nAnswer in hindi only"
+                    if args.lang == "hinglish":
+                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
+
+                    prompts2.append(text)   
+                    topics_selected2.append(topic_selected)
+                    sys_prompt_selected.append(system_message_selected)
+                    question2.append(instruction)
 
             outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
             for idx, text in enumerate(outputs2):
@@ -291,6 +297,7 @@ def main(args):
                     "evol_answer": "",
                 })
 
+            os.exit(1)
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=True)
 
