@@ -339,9 +339,9 @@ def main(args):
 
                 random.shuffle(existing_instructions)
                 if len(existing_instructions) > 25:
-                    topic_instruct_map[r["topic"]] = ",".join(existing_instructions[:25])
+                    topic_instruct_map[topic_selected] = ",".join(existing_instructions[:25])
                 else:
-                    topic_instruct_map[r["topic"]] = ",".join(existing_instructions)
+                    topic_instruct_map[topic_selected] = ",".join(existing_instructions)
 
                 msg_list = []
                 SYSTEM_PROMPT = PROMPT_2
