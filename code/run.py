@@ -78,6 +78,8 @@ None of the tasks should be about reading from or writing to csvs.
 
 Give me a numbered list of 10 new coding tasks in hindi.
 
+Tasks should all details required to write the code, including programing language to use or any other data required to completed the task. 
+
 Don't mention the word "hindi" in tasks generated.
 
 Response format:
@@ -124,7 +126,7 @@ None of the tasks should be about reading from or writing to csvs.
 
 Give me a numbered list of 5 new coding tasks in hinglish.
 
-Tasks should all details required to write the code, including programing language or any other data required to completed the task. 
+Tasks should all details required to write the code, including programing language to use or any other data required to completed the task. 
 
 Don't mention the word "hinglish" in tasks generated.
 
