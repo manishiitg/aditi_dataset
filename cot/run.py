@@ -72,9 +72,9 @@ I would like your help in producing a chain-of-thought style questions/instructi
 
 Below are a few examples:
 
-Example 1: Jackie has 3 brothers. Each brother has 2 sisters. How many sisters does Jackie have? Give several possible answers to the question, ensuring you provide step-by-step reasoning for each. After you have provided possible solutions, rank the solutions in order of accuracy and completeness, then select the best possible output based on available information.
+Example 1: Jakie ke 3 bhai hain. Har bhai ke 2 behen hain. Toh Jakie ki kitni behen hain?  Sawal ke liye kayi possible answers do, aur har ek ke liye step-by-step reasoning bhi provide karo. Possible solutions dene ke baad, accuracy aur completeness ke order mein rank karo, phir available information ke aadhar par best possible output select karo.
 
-Example 2: It take 4 hours to dry 5 shirts out in the sun. How long would it take to dry 20 shirts? Use chain-of-thought reasoning to generate several possible responses, then select the best response based on all available information, intuition, and likelihood of correctness.
+Example 2: 5 shirt ko sukhane mein 4 ghante lagta hai. Toh 20 shirt ko kitne ghante lagega sukhane? Use chain-of-thought reasoning to generate several possible responses, phir sabse acchi response ko select karo based on sab available information, intuition, aur likelihood of correctness.
 
 Provide a set of 5 new, complex, unique, diverse tasks.
 
