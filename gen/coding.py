@@ -194,15 +194,15 @@ def main(args):
             
             PROGRAMMING_TOPICS = [
                 "python",
-                "javascript",
-                "java",
-                "c",
-                "c++",
-                "golang",
-                "C#",
-                "bash",
-                "powershell",
-                "SQL",
+                # "javascript",
+                # "java",
+                # "c",
+                # "c++",
+                # "golang",
+                # "C#",
+                # "bash",
+                # "powershell",
+                # "SQL",
             ]
             
 
