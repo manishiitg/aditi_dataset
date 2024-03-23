@@ -305,7 +305,7 @@ def main(args):
                     if args.lang == "hindi":
                         system_message_selected += "\n\nAnswer in hindi only. The code blocks should be in english, comments and explanations should be in hindi only."
                     if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
+                        system_message_selected += "\n\nAnswer in hinglish only. Add inline code comments as well.  Translate to hinglish if required."
 
                     msg_list = []
                     msg_system = {"role": "system",
