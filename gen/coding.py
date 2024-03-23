@@ -76,7 +76,7 @@ The tasks should be in Hindi language.
 
 None of the tasks should be about reading from or writing to csvs.
 
-Give me a numbered list of 3 new coding tasks in hindi.
+Give me a numbered list of 5 new coding tasks in hindi.
 
 Response format:
 TSK 1. [task 1 in hindi]
@@ -120,7 +120,7 @@ The tasks should be in Hinglish language.
 
 None of the tasks should be about reading from or writing to csvs.
 
-Give me a numbered list of 3 new coding tasks in hinglish.
+Give me a numbered list of 5 new coding tasks in hinglish.
 
 Response format:
 TSK 1. [task 1 in hinglish]
@@ -268,7 +268,7 @@ def main(args):
 
                     system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
                     if args.lang == "hindi":
-                        system_message_selected += "\n\nAnswer in hindi only"
+                        system_message_selected += "\n\nAnswer in hindi only. The code blocks should be in english, comments and explanations should be in hindi only."
                     if args.lang == "hinglish":
                         system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
 
