@@ -272,6 +272,19 @@ def main(args):
                     if args.lang == "hinglish":
                         system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
 
+                    msg_list = []
+                    msg_system = {"role": "system",
+                                    "content": system_message_selected}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": instruction}
+                    msg_list.append(msg_prompt)
+
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+
                     prompts2.append(text)   
                     topics_selected2.append(topic_selected)
                     sys_prompt_selected.append(system_message_selected)
