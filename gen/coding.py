@@ -154,7 +154,7 @@ def main(args):
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
             quantization="AWQ",
-            max_model_len=8196*2,
+            max_model_len=8196,
             gpu_memory_utilization=.95,
         )
     else:
@@ -164,7 +164,7 @@ def main(args):
             tokenizer=args.model_name_or_path,
             tokenizer_mode="auto",
             tensor_parallel_size=torch.cuda.device_count(),
-            max_model_len=8196*2,
+            max_model_len=8196,
         )
 
     final_data = []
