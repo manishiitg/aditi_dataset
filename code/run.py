@@ -267,9 +267,9 @@ def main(args):
                 if args.lang == "hinglish":
                     USER_PROMPT = PROMPT_2
 
-                if topic_selected in topic_instruct_map:
+                if topic_selected in topic_instruct_map and len(existing_instruction) > 0:
                     existing_instruction = topic_instruct_map[topic_selected]
-                    USER_PROMPT += "\n\n" + "Generated Instructions should be different from " + existing_instruction
+                    USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
                 user = USER_PROMPT.replace("{programming_language}", topic_selected)
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
