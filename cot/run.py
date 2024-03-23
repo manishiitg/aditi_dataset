@@ -193,7 +193,6 @@ def main(args):
             outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
             print(outputs)
-            os.exit(1)
 
             prompts2 = []
             topics_selected2 = []
@@ -202,7 +201,6 @@ def main(args):
             for idx, text in enumerate(outputs):
                 print("======")
                 print("prompt", prompts[idx], "text", text)
-                topic_selected = topics_selected[idx]
 
                 instructions = []
                 for instruction in re.findall(
@@ -212,9 +210,9 @@ def main(args):
 
                     system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
                     if args.lang == "hindi":
-                        system_message_selected += "\n\nAnswer in hindi only. The code blocks should be in english, comments and explanations should be in hindi only."
+                        system_message_selected += "\n\nAnswer in hindi only."
                     if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only. Add inline code comments as well.  Translate to hinglish if required."
+                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
 
                     msg_list = []
                     msg_system = {"role": "system",
@@ -253,6 +251,8 @@ def main(args):
                     "evol_question": "",
                     "evol_answer": "",
                 })
+
+            os.exit(1)
 
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=True)
