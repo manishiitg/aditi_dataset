@@ -78,6 +78,8 @@ None of the tasks should be about reading from or writing to csvs.
 
 Give me a numbered list of 5 new coding tasks in hindi.
 
+Don't mention the word "hindi" in tasks generated.
+
 Response format:
 TSK 1. [task 1 in hindi]
 TSK 2. [task 2 in hindi]
@@ -121,6 +123,8 @@ The tasks should be in Hinglish language.
 None of the tasks should be about reading from or writing to csvs.
 
 Give me a numbered list of 5 new coding tasks in hinglish.
+
+Don't mention the word "hinglish" in tasks generated.
 
 Response format:
 TSK 1. [task 1 in hinglish]
@@ -175,10 +179,10 @@ def main(args):
         )
 
     final_data = []
-    # if repo_exists(base_repo, repo_type="dataset"):
-    #     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-    #     for r in existing_ds:
-    #         final_data.append(r)
+    if repo_exists(base_repo, repo_type="dataset"):
+        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+        for r in existing_ds:
+            final_data.append(r)
 
     languages = ["hinglish", "hindi"]
     topics_generated = []
@@ -206,7 +210,7 @@ def main(args):
             if args.generate_topics or True:
                 message = []
                 prompt = """
-                    Give me a numbered list of 50 completely random topics related to programing, coding.
+                    Give me a numbered list of 50 completely random topics related to programing, coding for which code can be written.
                     Generate a diverse list of topics in english.
                 """
 
