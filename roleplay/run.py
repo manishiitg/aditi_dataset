@@ -200,7 +200,7 @@ def main(args):
             question2 = []
             for idx, text in enumerate(outputs):
                 print("======")
-                print("prompt", prompts[idx], "text", text)
+                # print("prompt", prompts[idx], "text", text)
 
                 instructions = []
                 for instruction in re.findall(
