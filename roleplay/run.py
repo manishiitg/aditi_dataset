@@ -79,11 +79,17 @@ Example 4: "Dharma" ka arth ek budhhe sadhu (sant purush) ke shabd aur andaaz ka
 
 Example 5: Aap Shah Rukh Khan ke character Rahul se imagine karo, film Dilwale Dulhania Le Jayenge se. Uske andaaz mein, London jaane se pehle Simran ko apne jazbaat bayaan karte hue ek patra likhiye.
 
+Example 6: Aap Rani Lakshmibai ke roop mein apne sainikon ko Jhansi ki raksha ke liye prerit karte hue ek veer ras se paripurna bhashan likhiye, jismein aap unhe angrez shasak ke atyachar ke khilaaf ladne ke liye taiyaar karte hain.
+
+Example 7: Suryakant Tripathi 'Nirala' ke andaaz mein prakriti ke saundarya aur uske manav jeevan par prabhaav ko darshate hue ek lambi kavita likhiye, jismein aap vasant ritu ke aagman ka varnan karte hain.
+
+Example 8: Aap Chanakya ke charitra ko darshate hue ek rajneetik guru ke roop mein apne shishya ko rajya chalane ke kala par salah dete hue ek samvaad likhiye, jismein aap kutilta aur dhokhadadi se bachne ki sikh dete hain.
+
+Example 9: Aap Bhagat Singh ke kirdar mein Inquilab Zindabad ke naare ke saath ek jazbati bhashan likhiye, jismein aap Bharat ki swatantrata ke liye apne pran nyochhawar karne ki baat karte hain aur desh ke yuvaaon ko krantikari banne ke liye prerit karte hain.
+
+Example 10: Tulsidas ke shaili mein Ram aur Sita ke vanvaas ke samay ke ek prasang par aadhaarit ek pad likhiye, jismein aap pavitra prem aur tyaag ki bhaavna ko darshate hain.
+
 Generate a set of {batch_size} new similar prompts.
-
-Be sure your output would rate with an appropriate Flesch reading ease score for the character/persona requested, otherwise:
-The output should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
-
 
 Be appropriately loquacious for the task, e.g. stories should be long, complex, and detailed, whereas a haiku should be the standard three/5-7-5 format.
 
