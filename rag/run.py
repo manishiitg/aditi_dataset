@@ -131,7 +131,7 @@ All output should be in {language}.
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
         temperature=temperature,
-        max_tokens=2048,
+        max_tokens=1024,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
@@ -269,6 +269,9 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
+            prompts = []
+            contexts = []
+            global_questions = []
             for idx, text in enumerate(outputs):
                 print("prompt", prompts[idx], "text", text)
                 context = text.split("ENDINSTRUCTION")[0] + "ENDINSTRUCTION"
@@ -279,9 +282,29 @@ def main(args):
                 print("context", context)
                 print("questions", questions)
 
-                user = PROMPT1_RESPONSE.replace("{language}", lang)
+                for ques in questions:
 
-                pass
+                    msg_system = {"role": "system", "content": PROMPT1_RESPONSE.replace("{language}", lang)}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user",
+                                  "content": ques}
+                    msg_list.append(msg_prompt)
+
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+                    prompts.append(text)
+                    contexts.append(context)
+                    global_questions.append(ques)
+
+                outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+                for idx, text in outputs:
+                    print("context", contexts[idx])
+                    print("question", question[idx])
+                    print("answer", text)
+                    print("========")
 
             # dataset = process_and_update_dataset(final_data)
             # dataset.push_to_hub(base_repo, private=False)
