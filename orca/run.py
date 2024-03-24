@@ -350,50 +350,50 @@ def main(args):
         args.lang = lang
         topic_instruct_map = {}
 
-        prompts = []
-        if args.generate_topics or True:
-            message = []
-            prompt = """
-                Give me a numbered list of 50 completely random topics related to reasoning.
-                Generate a diverse list of topics in english.
-            """
+        for loop in range(20):
+            prompts = []
+            if args.generate_topics or True:
+                message = []
+                prompt = """
+                    Give me a numbered list of 50 completely random topics related to reasoning.
+                    Generate a diverse list of topics in english.
+                """
 
-            #
-            if len(topics_generated) > 0:
-                prompt += "\n Topics should not be related to " + \
-                    ",".join(topics_generated)
-            message.append({"role": "user", "content": prompt})
-            text = tokenizer.apply_chat_template(
-                message,
-                tokenize=False,
-                add_generation_prompt=True
-            )
+                #
+                if len(topics_generated) > 0:
+                    prompt += "\n Topics should not be related to " + \
+                        ",".join(topics_generated)
+                message.append({"role": "user", "content": prompt})
+                text = tokenizer.apply_chat_template(
+                    message,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
 
-            outputs = eval_hf_model(args, model, tokenizer, [text], .5)
-            output = outputs[0]
+                outputs = eval_hf_model(args, model, tokenizer, [text], .5)
+                output = outputs[0]
 
-            topics = output.split("\n")
-            PROGRAMMING_TOPICS = []
-            for t in topics:
-                try:
-                    idx = t.index(".")
-                    if idx != -1:
-                        t = t[idx + 1:]
-                        t = t.strip()
-                except ValueError:
-                    pass
+                topics = output.split("\n")
+                PROGRAMMING_TOPICS = []
+                for t in topics:
+                    try:
+                        idx = t.index(".")
+                        if idx != -1:
+                            t = t[idx + 1:]
+                            t = t.strip()
+                    except ValueError:
+                        pass
 
-                if t.startswith('"'):
-                    t = t[1:]
-                if t.endswith('"'):
-                    t = t[:-1]
+                    if t.startswith('"'):
+                        t = t[1:]
+                    if t.endswith('"'):
+                        t = t[:-1]
 
-                PROGRAMMING_TOPICS.append(t)
-                topics_generated.append(t)
-                print("topic", t)
-        
-        for topic_selected in PROGRAMMING_TOPICS:
-            for loop in range(20):
+                    PROGRAMMING_TOPICS.append(t)
+                    topics_generated.append(t)
+                    print("topic", t)
+            
+            for topic_selected in PROGRAMMING_TOPICS:
                 existing_instructions = []
                 for r in final_data:
                     if r["language"] == lang:
@@ -417,7 +417,7 @@ def main(args):
                 #     if len(existing_instruction) > 0:
                 #         USER_PROMPT += "\n\n" + "Generated questions should be different from " + existing_instruction
 
-                user = USER_PROMPT.replace("{batch_size}", "3")
+                user = USER_PROMPT.replace("{batch_size}", "5")
                 user = user.replace("{topic_selected}", topic_selected)
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
