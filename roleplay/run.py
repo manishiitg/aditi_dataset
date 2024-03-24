@@ -49,13 +49,22 @@ Here are a few example prompts:
 उदाहरण 3: अकबर और बीरबल के बीच एक विनोदी संवाद बनाएं, जिसमें बीरबल अपनी बुद्धि का उपयोग करके अकबर के चुनौतीपूर्ण प्रश्नों में से एक का उत्तर दे।
 उदाहरण 4: एक युवा को सलाह देने वाले एक बुद्धिमान वृद्ध साधु के शब्दों और शैली का उपयोग करके "धर्म" का अर्थ समझाएं।
 उदाहरण 5: कल्पना कीजिए कि आप दिलवाले दुल्हनिया ले जाएंगे में शाहरुख खान का किरदार राहुल हैं। उन्हीं के अंदाज में लंदन जाने से पहले सिमरन को अपनी भावनाएं व्यक्त करते हुए एक पत्र लिखें।
+उदाहरण 6: आप रानी लक्ष्मीबाई के रूप में अपने सैनिकों को झाँसी की रक्षा के लिए प्रेरित करते हुए एक वीर रस से परिपूर्ण भूषण लिखिए, जिसमें आप उन्हें अंग्रेज़ शसक के अत्याचार के ख़िलाफ़ लड़ने के लिए तैयार करते हैं।
+
+उदाहरण 7: सूर्यकांत त्रिपाठी 'निराला' के अंदाज में प्रकृति के सौंदर्य और उसके मानव जीवन पर प्रभाव को दर्शाते हुए एक लंबी कविता लिखें, जिसमें आप वसंत ऋतु के आगमन का वर्णन करते हैं।
+
+उदाहरण 8: आप चाणक्य के चरित्र को दर्शाते हुए एक राजनीतिक गुरु के रूप में अपने शिष्य को राज्य चलाने के कला पर सलाह देते हुए एक संवाद लिखिए, जिसमें आप कुटिलता और धोखेबाज़ी से बचना सीख देते हैं।
+
+उदाहरण 9: आप भगत सिंह के किरदार में इंकलाब जिंदाबाद के नारे के साथ एक जज़्बाती भाषा लिखिए, जिसमें आप भारत की स्वतंत्रता के लिए अपने प्राण न्योछावर करने की बात करते हैं और देश के युवाओं को क्रांतिकारी बनने के लिए प्रेरित करते हैं।
+
+उदाहरण 10: तुलसीदास की शैली में राम और सीता के वनवास के समय के एक प्रसंग पर आधार एक पद लिखिए, जिसमें आप पवित्र प्रेम और त्याग की भावना को दर्शाते हैं।
 
 Generate a set of {batch_size} new similar prompts.
 
-Be sure your output would rate with an appropriate Flesch reading ease score for the character/persona requested, otherwise:
-The output should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
-
 Be appropriately loquacious for the task, e.g. stories should be long, complex, and detailed, whereas a haiku should be the standard three/5-7-5 format.
+
+Make sure to generate diverse and detailed tasks. 
+Every task should be atleast 2-3 lines. 
 
 All output task should be in hindi language.
 
@@ -93,13 +102,14 @@ Generate a set of {batch_size} new similar prompts.
 
 Be appropriately loquacious for the task, e.g. stories should be long, complex, and detailed, whereas a haiku should be the standard three/5-7-5 format.
 
-Make sure to generate diverse tasks related to roleplaying.
+Make sure to generate diverse and detailed tasks. 
+Every task should be atleast 2-3 lines. 
 
 All output task should be in hinglish language.
 
 Response format:
-TSK 1. task 1 in hinglish language
-TSK 2. task 2 in hinglish language
+TSK 1. [task 1 in hinglish language]
+TSK 2. [task 2 in hinglish language]
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
