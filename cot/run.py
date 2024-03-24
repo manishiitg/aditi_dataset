@@ -337,7 +337,7 @@ def main(args):
                     USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
             user = USER_PROMPT
-            SYSTEM_PROMPT = "You are an helpful AI assistant"
+            SYSTEM_PROMPT = "You are an helpful AI assistant. Follow the instructions provided."
             msg_system = {"role": "system", "content": SYSTEM_PROMPT}
             msg_list.append(msg_system)
             msg_prompt = {"role": "user",
