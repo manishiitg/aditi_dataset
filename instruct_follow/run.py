@@ -228,7 +228,7 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
             print(outputs)
-            os.exit(1)
+            
 
             prompts2 = []
             topics_selected2 = []
@@ -267,6 +267,7 @@ def main(args):
                     sys_prompt_selected.append(question.strip())
                     question2.append(answer.strip())
 
+            os.exit(1)
             outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
             for idx, text in enumerate(outputs2):
                 print("======")
