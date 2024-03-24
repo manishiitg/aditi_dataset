@@ -128,10 +128,10 @@ All output should be in {language}.
 
 
 @torch.no_grad()
-def eval_hf_model(args, model, tokenizer, prompts, temperature):
+def eval_hf_model(args, model, tokenizer, prompts, temperature, max_tokens=8196):
     sampling_params = vllm.SamplingParams(
         temperature=temperature,
-        max_tokens=1024,
+        max_tokens=max_tokens,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
@@ -299,13 +299,14 @@ def main(args):
                     contexts.append(context)
                     global_questions.append(ques)
 
-                outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+                outputs = eval_hf_model(args, model, tokenizer, prompts, 0, 1024)
                 for idx, text in outputs:
                     print("context", contexts[idx])
                     print("question", question[idx])
                     print("answer", text)
                     print("========")
 
+            os.exit(1)
             # dataset = process_and_update_dataset(final_data)
             # dataset.push_to_hub(base_repo, private=False)
 
