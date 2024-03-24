@@ -452,7 +452,7 @@ def main(args):
                         print()
 
                         final_data.append({
-                            "topic": "",
+                            "topic": topic_selected,
                             "question": question,
                             "answer": answer,
                             "system_prompt": "",
