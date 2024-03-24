@@ -106,6 +106,44 @@ INPUT: [second instruction's answer in hinglish]
 
 """
 
+PROMPT_3 = """
+You are asked to come up with a set of 10 diverse task instructions and corrosponding input related to role playing.
+
+You should generate an appropriate input to the instruction. The input field should contain a specific example provided for the instruction. It should involve realistic data and should not contain simple placeholders. The input should provide substantial content to make the instruction challenging but should ideally not exceed 100 words.
+
+Instructions generated should be detailed, atleast 2-3 lines. 
+
+The instruction should only be related to SUBJECT_AREA
+
+Examples of instructions/input to generate:
+
+End of examples
+INPUT: The witness claims to have seen the suspect fleeing the scene with a stolen item.
+
+INSTRUCTION: Pretend you are Jane Goodall and explain to a person who just deforested a huge area the importance of preserving our natural habitats.
+INPUT: Deforestation is necessary for development. Why should I care about preserving forests?
+
+INSTRUCTION: You are Tesla's AI assistant developed in the year 2040, specialized in helping customers. Please provide an answer to a user having trouble charging their Tesla car at home
+INPUT: I recently purchased a Tesla Model X3 and I'm having some issues charging it in my garage. The charging cable refuses to make a solid connection to the car's charging port, and the process always fails. Could you assist me?
+
+INSTRUCTION: Pretend that you are an AI assistant to a superhero. How would you help them track down an archenemy who has gone into hiding?
+INPUT: Superhero: Find Nightshade's whereabouts for me. She disappeared after our last encounter in the city.
+
+INSTRUCTION: Imagine you are a superhero with the power to control time. How would you protect your city from an impending disaster?
+INPUT: A massive earthquake is about to strike your city, causing massive destruction and threatening countless lives. As a superhero with the ability to manipulate time, what are your strategies to save your city and its inhabitants?
+
+List of 25 tasks:
+
+Instruction should only be generated in hindi language.
+
+The output format should be:
+INSTRUCTION: [first instruction in hindi]
+INPUT: [first input's answer in hindi]
+
+INSTRUCTION: [second instruction in hindi]
+INPUT: [second instruction's answer in hindi]
+"""
+
 
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
@@ -160,7 +198,7 @@ def main(args):
 
     topics_generated = []
 
-    languages = ["hinglish","english"]
+    languages = ["hinglish","english", "hindi"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -227,6 +265,8 @@ def main(args):
 
                 if args.lang == "hinglish":
                     SYSTEM_PROMPT = PROMPT_2
+                if args.lang == "hindi":
+                    SYSTEM_PROMPT = PROMPT_3
 
                 user = f"SUBJECT_AREA: {topic_selected}"
 
