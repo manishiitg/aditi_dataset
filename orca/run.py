@@ -415,7 +415,7 @@ def main(args):
                 if topic_selected in topic_instruct_map:
                     existing_instruction = topic_instruct_map[topic_selected]
                     if len(existing_instruction) > 0:
-                        USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
+                        USER_PROMPT += "\n\n" + "Generated questions should be different from " + existing_instruction
 
                 user = USER_PROMPT.replace("{batch_size}", "3")
                 user = user.replace("{topic_selected}", topic_selected)
@@ -431,6 +431,7 @@ def main(args):
                     tokenize=False,
                     add_generation_prompt=True
                 )
+                print(text)
                 prompts.append(text)
 
                 outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
