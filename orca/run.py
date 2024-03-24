@@ -354,7 +354,7 @@ def main(args):
         if args.generate_topics or True:
             message = []
             prompt = """
-                Give me a numbered list of 50 completely random topics related to common sense reasoning.
+                Give me a numbered list of 50 completely random topics related to reasoning.
                 Generate a diverse list of topics in english.
             """
 
