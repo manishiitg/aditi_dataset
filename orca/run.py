@@ -344,7 +344,7 @@ def main(args):
 
     languages = ["hinglish", "hindi"]
     topic_selected = "orca"
-    topics_generated = {}
+    topics_generated = []
     PROGRAMMING_TOPICS = []
     for lang in languages:
         args.lang = lang
