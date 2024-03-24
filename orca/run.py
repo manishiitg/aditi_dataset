@@ -337,10 +337,10 @@ def main(args):
         )
 
     final_data = []
-    if repo_exists(base_repo, repo_type="dataset"):
-        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-        for r in existing_ds:
-            final_data.append(r)
+    # if repo_exists(base_repo, repo_type="dataset"):
+    #     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+    #     for r in existing_ds:
+    #         final_data.append(r)
 
     languages = ["hinglish", "hindi"]
     topic_selected = "orca"
@@ -464,8 +464,8 @@ def main(args):
                             "evol_answer": "",
                         })
 
-                dataset = process_and_update_dataset(final_data)
-                dataset.push_to_hub(base_repo, private=False)
+            dataset = process_and_update_dataset(final_data)
+            dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):
