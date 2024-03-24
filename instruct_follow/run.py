@@ -271,7 +271,6 @@ def main(args):
                 topics_selected.append(topic_selected)
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
-            print(outputs)
             
 
             prompts2 = []
@@ -287,7 +286,7 @@ def main(args):
                 pattern = re.compile(f"{start_key}:(.*?){end_key}:(.*?)(?={start_key}|$)", re.DOTALL)
 
                 matches = pattern.findall(text)
-
+                print("topics_selected", topics_selected[idx])
                 for question, answer in matches:
                     print("======")
                     print(f"INSTRUCTION: {question.strip()}")
