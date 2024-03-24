@@ -18,7 +18,7 @@ for model_name_or_path in "${model_names[@]}"; do
         awq_param=""
     fi
     
-    cd instruct-follow
+    cd instruct_follow
     python3 run.py --model_name_or_path $model_name_or_path $awq_param
     cd ..
     
