@@ -358,6 +358,8 @@ def main(args):
             topics_selected2 = []
             sys_prompt_selected = []
             question2 = []
+            print(outputs)
+            os.exit(1)
             for idx, text in enumerate(outputs):
 
                 instructions = []
