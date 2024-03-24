@@ -156,7 +156,7 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 All output text should be in hindi, but the exact terms "QUESTION" and "ANSWER" are special tokens that must not be translated.
 
-All questions generated should be related to topic "{topic_selected}"
+All questions generated should be related to topic "{topic_selected}"  and generate {batch_size} number of questions.
 
 The output format should be:
 QUESTION: [first question in hindi]
@@ -282,7 +282,7 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 All output text should be in hinglish language, but the exact terms "QUESTION" and "ANSWER" are special tokens that must not be translated.
 
-All questions generated should be related to topic "{topic_selected}"
+All questions generated should be related to topic "{topic_selected}" and generate {batch_size} number of questions.
 
 The output format should be:
 QUESTION: [first question in hinglish]
@@ -337,10 +337,10 @@ def main(args):
         )
 
     final_data = []
-    # if repo_exists(base_repo, repo_type="dataset"):
-    #     existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
-    #     for r in existing_ds:
-    #         final_data.append(r)
+    if repo_exists(base_repo, repo_type="dataset"):
+        existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
+        for r in existing_ds:
+            final_data.append(r)
 
     languages = ["hinglish", "hindi"]
     topic_selected = "orca"
