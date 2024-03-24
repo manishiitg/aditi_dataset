@@ -386,7 +386,7 @@ def main(args):
             )
             prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
 
             for idx, text in enumerate(outputs):
                 print("prompt", prompts[idx], "text", text)
