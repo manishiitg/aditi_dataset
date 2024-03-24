@@ -297,7 +297,7 @@ ANSWER: [second question's answer in hinglish]
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
         temperature=temperature,
-        max_tokens=4096,
+        max_tokens=8192,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
@@ -464,7 +464,6 @@ def main(args):
                             "evol_answer": "",
                         })
 
-                os.exit(1)
                 dataset = process_and_update_dataset(final_data)
                 dataset.push_to_hub(base_repo, private=False)
 
