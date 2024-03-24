@@ -287,12 +287,8 @@ def main(args):
             random.shuffle(TOPICS)
             if args.generate_topics:
                 message = []
-                # prompt = """
-                #     Give me a numbered list of 50 completely random topics , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
-                #     Generate a diverse list of topics in english.
-                # """
                 prompt = """
-                    Give me a numbered list of 50 completely random topics , related to programming, coding. 
+                    Give me a numbered list of 50 completely random topics , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
                     Generate a diverse list of topics in english.
                 """
 
@@ -343,9 +339,9 @@ def main(args):
 
                 random.shuffle(existing_instructions)
                 if len(existing_instructions) > 25:
-                    topic_instruct_map[r["topic"]] = ",".join(existing_instructions[:25])
+                    topic_instruct_map[topic_selected] = ",".join(existing_instructions[:25])
                 else:
-                    topic_instruct_map[r["topic"]] = ",".join(existing_instructions)
+                    topic_instruct_map[topic_selected] = ",".join(existing_instructions)
 
                 msg_list = []
                 SYSTEM_PROMPT = PROMPT_2
