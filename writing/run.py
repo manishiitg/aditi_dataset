@@ -186,7 +186,7 @@ def main(args):
                 "heartwarming",
                 "romantic"
             ]
-            if args.generate_topics:
+            if args.generate_topics or True:
                 message = []
                 prompt = """
                     Give me a numbered list of 10 completely random topics related to writing and different styles of writing.

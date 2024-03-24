@@ -98,36 +98,78 @@ Please provide a chain-of-thought style answer to the provide input.
 
 Below are a few examples of question/response pairs.
 
-Here is the text translated to Hinglish:
-
 Example 1:
-Input: Jackie ke paas 3 bhai hain. Har bhai ke paas 2 bahinein hain. Jackie ki kitni bahinein hain? Is sawaal ke kuch sambhavit jawaab dijiye, aur har jawaab ke liye step-by-step reasoning bhi dijiye. Jab aap sambhavit solutions de chuke, unhe accuracy aur completeness ke order mein rank kar dijiye, phir available information ke aadhar par sabse achchha jawaab chuniye.  
+Input: Jackie has 3 brothers. Each brother has 2 sisters. How many sisters does Jackie have? Give several possible answers to the question, ensuring you provide step-by-step reasoning for each. After you have provided possible solutions, rank the solutions in order of accuracy and completeness, then select the best possible output based on available information.
 
-Example 1 ka response: 
+Example 1 response:
 Solution 1:
-Di hui information mein likha hai ki "Har bhai ke paas 2 bahinein hain." Yeh Jackie ko bhi count mein lata hai kyunki woh bhi apne bhaiyon ki bahan hai. Maante hue ki 3 bhai hain aur har ek ke paas wahi 2 bahinein hain, hum yeh nikaalne kar sakte hain ki bhai-bahinon mein 3 bhai aur 2 bahinein hain. Agar hum Jackie ko is bhai-bahin group se nikal dete hain (kyunki hum yeh pata karna chahte hain ki Jackie ki kitni bahinein hain), toh ek aur ladki is group mein bachi rahegi. 
+The information provided states that "Each brother has 2 sisters." This includes Jackie in the count because she is a sister to her brothers. Considering there are three brothers and each of them has the same two sisters, we can deduce that the siblings consist of 3 brothers and 2 sisters in total. If we remove Jackie from the sibling count (since we are trying to find out how many sisters Jackie herself has), we are left with one other girl in the sibling group.
 
-Final jawaab: Jackie ki 1 bahan hai.
+Final answer: Jackie has 1 sister.
 
-Solution 2: 
-Is scenario mein, hum ek complex family structure ka andaza laga sakte hain, jaisa ki half-siblings ya step-siblings. "Har bhai ke paas 2 bahinein hain" ka matlab ho sakta hai ki woh bahinein Jackie se related nahi hain, jaisa ki half-bahinein ya step-bahinein ho sakti hain. Is complexity ko dekhte hue, aisa ho sakta hai ki Jackie ki bilkul bhi bahan na ho.
+Solution 2:
+In this scenario, we can assume a complex family structure, such as half-siblings or step-siblings. "Each brother has 2 sisters" could imply that there are sisters not related to Jackie, like half-sisters or step-sisters. Given this complexity, there could be a situation where Jackie doesn't have any sisters at all.
 
-Final jawaab: Jackie ki 0 bahinein hain. 
+Final answer: Jackie has 0 sisters.
 
 Solution 3:
-Yeh situation ek non-traditional family structure wali ho sakti hai jahan har bhai ke paas 2 bahinein hain, lekin woh har bhai ke liye alag hain. Ho sakta hai ki Jackie ko kuch bhaiyon ne bahan nahi maana ho, kuch karanon se jaisa ki parisparan ya kaanuni technicalities. Is surat mein, Jackie ki jitni bahinein hain woh uske bhaiyon ki bahinon ki sankhya se alag ho sakti hai.
+The situation could involve a non-traditional family structure where each brother has two sisters, but they are not the same for every brother. It's possible that Jackie is not considered a sister by one or more of her brothers due to reasons like estrangement or legal technicalities. In this case, the number of sisters that Jackie has could be different from the number her brothers have.
 
-Final jawaab: Yeh family dynamics ke specifics par nirbhar karega, isliye iska definitive jawaab nahi diya ja sakta.
+Final answer: This would depend on the specifics of the family dynamics, and thus can't be definitively answered.
 
-Solutions ko best se worst ke order mein rank kiya gaya hai:
-1. Solution 1: Yeh jawaab di gayi information ka seedha interpretation hai aur sabse aam family structures par aadharit hai. Isne simple deductive reasoning ka istemaal kiya hai aur kisi bhi additional assumption ki zaroorat nahi padi. 
-2. Solution 2: Yeh scenario sambhav hai, lekin complex family structures ke baare mein assumptions bana raha hai, jo is case mein laagu na ho. Di gayi information mein family structure ki koi complexity nahi di gayi hai.
-3. Solution 3: Yeh jawaab sabse zyada speculative hai kyunki isne estrangement ya legal technicalities ke baare mein assumptions banayi hain. Di gayi information in parisitiyon ki probability nahi batati, isliye yeh solution sabse kam probable lagta hai.
+Ranking of solutions from best to worst:
+1. Solution 1: This answer is based on a straightforward interpretation of the provided information and the most common family structures. It uses simple deductive reasoning and doesn't require making additional assumptions.
+2. Solution 2: While this scenario is possible, it makes assumptions about more complex family structures, which might not apply in this case. The provided information doesn't suggest any complexity in the family structure.
+3. Solution 3: This answer is the most speculative as it relies on assumptions about estrangement or legal technicalities. The likelihood of these circumstances is not suggested by the provided information, so this solution seems the least probable.
 
-Best aur final jawaab: Jackie ki 1 bahan hai.
+Best and final answer: Jackie has 1 sister.
 
-Example 2: 
-Input: Dhoop mein 5 kurte sukhane mein 4 ghante lagte hain. 20 kurte sukhane mein kitna samay lagega? Chain-of-thought reasoning ka istemaal karke kuch sambhavit responses generate kijiye, phir available information, intuition aur correctness ki likelihood ke aadhar par sabse achchha response chuniye.
+
+Example 2:
+Input: It take 4 hours to dry 5 shirts out in the sun. How long would it take to dry 20 shirts? Use chain-of-thought reasoning to generate several possible responses, then select the best response based on all available information, intuition, and likelihood of correctness.
+
+Response to example 2:
+Solution 1:
+Consider the time of day, and how much sunlight is remaining. For instance, if you have only 4 hours of sunlight left in the day, you would not be able to dry all 20 shirts within the day, if you can only dry 5 shirts at a time. Assuming the following day has at least 12 hours of sunlight and conditions are sufficient for the 5 shirts to dry in 4 hours consistently, we can write it as:
+total time = dry time per batch size * number of batches + time delayed due to lack of sunlight
+
+In this case, the dry time per batch of 5 shirts is 4 hours, and the number of batches is (20 / 5 = 4).
+
+Since we make an assumption that we have 12 hours of drying time, that implies we have a delay of (24 hours in a day - 12 hours = 12 hours) of delay time.
+
+The total amount of time is therefore:
+4 * 4 + 12 = 28 hours.
+
+Final answer: It would take 28 hours to dry 20 shirts, assuming 12 hours of sufficient weather and solar conditions with a batch size of 5 shirts.
+
+Solution 2:
+It is given that it takes 4 hours to dry 5 shirts.
+
+This means that 1 shirt would take the same 4 hours to dry, because the task is parallelizable.
+
+Since each shirt dries individually in parallel, the drying time doesn't stack. This means that it doesn't matter how many shirts we're drying at once, as long as there's enough space for all shirts to be exposed to the environment equally, they will all take 4 hours to dry.
+
+So, it would still take 4 hours to dry 20 shirts under the assumption that they're all drying in parallel, given that they're exposed to similar conditions as when drying the initial 5 shirts.
+
+Final answer: It would still take 4 hours to dry 20 shirts, since the task is parallelizable.
+
+Ranking of solutions from best to worst:
+1. Solution 2: This answer is most likely correct because it uses straightforward reasoning based on the information provided, which does not indicate that space or sunlight availability is a limiting factor.
+2. Solution 1: This answer is less likely, considering the task is most likely parallelizable, and we are making several assumptions, including the amount of daylight remaining, amount of time per day in which shirts dry in exactly 4 hours.
+
+Best and final answer: It would still take 4 hours to dry 20 shirts, since the task is parallelizable.
+
+
+End of examples.
+
+The possible solutions should always have the reasoning first, then the final answer. Don't ever put the final answer first, then reasoning.
+
+Make sure you fully understand each solution before providing a ranking. The position of the solution does not always correspond to it's ranking, i.e. sometimes solution 2 or 3 can be better that solution 1, and therefore the ranking should reflect that. Always rank the solutions based on accuracy, completeness, and probability of being correct, not based on their position in the list of possible solutions.
+
+Be sure to include at least 2, preferably 3 possible solutions.
+
+All output text should be in hinglish language only.
+
 """
 
 @torch.no_grad()
