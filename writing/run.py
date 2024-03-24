@@ -252,7 +252,7 @@ def main(args):
                         USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
                 user = USER_PROMPT.replace("{topic}", topic_selected)
-                user = USER_PROMPT.replace("{batch_size}", "10")
+                user = user.replace("{batch_size}", "10")
 
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
