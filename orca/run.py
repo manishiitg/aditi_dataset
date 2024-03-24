@@ -156,6 +156,8 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 All output text should be in hindi, but the exact terms "QUESTION" and "ANSWER" are special tokens that must not be translated.
 
+Questions should be related to topic {topic_selected}
+
 The output format should be:
 QUESTION: [first question in hindi]
 ANSWER: [first question's answer in hindi]
@@ -280,6 +282,8 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 All output text should be in hinglish language, but the exact terms "QUESTION" and "ANSWER" are special tokens that must not be translated.
 
+Questions should be related to topic {topic_selected}
+
 The output format should be:
 QUESTION: [first question in hinglish]
 ANSWER: [first question's answer in hinglish]
@@ -339,87 +343,130 @@ def main(args):
             final_data.append(r)
 
     languages = ["hinglish", "hindi"]
-    topic_selected = "cot"
+    topic_selected = "orca"
+    topics_generated = {}
+    PROGRAMMING_TOPICS = []
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
 
-        for loop in range(20):
+        prompts = []
+        if args.generate_topics or True:
+            message = []
+            prompt = """
+                Give me a numbered list of 50 completely random topics related to common sense reasoning.
+                Generate a diverse list of topics in english.
+            """
 
-            prompts = []
-
-            existing_instructions = []
-            for r in final_data:
-                if r["language"] == lang:
-                    if r["topic"] == topic_selected:
-                        existing_instructions.append(r["question"])
-
-            random.shuffle(existing_instructions)
-            if len(existing_instructions) > 50:
-                topic_instruct_map[topic_selected] = ",".join(existing_instructions[:50])
-            else:
-                topic_instruct_map[topic_selected] = ",".join(existing_instructions)
-
-            msg_list = []
-            USER_PROMPT = PROMPT_1
-
-            if args.lang == "hinglish":
-                USER_PROMPT = PROMPT_2
-
-            if topic_selected in topic_instruct_map:
-                existing_instruction = topic_instruct_map[topic_selected]
-                if len(existing_instruction) > 0:
-                    USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
-
-            user = USER_PROMPT.replace("{batch_size}", "3")
-            SYSTEM_PROMPT = "You are an helpful AI assistant"
-            msg_system = {"role": "system", "content": SYSTEM_PROMPT}
-            msg_list.append(msg_system)
-            msg_prompt = {"role": "user",
-                          "content": user}
-            msg_list.append(msg_prompt)
-
+            #
+            if len(topics_generated) > 0:
+                prompt += "\n Topics should not be related to " + \
+                    ",".join(topics_generated)
+            message.append({"role": "user", "content": prompt})
             text = tokenizer.apply_chat_template(
-                msg_list,
+                message,
                 tokenize=False,
                 add_generation_prompt=True
             )
-            prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+            outputs = eval_hf_model(args, model, tokenizer, [text], .5)
+            output = outputs[0]
 
-            for idx, text in enumerate(outputs):
-                print("prompt", prompts[idx], "text", text)
+            topics = output.split("\n")
+            PROGRAMMING_TOPICS = []
+            for t in topics:
+                try:
+                    idx = t.index(".")
+                    if idx != -1:
+                        t = t[idx + 1:]
+                        t = t.strip()
+                except ValueError:
+                    pass
 
-                start_key = "QUESTION"
-                end_key = "ANSWER"
+                if t.startswith('"'):
+                    t = t[1:]
+                if t.endswith('"'):
+                    t = t[:-1]
 
-                pattern = re.compile(f"{start_key}:(.*?){end_key}:(.*?)(?={start_key}|$)", re.DOTALL)
+                PROGRAMMING_TOPICS.append(t)
+                topics_generated.append(t)
+                print("topic", t)
+        
+        for topic_selected in PROGRAMMING_TOPICS:
+            for loop in range(20):
+                existing_instructions = []
+                for r in final_data:
+                    if r["language"] == lang:
+                        if r["topic"] == topic_selected:
+                            existing_instructions.append(r["question"])
 
-                matches = pattern.findall(text)
+                random.shuffle(existing_instructions)
+                if len(existing_instructions) > 50:
+                    topic_instruct_map[topic_selected] = ",".join(existing_instructions[:50])
+                else:
+                    topic_instruct_map[topic_selected] = ",".join(existing_instructions)
 
-                for question, answer in matches:
-                    print("======")
-                    print(f"QUESTION: {question.strip()}")
-                    print(f"ANSWER: {answer.strip()}")
-                    print()
+                msg_list = []
+                USER_PROMPT = PROMPT_1
 
-                    final_data.append({
-                        "topic": "",
-                        "question": question,
-                        "answer": answer,
-                        "system_prompt": "",
-                        "language": args.lang,
-                        "type": "orca",
-                        "model": args.model_name_or_path,
-                        "messages": [],
-                        "evol_question": "",
-                        "evol_answer": "",
-                    })
+                if args.lang == "hinglish":
+                    USER_PROMPT = PROMPT_2
+
+                if topic_selected in topic_instruct_map:
+                    existing_instruction = topic_instruct_map[topic_selected]
+                    if len(existing_instruction) > 0:
+                        USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
+
+                user = USER_PROMPT.replace("{batch_size}", "3")
+                user = USER_PROMPT.replace("{topic_selected}", topic_selected)
+                SYSTEM_PROMPT = "You are an helpful AI assistant"
+                msg_system = {"role": "system", "content": SYSTEM_PROMPT}
+                msg_list.append(msg_system)
+                msg_prompt = {"role": "user",
+                            "content": user}
+                msg_list.append(msg_prompt)
+
+                text = tokenizer.apply_chat_template(
+                    msg_list,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                prompts.append(text)
+
+                outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+
+                for idx, text in enumerate(outputs):
+                    print("prompt", prompts[idx], "text", text)
+
+                    start_key = "QUESTION"
+                    end_key = "ANSWER"
+
+                    pattern = re.compile(f"{start_key}:(.*?){end_key}:(.*?)(?={start_key}|$)", re.DOTALL)
+
+                    matches = pattern.findall(text)
+
+                    for question, answer in matches:
+                        print("======")
+                        print(f"QUESTION: {question.strip()}")
+                        print(f"ANSWER: {answer.strip()}")
+                        print()
+
+                        final_data.append({
+                            "topic": "",
+                            "question": question,
+                            "answer": answer,
+                            "system_prompt": "",
+                            "language": args.lang,
+                            "type": "orca",
+                            "model": args.model_name_or_path,
+                            "messages": [],
+                            "evol_question": "",
+                            "evol_answer": "",
+                        })
 
 
-            dataset = process_and_update_dataset(final_data)
-            dataset.push_to_hub(base_repo, private=False)
+                dataset = process_and_update_dataset(final_data)
+                dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):
