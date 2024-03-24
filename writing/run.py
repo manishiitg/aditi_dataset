@@ -252,7 +252,7 @@ def main(args):
                         USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
                 user = USER_PROMPT.replace("{topic}", topic_selected)
-                user = USER_PROMPT.replace("{batch_size}", "20")
+                user = USER_PROMPT.replace("{batch_size}", "10")
 
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
@@ -269,7 +269,7 @@ def main(args):
                 prompts.append(text)
                 topics_selected.append(topic_selected)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             prompts2 = []
             topics_selected2 = []
