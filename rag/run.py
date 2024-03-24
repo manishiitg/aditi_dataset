@@ -269,7 +269,7 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-            prompts = []
+            prompts2 = []
             contexts = []
             global_questions = []
             for idx, text in enumerate(outputs):
@@ -295,11 +295,11 @@ def main(args):
                         tokenize=False,
                         add_generation_prompt=True
                     )
-                    prompts.append(text)
+                    prompts2.append(text)
                     contexts.append(context)
                     global_questions.append(ques)
 
-                outputs = eval_hf_model(args, model, tokenizer, prompts, 0, 1024)
+                outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, 1024)
                 for idx, text in outputs:
                     print("context", contexts[idx])
                     print("question", question[idx])
