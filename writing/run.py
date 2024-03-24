@@ -164,7 +164,7 @@ def main(args):
         args.lang = lang
         topic_instruct_map = {}
 
-        for loop in range(50):
+        for loop in range(10):
 
             prompts = []
             topics_selected = []
@@ -299,7 +299,7 @@ def main(args):
                     if args.lang == "hindi":
                         system_message_selected += base_prompt + "\n\nAnswer in hindi only."
                     if args.lang == "hinglish":
-                        system_message_selected += base_prompt + "\n\nAnswer in hinglish only. Translate to hinglish if required."
+                        system_message_selected += base_prompt + "\n\nAnswer in hinglish only."
 
                     msg_list = []
                     msg_system = {"role": "system",
