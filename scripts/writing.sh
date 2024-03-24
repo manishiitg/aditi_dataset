@@ -1,8 +1,8 @@
 #!/bin/bash
 
 model_names=(
-    # "Qwen/Qwen1.5-72B-Chat-AWQ"
-    "MaziyarPanahi/Smaug-72B-v0.1-AWQ"
+    "Qwen/Qwen1.5-72B-Chat-AWQ"
+    # "MaziyarPanahi/Smaug-72B-v0.1-AWQ"
 )
 FOLDER_BASE=/sky-notebook/eval-results
 
@@ -12,7 +12,7 @@ for model_name_or_path in "${model_names[@]}"; do
     model_name=${model_name_or_path##*/}
     
     echo "evaluating $model_name base on $TASK_NAME $NUM_SHOTS ..."
-
+    template_format="eval.templates.create_prompt_with_chatml_format"
     if echo "$model_name" | grep -qi "awq"; then
         awq_param="--awq"
     else
