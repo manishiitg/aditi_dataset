@@ -277,14 +277,17 @@ def main(args):
                 context = text.split("ENDINSTRUCTION")[0] + "ENDINSTRUCTION"
                 question = text.split("ENDINSTRUCTION")[1]
 
-                questions = text.split("\n")
+                questions = question.split("\n")
+
+                print("context", context)
+                print("questions", questions)
 
                 pass
 
                     
 
-            dataset = process_and_update_dataset(final_data)
-            dataset.push_to_hub(base_repo, private=False)
+            # dataset = process_and_update_dataset(final_data)
+            # dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):
