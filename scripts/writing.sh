@@ -20,6 +20,7 @@ for model_name_or_path in "${model_names[@]}"; do
     
     cd writing
     python3 run.py --model_name_or_path $model_name_or_path $awq_param
+    python3 run.py --model_name_or_path $model_name_or_path --generate_topics $awq_param
     cd ..
     
     
