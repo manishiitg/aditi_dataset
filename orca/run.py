@@ -391,63 +391,37 @@ def main(args):
             print(outputs)
             os.exit(1)
 
-            prompts2 = []
-            topics_selected2 = []
-            sys_prompt_selected = []
-            question2 = []
             for idx, text in enumerate(outputs):
                 print("======")
                 print("prompt", prompts[idx], "text", text)
 
-                instructions = []
-                for instruction in re.findall(
-                    r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
-                ):
-                    instructions.append(instruction)
+                start_key = "QUESTION"
+                end_key = "ANSWER"
 
-                    system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
-                    if args.lang == "hindi":
-                        system_message_selected += "\n\nAnswer in hindi only."
-                    if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
+                pattern = re.compile(f"{start_key}:(.*?){end_key}:(.*?)(?={start_key}|$)", re.DOTALL)
 
-                    msg_list = []
-                    msg_system = {"role": "system",
-                                  "content": system_message_selected}
-                    msg_list.append(msg_system)
-                    msg_prompt = {"role": "user", "content": instruction}
-                    msg_list.append(msg_prompt)
+                matches = pattern.findall(text)
 
-                    text = tokenizer.apply_chat_template(
-                        msg_list,
-                        tokenize=False,
-                        add_generation_prompt=True
-                    )
+                for question, answer in matches:
+                    print(f"QUESTION: {question.strip()}")
+                    print(f"ANSWER: {answer.strip()}")
+                    print()
 
-                    prompts2.append(text)
-                    topics_selected2.append(topic_selected)
-                    sys_prompt_selected.append(system_message_selected)
-                    question2.append(instruction)
+                    final_data.append({
+                        "topic": "",
+                        "question": question,
+                        "answer": answer,
+                        "system_prompt": "",
+                        "language": args.lang,
+                        "type": "orca",
+                        "model": args.model_name_or_path,
+                        "messages": [],
+                        "evol_question": "",
+                        "evol_answer": "",
+                    })
 
-            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, 0)
-            for idx, text in enumerate(outputs2):
-                print("======")
 
-                print("topic selected", topics_selected2[idx])
-                print("text", question2[idx])
-                print("text", text)
-                final_data.append({
-                    "topic": topics_selected2[idx],
-                    "question": question2[idx],
-                    "answer": text,
-                    "system_prompt": sys_prompt_selected[idx],
-                    "language": args.lang,
-                    "type": "orca",
-                    "model": args.model_name_or_path,
-                    "messages": [],
-                    "evol_question": "",
-                    "evol_answer": "",
-                })
+            
 
             os.exit(1)
 
