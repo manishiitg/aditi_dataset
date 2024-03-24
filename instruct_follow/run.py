@@ -6,6 +6,7 @@ import vllm
 from datasets import Dataset
 import torch
 import random
+import re
 import time
 from huggingface_hub import repo_exists
 
@@ -31,98 +32,7 @@ def contains_chinese(text):
     return False
 
 
-SYSTEM_MESSAGES_ORCA = [
-    # "",
-    "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
-    "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
-    "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
-    "You are an AI assistant that helps people find information. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-    "You are an AI assistant that helps people find information. User will you give you a question. Your task is to answer as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "User will you give you a task with some instruction. Your job is follow the instructions as faithfully as you can. While answering think step-by-step and justify your answer.",
-    "You are a teacher. Given a task, you explain in simple steps what the task is asking, any guidelines it provides and how to use those guidelines to find the answer.",
-    "You are an AI assistant that helps people find information.",
-]
-
-TOPICS = [
-    "Cricket - players, matches, history, etc.",
-    "Science - physics, chemistry, biology, astronomy, etc.",
-    "Mathematics - algebra, geometry, calculus, statistics, etc.",
-    "Technology - computers, engineering, AI, robotics, etc.",
-    "Business - economics, finance, marketing, management, entrepreneurship",
-    "History - ancient, medieval, modern, world history, military history",
-    "Geography - countries, capitals, landscapes, maps, oceans, rivers",
-    "Literature - poetry, novels, plays, short stories, genres, authors",
-    "Philosophy - logic, ethics, political philosophy, existentialism",
-    "Psychology - cognition, development, disorders, therapy, social psychology",
-    "Sociology - culture, demographics, institutions, social change, inequality",
-    "Politics - political systems, ideologies, voting, campaigns, public policy",
-    "Law - constitutional law, criminal law, contracts, litigation, civil rights",
-    "Medicine - anatomy, diseases, treatments, pharmaceuticals, medical specialties",
-    "Religion - Christianity, Islam, Judaism, Buddhism, Hinduism, atheism",
-    "Mythology - Greek, Roman, Norse, Egyptian, Native American myths",
-    "Art - art history, painting, sculpture, architecture, music, theater",
-    "Sports - individual and team sports, athletes, championships, training",
-    "Cooking - recipes, ingredients, techniques, regional and ethnic cuisine",
-    "Movies & TV - genre analysis, directors, actors, awards, popular shows",
-    "News & Current Events - reporting on latest happenings around the world",
-    "Culture - customs, values, gender roles, holidays, language, clothing",
-    "Relationships - family, friends, romantic relationships, dating, marriage",
-    "Education - teaching methods, curriculum, policy, higher education, vocational",
-    "Transportation - cars, planes, trains, ships, public transit, infrastructure",
-    "Communication - language acquisition, linguistics, rhetoric, social media",
-    "Agriculture - farming techniques, crops, livestock, fisheries, forestry",
-    "Housing & Architecture - interior design, urban planning, real estate, remodeling",
-    "Nature & Environment - ecology, sustainability, conservation, renewable energy",
-    "Travel & Tourism - destinations, lodging, adventure, culture, ecotourism",
-    "Music - theory, genres, instruments, bands, composers, music history",
-    "Fashion - designers, trends, modeling, retail, cosmetics, accessories",
-    "Government - political systems, public administration, foreign policy, voting",
-    "Warfare - military history, weapons, strategy, special operations forces",
-    "Space - astronomy, spaceflight, exploration, space technology, universe",
-    "Weather & Climate - meteorology, forecasting, natural disasters, seasons",
-    "Food & Cooking - nutrition, recipes, diets, food science, restaurants",
-    "Pets & Animals - breeds, care, veterinary medicine, wildlife, animal behavior",
-    "Gardening - plants, landscaping, flowers, vegetables, lawn care, tools",
-    "Home Improvement - repair, decor, renovation, tools, plumbing, electricity",
-    "Personal Finance - budgeting, investing, taxes, insurance, retirement",
-    "Exercise & Fitness - techniques, equipment, sports medicine, motivation",
-    "Health & Medicine - biology, anatomy, diseases, treatments, wellness",
-    "Mental Health - psychology, disorders, counseling, self-help, mindfulness",
-    "Race & Ethnicity - cultures, discrimination, identity, immigration, diversity",
-    "Gender & Sexuality - LGBTQ issues, feminism, roles, relationships, equality",
-    "Employment - careers, human resources, resumes, workplace culture, unions",
-    "Crime & Justice - laws, law enforcement, courts, prisons, investigations",
-    "Social Issues - poverty, homelessness, human rights, community service",
-    "Technology - computers, engineering, artificial intelligence, innovations",
-    "Entertainment - movies, television, games, comedy, performing arts",
-]
-
-SYSTEM_MESSAGES = SYSTEM_MESSAGES_ORCA
-
-PROMPT_2 = """
-You are asked to come up with a set of 25 diverse task instructions. 
-These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
-
-The instruction should only be related to SUBJECT_AREA
-
-Here are the requirements:
-1. Try not to repeat the verb for each instruction to maximize diversity.
-2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
-3. The type of instructions should be related to only SUBJECT_AREA
-   a. The type of instruction should not include poem writing
-4. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
-5. The instructions should be in English.
-6. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
-
-List of 25 tasks:
-
-1. <instruction>
-2. <instruction>
-"""
-
-PROMPT_4 = """
+PROMPT_1 = """
 You are asked to come up with a set of 25 diverse task instructions. 
 These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
 
@@ -144,9 +54,12 @@ List of 25 tasks:
 2. <instruction_in_hindi>
 """
 
-PROMPT_5 = """
-You are asked to come up with a set of 25 diverse task instructions. 
-These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
+PROMPT_2 = """
+You are asked to come up with a set of 25 diverse task instructions and corrosponding input. 
+
+You should generate an appropriate input to the instruction. The input field should contain a specific example provided for the instruction. It should involve realistic data and should not contain simple placeholders. The input should provide substantial content to make the instruction challenging but should ideally not exceed 100 words.
+
+These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions based on the input.
 
 The instruction should only be related to SUBJECT_AREA
 
@@ -162,8 +75,12 @@ Here are the requirements:
 
 List of 25 tasks:
 
-1. <instruction_in_hinglish>
-2. <instruction_in_hinglish>
+The output format should be:
+INSTRUCTION: [first instruction in hinglish]
+INPUT: [first input's answer in hinglish]
+
+INSTRUCTION: [second instruction in hinglish]
+INPUT: [second instruction's answer in hinglish]
 
 """
 
@@ -189,7 +106,7 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature):
 
 def main(args):
 
-    base_repo = "manishiitg/indic-synthetic-instruct"
+    base_repo = "manishiitg/indic-synthetic-instruct-follow"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
@@ -221,7 +138,7 @@ def main(args):
 
     topics_generated = []
 
-    languages = ["hindi", "hinglish"]  # ["hinglish", "hindi", "english"]
+    languages = ["hinglish","hindi"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -234,11 +151,9 @@ def main(args):
             if args.generate_topics:
                 message = []
                 prompt = """
-                    Give me a numbered list of 50 completely random topics , related to india, indian culture, indian socity, latest trends in india and what people talk about in india
+                    Give me a numbered list of 50 completely random topics
                     Generate a diverse list of topics in english.
                 """
-
-                #
                 if len(topics_generated) > 0:
                     prompt += "\n Topics should not be related to " + \
                         ",".join(topics_generated)
@@ -274,9 +189,6 @@ def main(args):
 
             for topic_selected in TOPICS:
 
-                # topic_number = random.randint(0, len(TOPICS)-1)
-                # topic_selected = TOPICS[topic_number]
-
                 existing_instructions = []
                 for r in final_data:
                     if r["language"] == lang:
@@ -290,13 +202,10 @@ def main(args):
                     topic_instruct_map[topic_selected] = ",".join(existing_instructions)
 
                 msg_list = []
-                SYSTEM_PROMPT = PROMPT_2
-
-                if args.lang == "hindi":
-                    SYSTEM_PROMPT = PROMPT_4
+                SYSTEM_PROMPT = PROMPT_1
 
                 if args.lang == "hinglish":
-                    SYSTEM_PROMPT = PROMPT_5
+                    SYSTEM_PROMPT = PROMPT_2
 
                 user = f"SUBJECT_AREA: {topic_selected}"
 
@@ -304,16 +213,11 @@ def main(args):
                     existing_instruction = topic_instruct_map[topic_selected]
                     user += "\n\n" + "Generated Instructions should be different from " + existing_instruction
 
-                if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
-                    msg_prompt = {"role": "user",
-                                  "content": SYSTEM_PROMPT + "\n\n" + user}
-                    msg_list.append(msg_prompt)
-                else:
-                    msg_system = {"role": "system", "content": SYSTEM_PROMPT}
-                    msg_list.append(msg_system)
-                    msg_prompt = {"role": "user",
-                                  "content": user}
-                    msg_list.append(msg_prompt)
+                msg_system = {"role": "system", "content": SYSTEM_PROMPT}
+                msg_list.append(msg_system)
+                msg_prompt = {"role": "user",
+                                "content": user}
+                msg_list.append(msg_prompt)
 
                 text = tokenizer.apply_chat_template(
                     msg_list,
@@ -323,7 +227,9 @@ def main(args):
                 prompts.append(text)
                 topics_selected.append(topic_selected)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
+            print(outputs)
+            os.exit(1)
 
             prompts2 = []
             topics_selected2 = []
@@ -339,55 +245,25 @@ def main(args):
                 # instructions = re.findall(
                 #     instruction_pattern, text, re.DOTALL)
 
-                instructions = []
-                matches = text.split("\n")
-                for match in matches:
-                    if "." in match:
-                        ix = match.index(".")
-                        match = match[ix+1:]
-                        match = match.strip()
-                    else:
-                        print("skipping instruction", match)
-                        continue
-                    match = match.strip()
-                    if match.startswith('"'):
-                        match = match[1:]
-                    if match.endswith('"'):
-                        match = match[:-1]
-                    instructions.append(match.strip())
+                start_key = "QUESTION"
+                end_key = "ANSWER"
 
-                topic_selected = topics_selected[idx]
-                topic_instruct_map[topic_selected] = text
+                pattern = re.compile(f"{start_key}:(.*?){end_key}:(.*?)(?={start_key}|$)", re.DOTALL)
 
-                print("topic_selected", topic_selected)
-                dups = {}
-                for inst in instructions:
-                    print("inst", inst)
-                    if args.lang == "hinglish":
-                        if contains_hindi(inst) or contains_chinese(inst):
-                            continue
-                    if inst in dups:
-                        continue
-                    dups[inst] = True
-                    system_message_number = random.randint(
-                        0, len(SYSTEM_MESSAGES)-1)
-                    system_message_selected = SYSTEM_MESSAGES[system_message_number]
-                    if args.lang == "hindi":
-                        system_message_selected += "\n\nAnswer in hindi only"
-                    if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
-                    if args.model_name_or_path == "mistralai/Mixtral-8x7B-Instruct-v0.1":
-                        msg_list = []
-                        msg_prompt = {
-                            "role": "user", "content": system_message_selected + "\n\n" + inst}
-                        msg_list.append(msg_prompt)
-                    else:
-                        msg_list = []
-                        msg_system = {"role": "system",
-                                      "content": system_message_selected}
-                        msg_list.append(msg_system)
-                        msg_prompt = {"role": "user", "content": inst}
-                        msg_list.append(msg_prompt)
+                matches = pattern.findall(text)
+
+                for question, answer in matches:
+                    print("======")
+                    print(f"QUESTION: {question.strip()}")
+                    print(f"ANSWER: {answer.strip()}")
+                    print()
+                    
+                    msg_list = []
+                    msg_system = {"role": "system",
+                                    "content": system_message_selected}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": inst}
+                    msg_list.append(msg_prompt)
 
                     text = tokenizer.apply_chat_template(
                         msg_list,
