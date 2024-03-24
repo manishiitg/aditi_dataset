@@ -147,8 +147,7 @@ def main(args):
 
             prompts = []
             topics_selected = []
-            random.shuffle(TOPICS)
-            if args.generate_topics:
+            if args.generate_topics or True:
                 message = []
                 prompt = """
                     Give me a numbered list of 50 completely random topics
