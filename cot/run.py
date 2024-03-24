@@ -354,15 +354,11 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
-            print(outputs)
-
             prompts2 = []
             topics_selected2 = []
             sys_prompt_selected = []
             question2 = []
             for idx, text in enumerate(outputs):
-                print("======")
-                print("prompt", prompts[idx], "text", text)
 
                 instructions = []
                 for instruction in re.findall(
@@ -374,6 +370,7 @@ def main(args):
                     if instruction.endswith("]"):
                         instructions = instructions[:-1]
 
+                    print("instructions", instructions)
                     system_message_selected = PROMPT_1_RESPONSE
 
                     if args.lang == "hinglish":
@@ -401,7 +398,6 @@ def main(args):
             for idx, text in enumerate(outputs2):
                 print("======")
 
-                print("topic selected", topics_selected2[idx])
                 print("text", question2[idx])
                 print("text", text)
                 final_data.append({
