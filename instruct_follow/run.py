@@ -117,9 +117,6 @@ The instruction should only be related to SUBJECT_AREA
 
 Examples of instructions/input to generate:
 
-End of examples
-INPUT: The witness claims to have seen the suspect fleeing the scene with a stolen item.
-
 INSTRUCTION: Pretend you are Jane Goodall and explain to a person who just deforested a huge area the importance of preserving our natural habitats.
 INPUT: Deforestation is necessary for development. Why should I care about preserving forests?
 
@@ -131,6 +128,8 @@ INPUT: Superhero: Find Nightshade's whereabouts for me. She disappeared after ou
 
 INSTRUCTION: Imagine you are a superhero with the power to control time. How would you protect your city from an impending disaster?
 INPUT: A massive earthquake is about to strike your city, causing massive destruction and threatening countless lives. As a superhero with the ability to manipulate time, what are your strategies to save your city and its inhabitants?
+
+End of examples
 
 List of 25 tasks:
 
