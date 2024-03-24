@@ -196,10 +196,9 @@ def main(args):
 
     global TOPICS
 
-    topics_generated = []
-
     languages = ["hinglish","english", "hindi"]
     for lang in languages:
+        topics_generated = []
         args.lang = lang
         topic_instruct_map = {}
 
