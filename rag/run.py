@@ -274,8 +274,8 @@ def main(args):
             global_questions = []
             for idx, text in enumerate(outputs):
                 print("prompt", prompts[idx], "text", text)
-                context = text.split("ENDINSTRUCTION")[0] + "ENDINSTRUCTION"
-                question = text.split("ENDINSTRUCTION")[1]
+                context = text.split("BEGININSTRUCTION")[0] + "BEGININSTRUCTION"
+                question = text.split("BEGININSTRUCTION")[1]
 
                 questions = question.split("\n")
 
