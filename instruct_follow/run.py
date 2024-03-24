@@ -44,29 +44,28 @@ The instruction should only be related to SUBJECT_AREA
 Examples of instructions/input to generate:
 
 End of examples
-INSTRUCTION: दिखावा करो कि आप 1920 के दशक के एक जासूस हैं जो एक अपराध के गवाह से पूछ रहे हैं। संदिग्ध के बारे में जानकारी जानने के लिए 5 सवाल पूछिए।
-INPUT: गवाह का कहना है कि वो संदिग्ध को चुराया हुआ सामान लेकर भागते हुए देखा।
+INPUT: The witness claims to have seen the suspect fleeing the scene with a stolen item.
 
-INSTRUCTION: कल्पना कीजिए कि आप जेन गुडॉल हैं और एक व्यक्ति से समझते हैं जो अभी एक बड़ा क्षेत्र वनों को ख़त्म कर दिया है कि प्रकृति के निवास स्थलों को सुरक्षित रखने की महत्ता है।
-INPUT: वनों को सुरक्षित रखने की क्यों चिंता करनी चाहिए?
+INSTRUCTION: Pretend you are Jane Goodall and explain to a person who just deforested a huge area the importance of preserving our natural habitats.
+INPUT: Deforestation is necessary for development. Why should I care about preserving forests?
 
-INSTRUCTION: आप टेस्ला के एआई असिस्टेंट हैं जो 2040 में बन गया है, जो ग्राहकों की मदद करने में विशेष है। कृपया मुझे मदद करें जिनके घर में टेस्ला कार को चार्ज करने की समस्या आ रही है।
-INPUT: मैंने हाल ही में टेस्ला मॉडल एक्स3 खरीदा है और मुझे अपने गैराज में चार्ज करने के लिए कुछ समस्या आ रही है। चार्ज का केबल कार के चार्जिंग पोर्ट से मजबूत कनेक्शन नहीं बन रहा है, और प्रक्रिया हमेशा विफल हो जाती है। क्या आप मेरी मदद कर सकते हैं?
+INSTRUCTION: You are Tesla's AI assistant developed in the year 2040, specialized in helping customers. Please provide an answer to a user having trouble charging their Tesla car at home
+INPUT: I recently purchased a Tesla Model X3 and I'm having some issues charging it in my garage. The charging cable refuses to make a solid connection to the car's charging port, and the process always fails. Could you assist me?
 
-INSTRUCTION: कल्पना कीजिए कि आप एक सुपरहीरो के लिए एआई असिस्टेंट हैं। कैसे उन्हें मदद करोगे जिसमें एक दुश्मन जो छुप गया है, उसका पता लगाया जा सके?
-INPUT: सुपरहीरो: नाइटशेड के पता मुझे ढूंढ दो। उसने हमारी आखिरी मुलाकात के बाद शहर में गायब हो गई।
+INSTRUCTION: Pretend that you are an AI assistant to a superhero. How would you help them track down an archenemy who has gone into hiding?
+INPUT: Superhero: Find Nightshade's whereabouts for me. She disappeared after our last encounter in the city.
 
-INSTRUCTION: कल्पना कीजिए कि आप एक सुपरहीरो हैं जिसके समय को नियंत्रित करने की शक्ति है। आप अपने शहर को आने वाले आपदा से कैसे बचाएंगे?
-INPUT: एक बड़ा भूखाम्प आपके शहर को लगने वाला है, जिसमें बड़े नुक्सान की संभावना है और अनेक लोगों की जिंदगी को खतरा है। समय को हेरफेर करने की शक्ति वाले सुपरहीरो के रूप में, आपके पास आपके शहर और उसके रहने वालों को बचाने के लिए क्या रानियां होंगी?
+INSTRUCTION: Imagine you are a superhero with the power to control time. How would you protect your city from an impending disaster?
+INPUT: A massive earthquake is about to strike your city, causing massive destruction and threatening countless lives. As a superhero with the ability to manipulate time, what are your strategies to save your city and its inhabitants?
 
 List of 25 tasks:
 
 The output format should be:
-INSTRUCTION: [first instruction in hindi]
-INPUT: [first input's answer in hindi]
+INSTRUCTION: [first instruction in english]
+INPUT: [first input's answer in english]
 
-INSTRUCTION: [second instruction in hindi]
-INPUT: [second instruction's answer in hindi]
+INSTRUCTION: [second instruction in english]
+INPUT: [second instruction's answer in english]
 """
 
 PROMPT_2 = """
@@ -159,7 +158,7 @@ def main(args):
 
     topics_generated = []
 
-    languages = ["hinglish", "hindi"]
+    languages = ["english","hinglish"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -301,7 +300,7 @@ def main(args):
                     "answer": text,
                     "system_prompt": sys_prompt_selected[idx],
                     "language": args.lang,
-                    "type": "alpaca",
+                    "type": "rp-follow",
                     "model": args.model_name_or_path,
                     "messages": [],
                     "evol_question": "",
