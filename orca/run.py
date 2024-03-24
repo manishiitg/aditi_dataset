@@ -389,7 +389,6 @@ def main(args):
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             for idx, text in enumerate(outputs):
-                print("======")
                 # print("prompt", prompts[idx], "text", text)
 
                 start_key = "QUESTION"
@@ -400,6 +399,7 @@ def main(args):
                 matches = pattern.findall(text)
 
                 for question, answer in matches:
+                    print("======")
                     print(f"QUESTION: {question.strip()}")
                     print(f"ANSWER: {answer.strip()}")
                     print()
