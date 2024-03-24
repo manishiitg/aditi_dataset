@@ -158,7 +158,7 @@ def main(args):
 
     topics_generated = []
 
-    languages = ["english","hinglish"]
+    languages = ["hinglish","english"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -286,7 +286,6 @@ def main(args):
                     sys_prompt_selected.append(question.strip())
                     question2.append(answer.strip())
 
-            os.exit(1)
             outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
             for idx, text in enumerate(outputs2):
                 print("======")
