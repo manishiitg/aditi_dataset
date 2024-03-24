@@ -93,7 +93,7 @@ Be sure to include "TSK", untranslated, as a prefix as described in response for
 """
 
 
-PROMPT_2_RESPONSE = """
+PROMPT_1_RESPONSE = """
 Please provide a chain-of-thought style answer to the provide input.
 
 Below are a few examples of question/response pairs.
@@ -125,39 +125,41 @@ Ranking of solutions from best to worst:
 Best and final answer: Jackie has 1 sister.
 
 
-Example 2:
-Input: It take 4 hours to dry 5 shirts out in the sun. How long would it take to dry 20 shirts? Use chain-of-thought reasoning to generate several possible responses, then select the best response based on all available information, intuition, and likelihood of correctness.
+Yahan hai Example 2 ka Hinglish translation:
 
-Response to example 2:
-Solution 1:
-Consider the time of day, and how much sunlight is remaining. For instance, if you have only 4 hours of sunlight left in the day, you would not be able to dry all 20 shirts within the day, if you can only dry 5 shirts at a time. Assuming the following day has at least 12 hours of sunlight and conditions are sufficient for the 5 shirts to dry in 4 hours consistently, we can write it as:
-total time = dry time per batch size * number of batches + time delayed due to lack of sunlight
+Input: Dhoop mein 5 kurte sukhane mein 4 ghante lagte hain. 20 kurte sukhane mein kitna samay lagega? Chain-of-thought reasoning ka istemaal karke kuchh sambhavit responses generate kijiye, phir available information, intuition aur correctness ki likelihood ke aadhar par sabse achchha response chuniye.
 
-In this case, the dry time per batch of 5 shirts is 4 hours, and the number of batches is (20 / 5 = 4).
+Response to Example 2:
 
-Since we make an assumption that we have 12 hours of drying time, that implies we have a delay of (24 hours in a day - 12 hours = 12 hours) of delay time.
+Solution 1: 
+Din ke samay aur baaki kitni dhoop hai isko consider kijiye. Maslan, agar aapke paas din mein sirf 4 ghante ki dhoop baaki hai, toh aap ek hi din mein 20 kurte nahi sukha paaoge agar aap ek baar mein sirf 5 kurte hi sukha sakte hain. Maante hue ki agle din kam se kam 12 ghante dhoop rahegi aur haalat aise hain ki 5 kurte 4 ghanton mein consistently sukh jaayenge, hum ise iss tarah likh sakte hain:
+total time = dry time per batch size * number of batches + time delayed due to lack of sunlight  
 
-The total amount of time is therefore:
-4 * 4 + 12 = 28 hours.
+Is case mein, 5 kurton ke ek batch ko sukhane mein 4 ghante lagte hain, aur batches ki sankhya hai (20 / 5 = 4).
 
-Final answer: It would take 28 hours to dry 20 shirts, assuming 12 hours of sufficient weather and solar conditions with a batch size of 5 shirts.
+Choonki hum yeh maan rahe hain ki humare paas 12 ghante sukhane ka samay hai, iska matlab hai ki humein (24 ghante mein se 12 ghante ghata kar = 12 ghante) ka delay hua.
+
+Toh total time yeh hoga:
+4 * 4 + 12 = 28 ghante.  
+
+Final jawaab: 20 kurte sukhane mein 28 ghante lagenge, agar hum maan lein ki 12 ghante mausam aur dhoop ke haalat ache rahenge aur batch size 5 kurte hogi.
 
 Solution 2:
-It is given that it takes 4 hours to dry 5 shirts.
+Diya gaya hai ki 5 kurte sukhane mein 4 ghante lagte hain.
 
-This means that 1 shirt would take the same 4 hours to dry, because the task is parallelizable.
+Iska matlab hai ki 1 kurta bhi 4 ghante mein hi sukhega, kyunki yeh task parallelizable hai.
 
-Since each shirt dries individually in parallel, the drying time doesn't stack. This means that it doesn't matter how many shirts we're drying at once, as long as there's enough space for all shirts to be exposed to the environment equally, they will all take 4 hours to dry.
+Choonki har kurta individually parallel mein sukh raha hai, toh drying time nahi judi. Iska matlab hai ki chahe hum ek saath kitne bhi kurte sukha rahe hain, jab tak sabhi kurton ko equally environment expose karne ke liye kaafi jagah hai, woh sab 4 ghanton mein hi sukh jaayenge.  
 
-So, it would still take 4 hours to dry 20 shirts under the assumption that they're all drying in parallel, given that they're exposed to similar conditions as when drying the initial 5 shirts.
+Toh, agar hum yeh maan lein ki woh sab parallel mein sukh rahe hain, aur unhe waise hi haalat mein rakha gaya hai jaise ki pehle ke 5 kurton ko rakha gaya tha, toh 20 kurte sukhane mein bhi 4 hi ghante lagenge.
 
-Final answer: It would still take 4 hours to dry 20 shirts, since the task is parallelizable.
+Final jawaab: Choonki yeh task parallelizable hai, isliye 20 kurte sukhane mein bhi 4 hi ghante lagenge.
 
-Ranking of solutions from best to worst:
-1. Solution 2: This answer is most likely correct because it uses straightforward reasoning based on the information provided, which does not indicate that space or sunlight availability is a limiting factor.
-2. Solution 1: This answer is less likely, considering the task is most likely parallelizable, and we are making several assumptions, including the amount of daylight remaining, amount of time per day in which shirts dry in exactly 4 hours.
+Solutions ko best se worst ke order mein rank kiya gaya hai:
+1. Solution 2: Yeh jawaab sabse zyada sahi lagta hai kyunki isne di gayi information par straightforward reasoning ki hai, jismein yeh nahi bataya gaya ki space ya dhoop ki availability koi limiting factor hai.
+2. Solution 1: Yeh jawaab kam probable hai, kyunki task parallelizable hai, aur humne kai assumptions banayi hain jaise ki kitni dhoop baaki hai, aur kitne ghante aise hain jismein kurte exactly 4 ghanton mein sukh jaate hain.  
 
-Best and final answer: It would still take 4 hours to dry 20 shirts, since the task is parallelizable.
+Best aur final jawaab: Choonki yeh task parallelizable hai, isliye 20 kurte sukhane mein bhi 4 hi ghante lagenge.
 
 
 End of examples.
@@ -169,7 +171,87 @@ Make sure you fully understand each solution before providing a ranking. The pos
 Be sure to include at least 2, preferably 3 possible solutions.
 
 All output text should be in hinglish language only.
+"""
 
+PROMPT_2_RESPONSE = """
+Please provide a chain-of-thought style answer to the provide input.
+
+Below are a few examples of question/response pairs.
+
+Example1:
+Input: Jackie ke paas 3 bhai hain. Har bhai ke paas 2 bahinein hain. Jackie ki kitni bahinein hain? Is sawaal ke kuchh sambhavit jawaab dijiye, aur har jawaab ke liye step-by-step reasoning bhi dijiye. Jab aap sambhavit solutions de chuke, unhe accuracy aur completeness ke order mein rank kar dijiye, phir available information ke aadhar par sabse achchha jawaab chuniye.
+
+Example 1 ka response:
+
+Solution 1:
+Di hui information mein likha hai ki "Har bhai ke paas 2 bahinein hain." Yeh Jackie ko bhi count mein lata hai kyunki woh bhi apne bhaiyon ki bahan hai. Maante hue ki 3 bhai hain aur har ek ke paas wahi 2 bahinein hain, hum yeh nikaalne kar sakte hain ki bhai-bahinon mein 3 bhai aur 2 bahinein hain. Agar hum Jackie ko is bhai-bahin group se nikal dete hain (kyunki hum yeh pata karna chahte hain ki Jackie ki kitni bahinein hain), toh ek aur ladki is group mein bachi rahegi.
+
+Final jawaab: Jackie ki 1 bahan hai.
+
+Solution 2: 
+Is scenario mein, hum ek complex family structure ka andaza laga sakte hain, jaisa ki half-siblings ya step-siblings. "Har bhai ke paas 2 bahinein hain" ka matlab ho sakta hai ki woh bahinein Jackie se related nahi hain, jaisa ki half-bahinein ya step-bahinein ho sakti hain. Is complexity ko dekhte hue, aisa ho sakta hai ki Jackie ki bilkul bhi bahan na ho.
+
+Final jawaab: Jackie ki 0 bahinein hain.
+
+Solution 3:
+Yeh situation ek non-traditional family structure wali ho sakti hai jahan har bhai ke paas 2 bahinein hain, lekin woh har bhai ke liye alag hain. Ho sakta hai ki Jackie ko kuch bhaiyon ne bahan nahi maana ho, kuch karanon se jaisa ki parisparan ya kaanuni technicalities. Is surat mein, Jackie ki jitni bahinein hain woh uske bhaiyon ki bahinon ki sankhya se alag ho sakti hai. 
+
+Final jawaab: Yeh family dynamics ke specifics par nirbhar karega, isliye iska definitive jawaab nahi diya ja sakta.
+
+Solutions ko best se worst ke order mein rank kiya gaya hai:
+1. Solution 1: Yeh jawaab di gayi information ka seedha interpretation hai aur sabse aam family structures par aadharit hai. Isne simple deductive reasoning ka istemaal kiya hai aur kisi bhi additional assumption ki zaroorat nahi padi.
+2. Solution 2: Yeh scenario sambhav hai, lekin complex family structures ke baare mein assumptions bana raha hai, jo is case mein laagu na ho. Di gayi information mein family structure ki koi complexity nahi di gayi hai. 
+3. Solution 3: Yeh jawaab sabse zyada speculative hai kyunki isne estrangement ya legal technicalities ke baare mein assumptions banayi hain. Di gayi information in parisitiyon ki probability nahi batati, isliye yeh solution sabse kam probable lagta hai.
+
+Best aur final jawaab: Jackie ki 1 bahan hai.
+
+
+Example2:
+
+Input: Dhoop mein 5 kurte sukhane mein 4 ghante lagte hain. 20 kurte sukhane mein kitna samay lagega? Chain-of-thought reasoning ka istemaal karke kuchh sambhavit responses generate kijiye, phir available information, intuition aur correctness ki likelihood ke aadhar par sabse achchha response chuniye.
+
+Response to Example 2:
+
+Solution 1: 
+Din ke samay aur baaki kitni dhoop hai isko consider kijiye. Maslan, agar aapke paas din mein sirf 4 ghante ki dhoop baaki hai, toh aap ek hi din mein 20 kurte nahi sukha paaoge agar aap ek baar mein sirf 5 kurte hi sukha sakte hain. Maante hue ki agle din kam se kam 12 ghante dhoop rahegi aur haalat aise hain ki 5 kurte 4 ghanton mein consistently sukh jaayenge, hum ise iss tarah likh sakte hain:
+total time = dry time per batch size * number of batches + time delayed due to lack of sunlight  
+
+Is case mein, 5 kurton ke ek batch ko sukhane mein 4 ghante lagte hain, aur batches ki sankhya hai (20 / 5 = 4).
+
+Choonki hum yeh maan rahe hain ki humare paas 12 ghante sukhane ka samay hai, iska matlab hai ki humein (24 ghante mein se 12 ghante ghata kar = 12 ghante) ka delay hua.
+
+Toh total time yeh hoga:
+4 * 4 + 12 = 28 ghante.  
+
+Final jawaab: 20 kurte sukhane mein 28 ghante lagenge, agar hum maan lein ki 12 ghante mausam aur dhoop ke haalat ache rahenge aur batch size 5 kurte hogi.
+
+Solution 2:
+Diya gaya hai ki 5 kurte sukhane mein 4 ghante lagte hain.
+
+Iska matlab hai ki 1 kurta bhi 4 ghante mein hi sukhega, kyunki yeh task parallelizable hai.
+
+Choonki har kurta individually parallel mein sukh raha hai, toh drying time nahi judi. Iska matlab hai ki chahe hum ek saath kitne bhi kurte sukha rahe hain, jab tak sabhi kurton ko equally environment expose karne ke liye kaafi jagah hai, woh sab 4 ghanton mein hi sukh jaayenge.  
+
+Toh, agar hum yeh maan lein ki woh sab parallel mein sukh rahe hain, aur unhe waise hi haalat mein rakha gaya hai jaise ki pehle ke 5 kurton ko rakha gaya tha, toh 20 kurte sukhane mein bhi 4 hi ghante lagenge.
+
+Final jawaab: Choonki yeh task parallelizable hai, isliye 20 kurte sukhane mein bhi 4 hi ghante lagenge.
+
+Solutions ko best se worst ke order mein rank kiya gaya hai:
+1. Solution 2: Yeh jawaab sabse zyada sahi lagta hai kyunki isne di gayi information par straightforward reasoning ki hai, jismein yeh nahi bataya gaya ki space ya dhoop ki availability koi limiting factor hai.
+2. Solution 1: Yeh jawaab kam probable hai, kyunki task parallelizable hai, aur humne kai assumptions banayi hain jaise ki kitni dhoop baaki hai, aur kitne ghante aise hain jismein kurte exactly 4 ghanton mein sukh jaate hain.  
+
+Best aur final jawaab: Choonki yeh task parallelizable hai, isliye 20 kurte sukhane mein bhi 4 hi ghante lagenge.
+
+
+End of examples.
+
+The possible solutions should always have the reasoning first, then the final answer. Don't ever put the final answer first, then reasoning.
+
+Make sure you fully understand each solution before providing a ranking. The position of the solution does not always correspond to it's ranking, i.e. sometimes solution 2 or 3 can be better that solution 1, and therefore the ranking should reflect that. Always rank the solutions based on accuracy, completeness, and probability of being correct, not based on their position in the list of possible solutions.
+
+Be sure to include at least 2, preferably 3 possible solutions.
+
+All output text should be in hinglish language only.
 """
 
 @torch.no_grad()
