@@ -371,7 +371,7 @@ def main(args):
                     if instruction.endswith("]"):
                         instructions = instructions[:-1]
 
-                    print("instructions", instructions)
+                    print("instructions", instruction)
                     system_message_selected = PROMPT_1_RESPONSE
 
                     if args.lang == "hinglish":
