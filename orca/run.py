@@ -371,7 +371,7 @@ def main(args):
                 if len(existing_instruction) > 0:
                     USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
-            user = USER_PROMPT.replace("{batch_size}", "5")
+            user = USER_PROMPT.replace("{batch_size}", "3")
             SYSTEM_PROMPT = "You are an helpful AI assistant"
             msg_system = {"role": "system", "content": SYSTEM_PROMPT}
             msg_list.append(msg_system)
@@ -386,7 +386,7 @@ def main(args):
             )
             prompts.append(text)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, .5)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             for idx, text in enumerate(outputs):
                 print("prompt", prompts[idx], "text", text)
