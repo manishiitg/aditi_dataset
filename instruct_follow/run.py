@@ -138,7 +138,7 @@ def main(args):
 
     topics_generated = []
 
-    languages = ["hinglish","hindi"]
+    languages = ["hinglish", "hindi"]
     for lang in languages:
         args.lang = lang
         topic_instruct_map = {}
@@ -215,7 +215,7 @@ def main(args):
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user",
-                                "content": user}
+                              "content": user}
                 msg_list.append(msg_prompt)
 
                 text = tokenizer.apply_chat_template(
@@ -236,16 +236,9 @@ def main(args):
             question2 = []
             for idx, text in enumerate(outputs):
                 print("======")
-                # print("prompt", prompts[idx], "text", text)
 
-                # Define the regex pattern to match the instructions
-                # instruction_pattern = r'\*([^*]*)\*'
-                # Find all matches for instructions
-                # instructions = re.findall(
-                #     instruction_pattern, text, re.DOTALL)
-
-                start_key = "QUESTION"
-                end_key = "ANSWER"
+                start_key = "INSTRUCTION"
+                end_key = "INPUT"
 
                 pattern = re.compile(f"{start_key}:(.*?){end_key}:(.*?)(?={start_key}|$)", re.DOTALL)
 
@@ -253,15 +246,15 @@ def main(args):
 
                 for question, answer in matches:
                     print("======")
-                    print(f"QUESTION: {question.strip()}")
-                    print(f"ANSWER: {answer.strip()}")
+                    print(f"INSTRUCTION: {question.strip()}")
+                    print(f"INPUT: {answer.strip()}")
                     print()
-                    
+
                     msg_list = []
                     msg_system = {"role": "system",
-                                    "content": system_message_selected}
+                                  "content": question.strip()}
                     msg_list.append(msg_system)
-                    msg_prompt = {"role": "user", "content": inst}
+                    msg_prompt = {"role": "user", "content": answer.strip()}
                     msg_list.append(msg_prompt)
 
                     text = tokenizer.apply_chat_template(
@@ -271,8 +264,8 @@ def main(args):
                     )
                     prompts2.append(text)
                     topics_selected2.append(topic_selected)
-                    sys_prompt_selected.append(system_message_selected)
-                    question2.append(inst)
+                    sys_prompt_selected.append(question.strip())
+                    question2.append(answer.strip())
 
             outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
             for idx, text in enumerate(outputs2):
