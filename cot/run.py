@@ -32,14 +32,14 @@ def contains_chinese(text):
     return False
 
 
-SYSTEM_MESSAGES_ORCA = [
-    # "",
-    # "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
-    "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
-    "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
-    # "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
-    "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
-]
+# SYSTEM_MESSAGES_ORCA = [
+#     # "",
+#     # "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
+#     "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
+#     "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
+#     # "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
+#     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
+# ]
 
 
 PROMPT_1 = """
@@ -51,7 +51,7 @@ Below are a few examples:
 
 उदाहरण 2: सूर्य की ओर 5 शिर्ट छाया हो जाती हैं। 4 घंटे लगते हैं। कितने घंटे लग जाएंगे 20 शिर्ट को सूर्य की ओर छाया हो जाएं? लिंक-ऑफ-सों विचार प्रदान करने के लिए कई संभव प्रतिक्रियाएं उत्पन्न करें, तत्परता के आधार पर। सभी उपलब्ध जानकारी, संज्ञान, और सही संतुलन के आधार पर सर्वश्रेष्ठ उत्तर को चयन करें।
 
-Provide a set of 5 new, complex, unique, diverse tasks.
+Provide a set of 10 new, complex, unique, diverse tasks.
 
 Be sure to include a wide variety of tasks, including tasks that explore ideas of set theory, information theory, parallelism, logic, extrapolation from scientific studies, etc., but also be sure to only include questions that have multiple potentially correct answers.
 
@@ -76,7 +76,7 @@ Example 1: Jakie ke 3 bhai hain. Har bhai ke 2 behen hain. Toh Jakie ki kitni be
 
 Example 2: 5 shirt ko sukhane mein 4 ghante lagta hai. Toh 20 shirt ko kitne ghante lagega sukhane? Use chain-of-thought reasoning to generate several possible responses, phir sabse acchi response ko select karo based on sab available information, intuition, aur likelihood of correctness.
 
-Provide a set of 5 new, complex, unique, diverse tasks.
+Provide a set of 10 new, complex, unique, diverse tasks.
 
 Be sure to include a wide variety of tasks, including tasks that explore ideas of set theory, information theory, parallelism, logic, extrapolation from scientific studies, etc., but also be sure to only include questions that have multiple potentially correct answers.
 
@@ -99,67 +99,67 @@ Please provide a chain-of-thought style answer to the provide input.
 Below are a few examples of question/response pairs.
 
 Example 1:
-Input: Jackie has 3 brothers. Each brother has 2 sisters. How many sisters does Jackie have? Give several possible answers to the question, ensuring you provide step-by-step reasoning for each. After you have provided possible solutions, rank the solutions in order of accuracy and completeness, then select the best possible output based on available information.
+इनपुट: जैकी के पास 3 भाई हैं. हर भाई के पास 2 बहिनें हैं। जैकी की कितनी बहनें हैं? क्या सवाल के कुछ संभावित जवाब दीजिए, और हर जवाब के लिए चरण-दर-चरण तर्क भी दीजिए। जब आप संभवित समाधान दे चुके हैं, उन्हें सटीकता और पूर्णता के साथ ऑर्डर में रैंक कर दीजिए, फिर उपलब्ध जानकारी के आधार पर सबसे अच्छा जवाब चुनिए।
 
-Example 1 response:
-Solution 1:
-The information provided states that "Each brother has 2 sisters." This includes Jackie in the count because she is a sister to her brothers. Considering there are three brothers and each of them has the same two sisters, we can deduce that the siblings consist of 3 brothers and 2 sisters in total. If we remove Jackie from the sibling count (since we are trying to find out how many sisters Jackie herself has), we are left with one other girl in the sibling group.
+उदाहरण 1 ka प्रतिक्रिया:
 
-Final answer: Jackie has 1 sister.
+समाधान 1:
+दी हुई जानकारी में लिखा है कि "हर भाई के पास 2 बहिनें हैं।" ये जैकी को भी गिनती में लाता है क्योंकि वो भी अपने भाइयों की बहन है। मानते हुए कि 3 भाई हैं और हर एक के पास वही 2 बहिनें हैं, हम ये निकालने कर सकते हैं कि भाई-बहनों में 3 भाई और 2 बहिनें हैं। अगर हम जैकी को इस भाई-बहिन ग्रुप से निकाल देते हैं (क्योंकि हम ये पता करना चाहते हैं कि जैकी की कितनी बहनें हैं), तो एक और लड़की इस ग्रुप में बची रहेगी।
 
-Solution 2:
-In this scenario, we can assume a complex family structure, such as half-siblings or step-siblings. "Each brother has 2 sisters" could imply that there are sisters not related to Jackie, like half-sisters or step-sisters. Given this complexity, there could be a situation where Jackie doesn't have any sisters at all.
+अंतिम जवाब: जैकी की 1 बहन है।
 
-Final answer: Jackie has 0 sisters.
+समाधान 2:
+इस परिदृश्य में, हम एक जटिल पारिवारिक संरचना का अंदाज़ा लगा सकते हैं, जैसा कि सौतेले भाई-बहन या सौतेले भाई-बहन हैं। "हर भाई के पास 2 बहिनें हैं" का मतलब हो सकता है कि वो बहिनें जैकी से संबंधित नहीं हैं, जैसा कि आधी बहिनें या स्टेप बहिनें हो सकती हैं। क्या जटिलता को देखते हुए, ऐसा हो सकता है कि जैकी की बिल्कुल भी बहन न हो।
 
-Solution 3:
-The situation could involve a non-traditional family structure where each brother has two sisters, but they are not the same for every brother. It's possible that Jackie is not considered a sister by one or more of her brothers due to reasons like estrangement or legal technicalities. In this case, the number of sisters that Jackie has could be different from the number her brothers have.
+अंतिम जवाब: जैकी की 0 बहिनें हैं।
 
-Final answer: This would depend on the specifics of the family dynamics, and thus can't be definitively answered.
+समाधान 3:
+ये स्थिति एक गैर-पारंपरिक पारिवारिक संरचना वाली है जहां हर भाई के पास 2 बहनें हैं, लेकिन वो हर भाई के लिए अलग हैं। हो सकता है कि जैकी को कुछ भाइयों ने बहन नहीं माना हो, कुछ करणों से जैसा कि पारिश्रमिक या तकनीकी तकनीकी। इस सूरत में, जैकी की जितनी बहनें हैं वो उसके भाइयों की बहनों की संख्या से अलग हो सकती हैं।
 
-Ranking of solutions from best to worst:
-1. Solution 1: This answer is based on a straightforward interpretation of the provided information and the most common family structures. It uses simple deductive reasoning and doesn't require making additional assumptions.
-2. Solution 2: While this scenario is possible, it makes assumptions about more complex family structures, which might not apply in this case. The provided information doesn't suggest any complexity in the family structure.
-3. Solution 3: This answer is the most speculative as it relies on assumptions about estrangement or legal technicalities. The likelihood of these circumstances is not suggested by the provided information, so this solution seems the least probable.
+अंतिम जवाब: ये परिवार की गतिशीलता की बारीकियों पर निर्भर करेगा, इसलिए इसका निश्चित जवाब नहीं दिया जा सकता।
 
-Best and final answer: Jackie has 1 sister.
+समाधानों को सर्वश्रेष्ठ से सबसे खराब के ऑर्डर में रैंक किया गया है:
+1. समाधान 1: ये जवाब दी गई जानकारी का सीधा अर्थ है और सबसे आम पारिवारिक संरचनाओं का आधार है। इस प्रकार सरल निगमनात्मक तर्क का उपयोग किया जाता है और किसी भी अतिरिक्त धारणा की आवश्यकता नहीं पड़ी।
+2. समाधान 2: यह परिदृश्य संभव है, लेकिन जटिल पारिवारिक संरचनाओं के बारे में धारणाएं बन रही हैं, जो इस मामले में लागू नहीं है। पारिवारिक संरचना में जानकारी दी गई है कि कोई जटिलता नहीं दी गई है।
+3. समाधान 3: ये जवाब सबसे ज्यादा सट्टा है क्योंकि इसमें मनमुटाव या कानूनी तकनीकी बातें हैं जो धारणाएं बनाती हैं। दी गई जानकारी पेरिसियों की संभावना नहीं बताती, इसलिए यह समाधान सबसे कम संभावित लगता है।
 
+सर्वश्रेष्ठ और अंतिम जवाब: जैकी की 1 बहन है।
 
-Yahan hai Example 2 ka Hinglish translation:
+Example2:
 
-Input: Dhoop mein 5 kurte sukhane mein 4 ghante lagte hain. 20 kurte sukhane mein kitna samay lagega? Chain-of-thought reasoning ka istemaal karke kuchh sambhavit responses generate kijiye, phir available information, intuition aur correctness ki likelihood ke aadhar par sabse achchha response chuniye.
+इनपुट: धूप में 5 कुर्ते सुखने में 4 घंटे लगते हैं। 20 कुर्ते सुखने में कितना समय लगेगा? विचार-श्रृंखला तर्क का इस्तेमाल करके कुछ संभव प्रतिक्रियाएँ उत्पन्न करती हैं, फिर उपलब्ध जानकारी, अंतर्ज्ञान और शुद्धता की संभावना के आधार पर सबसे अच्छी प्रतिक्रिया चुनिए।
 
-Response to Example 2:
+उदाहरण 2 का उत्तर:
 
-Solution 1: 
-Din ke samay aur baaki kitni dhoop hai isko consider kijiye. Maslan, agar aapke paas din mein sirf 4 ghante ki dhoop baaki hai, toh aap ek hi din mein 20 kurte nahi sukha paaoge agar aap ek baar mein sirf 5 kurte hi sukha sakte hain. Maante hue ki agle din kam se kam 12 ghante dhoop rahegi aur haalat aise hain ki 5 kurte 4 ghanton mein consistently sukh jaayenge, hum ise iss tarah likh sakte hain:
-total time = dry time per batch size * number of batches + time delayed due to lack of sunlight  
+समाधान 1:
+दिन के समय और बाकी कितनी धूप है इसको मानें। मसलन, अगर आपके पास दिन में सिर्फ 4 घंटे की धूप बाकी है, तो आप एक ही दिन में 20 कुर्ते नहीं सुखा पाओगे। मानते हुए कि अगले दिन काम से कम 12 घंटे धूप रहेगी और हालात ऐसे हैं कि 5 कुर्ते 4 घंटों में लगातार सुख जाएंगे, हम इसे इस तरह लिख सकते हैं:
+कुल समय = प्रति बैच आकार शुष्क समय * बैचों की संख्या + सूर्य के प्रकाश की कमी के कारण विलंबित समय
 
-Is case mein, 5 kurton ke ek batch ko sukhane mein 4 ghante lagte hain, aur batches ki sankhya hai (20 / 5 = 4).
+इस केस में, 5 कुर्तों के एक बैच को सुखाने में 4 घंटे लगते हैं, और बैचों की संख्या है (20 / 5 = 4)।
 
-Choonki hum yeh maan rahe hain ki humare paas 12 ghante sukhane ka samay hai, iska matlab hai ki humein (24 ghante mein se 12 ghante ghata kar = 12 ghante) ka delay hua.
+चुनकी हम ये मान रहे हैं कि हमारे पास 12 घंटे सुखने का समय है, इसका मतलब है कि हमें (24 घंटे में से 12 घंटे घटा कर = 12 घंटे) का विलंब हुआ।
 
-Toh total time yeh hoga:
-4 * 4 + 12 = 28 ghante.  
+तो कुल समय ये होगा:
+4 * 4 + 12 = 28 घंटे.
 
-Final jawaab: 20 kurte sukhane mein 28 ghante lagenge, agar hum maan lein ki 12 ghante mausam aur dhoop ke haalat ache rahenge aur batch size 5 kurte hogi.
+अंतिम जवाब: 20 कुर्ते सुखने में 28 घंटे लगेंगे, अगर हम मान लें कि 12 घंटे मौसम और धूप के हालात अच्छे रहेंगे और बैच साइज 5 कुर्ते होंगे।
 
-Solution 2:
-Diya gaya hai ki 5 kurte sukhane mein 4 ghante lagte hain.
+समाधान 2:
+दिया गया है कि 5 कुर्ते सुखने में 4 घंटे लगते हैं।
 
-Iska matlab hai ki 1 kurta bhi 4 ghante mein hi sukhega, kyunki yeh task parallelizable hai.
+इसका मतलब यह है कि 1 कुर्ता भी 4 घंटे में ही सुखेगा, क्योंकि यह कार्य समानांतर है।
 
-Choonki har kurta individually parallel mein sukh raha hai, toh drying time nahi judi. Iska matlab hai ki chahe hum ek saath kitne bhi kurte sukha rahe hain, jab tak sabhi kurton ko equally environment expose karne ke liye kaafi jagah hai, woh sab 4 ghanton mein hi sukh jaayenge.  
+चुनकी हर कुर्ता व्यक्तिगत रूप से समानांतर में सुख रहा है, तो सुखाने का समय नहीं जुड़ा है। इसका मतलब है कि चाहे हम एक साथ कितने भी कुर्ते सुखा रहे हों, जब तक सभी कुर्तों को समान रूप से पर्यावरण को उजागर करने के लिए काफी जगह देते हैं, वो सब 4 घंटों में ही सुख जाएंगे।
 
-Toh, agar hum yeh maan lein ki woh sab parallel mein sukh rahe hain, aur unhe waise hi haalat mein rakha gaya hai jaise ki pehle ke 5 kurton ko rakha gaya tha, toh 20 kurte sukhane mein bhi 4 hi ghante lagenge.
+तो, अगर हम ये मान लें कि वो सब समानांतर में सुख रहे हैं, और उन्हें वैसे ही हालात में रखा गया है जैसे कि पहले के 5 कुर्तों को रखा गया था, तो 20 कुर्ते सुखने में भी 4 ही घंटे लगेंगे।
 
-Final jawaab: Choonki yeh task parallelizable hai, isliye 20 kurte sukhane mein bhi 4 hi ghante lagenge.
+अंतिम जवाब: चुनकी ये टास्क पैरेललाइज़ेबल है, इसलिए 20 कुर्ते सुखाने में भी 4 ही घंटे लगेंगे।
 
-Solutions ko best se worst ke order mein rank kiya gaya hai:
-1. Solution 2: Yeh jawaab sabse zyada sahi lagta hai kyunki isne di gayi information par straightforward reasoning ki hai, jismein yeh nahi bataya gaya ki space ya dhoop ki availability koi limiting factor hai.
-2. Solution 1: Yeh jawaab kam probable hai, kyunki task parallelizable hai, aur humne kai assumptions banayi hain jaise ki kitni dhoop baaki hai, aur kitne ghante aise hain jismein kurte exactly 4 ghanton mein sukh jaate hain.  
+समाधानों को सर्वश्रेष्ठ से सबसे खराब के ऑर्डर में रैंक किया गया है:
+1. समाधान 2: ये जवाब सबसे ज्यादा सही लगता है क्योंकि सीधे तर्क पर जानकारी दी गई है, जिसमें ये नहीं बताया गया है कि स्पेस या धूप की उपलब्धता कोई सीमित कारक है।
+2. समाधान 1: ये जवाब काम संभावित है, क्योंकि कार्य समानांतर है, और हमने कई धारणाएं बनाई हैं जैसे कि कितनी धूप बाकी है, और कितने घंटे ऐसे हैं जिनके कुर्ते बिल्कुल 4 घंटों में सुख जाते हैं।
 
-Best aur final jawaab: Choonki yeh task parallelizable hai, isliye 20 kurte sukhane mein bhi 4 hi ghante lagenge.
+सर्वश्रेष्ठ और अंतिम जवाब: चुनकी ये कार्य समानांतर है, इसलिए 20 कुर्ते सुखाने में भी 4 ही घंटे लगेंगे।
 
 
 End of examples.
@@ -170,7 +170,7 @@ Make sure you fully understand each solution before providing a ranking. The pos
 
 Be sure to include at least 2, preferably 3 possible solutions.
 
-All output text should be in hinglish language only.
+All output text should be in hindi language only.
 """
 
 PROMPT_2_RESPONSE = """
@@ -254,6 +254,7 @@ Be sure to include at least 2, preferably 3 possible solutions.
 All output text should be in hinglish language only.
 """
 
+
 @torch.no_grad()
 def eval_hf_model(args, model, tokenizer, prompts, temperature):
     sampling_params = vllm.SamplingParams(
@@ -312,7 +313,7 @@ def main(args):
         for loop in range(20):
 
             prompts = []
-            
+
             existing_instructions = []
             for r in final_data:
                 if r["language"] == lang:
@@ -341,7 +342,7 @@ def main(args):
             msg_system = {"role": "system", "content": SYSTEM_PROMPT}
             msg_list.append(msg_system)
             msg_prompt = {"role": "user",
-                            "content": user}
+                          "content": user}
             msg_list.append(msg_prompt)
 
             text = tokenizer.apply_chat_template(
@@ -373,11 +374,10 @@ def main(args):
                     if instruction.endswith("]"):
                         instructions = instructions[:-1]
 
-                    system_message_selected = random.choice(SYSTEM_MESSAGES_ORCA)
-                    if args.lang == "hindi":
-                        system_message_selected += "\n\nAnswer in hindi only."
+                    system_message_selected = PROMPT_1_RESPONSE
+
                     if args.lang == "hinglish":
-                        system_message_selected += "\n\nAnswer in hinglish only. Translate to hinglish if required."
+                        system_message_selected = PROMPT_2_RESPONSE
 
                     msg_list = []
                     msg_system = {"role": "system",
