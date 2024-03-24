@@ -259,7 +259,7 @@ def main(args):
             os.exit(1)
 
             dataset = process_and_update_dataset(final_data)
-            dataset.push_to_hub(base_repo, private=True)
+            dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):

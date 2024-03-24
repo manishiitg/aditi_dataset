@@ -69,8 +69,8 @@ Every task should be atleast 2-3 lines.
 All output task should be in hindi language.
 
 Response format:
-TSK 1. [task 1 in hindi]
-TSK 2. [task 2 in hindi]
+TSK 1. task 1 in hindi
+TSK 2. task 2 in hindi
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
@@ -78,25 +78,27 @@ Be sure to include "TSK", untranslated, as a prefix as described in response for
 
 PROMPT_2 = """
 Here are a few example prompts:
-Example 1: Rabindranath Tagore ke andaaz mein peacocks ke baare mein ek kavita likhiye.
+TSK 1: Rabindranath Tagore ke andaaz mein peacocks ke baare mein ek kavita likhiye.
 
-Example 2: Aap Amitabh Bachchan ke character Vijay Deenanath Chauhan se imagine karo, film Agneepath se. Uske andaaz mein, bhrashtachar ke khilaaf ek bhashan likhiye.  
+TSK 2: Aap Amitabh Bachchan ke character Vijay Deenanath Chauhan se imagine karo, film Agneepath se. Uske andaaz mein, bhrashtachar ke khilaaf ek bhashan likhiye.  
 
-Example 3: Akbar aur Birbal ke beech ek haasya-paripurna samvad likhiye, jismein Birbal apni buddhi se Akbar ke ek kathin sawal ka uttar deta hai.
+TSK 3: Akbar aur Birbal ke beech ek haasya-paripurna samvad likhiye, jismein Birbal apni buddhi se Akbar ke ek kathin sawal ka uttar deta hai.
 
-Example 4: "Dharma" ka arth ek budhhe sadhu (sant purush) ke shabd aur andaaz ka prayog karke samjhaiye, jaisa ki woh ek yuvak ko salah de raha ho.
+TSK 4: "Dharma" ka arth ek budhhe sadhu (sant purush) ke shabd aur andaaz ka prayog karke samjhaiye, jaisa ki woh ek yuvak ko salah de raha ho.
 
-Example 5: Aap Shah Rukh Khan ke character Rahul se imagine karo, film Dilwale Dulhania Le Jayenge se. Uske andaaz mein, London jaane se pehle Simran ko apne jazbaat bayaan karte hue ek patra likhiye.
+TSK 5: Aap Shah Rukh Khan ke character Rahul se imagine karo, film Dilwale Dulhania Le Jayenge se. Uske andaaz mein, London jaane se pehle Simran ko apne jazbaat bayaan karte hue ek patra likhiye.
 
-Example 6: Aap Rani Lakshmibai ke roop mein apne sainikon ko Jhansi ki raksha ke liye prerit karte hue ek veer ras se paripurna bhashan likhiye, jismein aap unhe angrez shasak ke atyachar ke khilaaf ladne ke liye taiyaar karte hain.
+TSK 6: Aap Rani Lakshmibai ke roop mein apne sainikon ko Jhansi ki raksha ke liye prerit karte hue ek veer ras se paripurna bhashan likhiye, jismein aap unhe angrez shasak ke atyachar ke khilaaf ladne ke liye taiyaar karte hain.
 
-Example 7: Suryakant Tripathi 'Nirala' ke andaaz mein prakriti ke saundarya aur uske manav jeevan par prabhaav ko darshate hue ek lambi kavita likhiye, jismein aap vasant ritu ke aagman ka varnan karte hain.
+TSK 7: Suryakant Tripathi 'Nirala' ke andaaz mein prakriti ke saundarya aur uske manav jeevan par prabhaav ko darshate hue ek lambi kavita likhiye, jismein aap vasant ritu ke aagman ka varnan karte hain.
 
-Example 8: Aap Chanakya ke charitra ko darshate hue ek rajneetik guru ke roop mein apne shishya ko rajya chalane ke kala par salah dete hue ek samvaad likhiye, jismein aap kutilta aur dhokhadadi se bachne ki sikh dete hain.
+TSK 8: Aap Chanakya ke charitra ko darshate hue ek rajneetik guru ke roop mein apne shishya ko rajya chalane ke kala par salah dete hue ek samvaad likhiye, jismein aap kutilta aur dhokhadadi se bachne ki sikh dete hain.
 
-Example 9: Aap Bhagat Singh ke kirdar mein Inquilab Zindabad ke naare ke saath ek jazbati bhashan likhiye, jismein aap Bharat ki swatantrata ke liye apne pran nyochhawar karne ki baat karte hain aur desh ke yuvaaon ko krantikari banne ke liye prerit karte hain.
+TSK 9: Aap Bhagat Singh ke kirdar mein Inquilab Zindabad ke naare ke saath ek jazbati bhashan likhiye, jismein aap Bharat ki swatantrata ke liye apne pran nyochhawar karne ki baat karte hain aur desh ke yuvaaon ko krantikari banne ke liye prerit karte hain.
 
-Example 10: Tulsidas ke shaili mein Ram aur Sita ke vanvaas ke samay ke ek prasang par aadhaarit ek pad likhiye, jismein aap pavitra prem aur tyaag ki bhaavna ko darshate hain.
+TSK 10: Tulsidas ke shaili mein Ram aur Sita ke vanvaas ke samay ke ek prasang par aadhaarit ek pad likhiye, jismein aap pavitra prem aur tyaag ki bhaavna ko darshate hain.
+
+End of examples. 
 
 Generate a set of {batch_size} new similar prompts.
 
@@ -108,8 +110,8 @@ Every task should be atleast 2-3 lines.
 All output task should be in hinglish language.
 
 Response format:
-TSK 1. [task 1 in hinglish language]
-TSK 2. [task 2 in hinglish language]
+TSK 1. task 1 in hinglish language
+TSK 2. task 2 in hinglish language
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.

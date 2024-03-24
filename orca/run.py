@@ -388,9 +388,6 @@ def main(args):
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
-            print(outputs)
-            os.exit(1)
-
             for idx, text in enumerate(outputs):
                 print("======")
                 print("prompt", prompts[idx], "text", text)
@@ -426,7 +423,7 @@ def main(args):
             os.exit(1)
 
             dataset = process_and_update_dataset(final_data)
-            dataset.push_to_hub(base_repo, private=True)
+            dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):
