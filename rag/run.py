@@ -197,10 +197,7 @@ def main(args):
             prompts = []
             if args.generate_topics or True:
                 message = []
-                prompt = """
-                    Give me a numbered list of 2 completely random topics.
-                    Generate a diverse list of topics in english.
-                """
+                prompt = """Give me a numbered list of 3 completely random topics."""
 
                 #
                 if len(topics_generated) > 0:
