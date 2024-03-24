@@ -282,8 +282,8 @@ def main(args):
                     "evol_answer": "",
                 })
 
-            dataset = process_and_update_dataset(final_data)
-            dataset.push_to_hub(base_repo, private=True)
+        dataset = process_and_update_dataset(final_data)
+        dataset.push_to_hub(base_repo, private=True)
 
 
 def process_and_update_dataset(new_data):
