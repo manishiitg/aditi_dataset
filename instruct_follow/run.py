@@ -80,7 +80,7 @@ INPUT: [second instruction's answer in hindi]
 """
 
 PROMPT_2 = """
-You are asked to come up with a set of 25 diverse task instructions and corrosponding input. 
+You are asked to come up with a set of 10 diverse task instructions and corrosponding input. 
 
 You should generate an appropriate input to the instruction. The input field should contain a specific example provided for the instruction. It should involve realistic data and should not contain simple placeholders. The input should provide substantial content to make the instruction challenging but should ideally not exceed 100 words.
 
@@ -105,8 +105,6 @@ INSTRUCTION: Imagine karo ki aap ek superhero hain jiska samay ko control karne 
 INPUT: Ek bada bhukamp aapke shehar ko lagne wala hai, jisme bade nuksan ki sambhavna hai aur anek logon ki zindagiyo ko khatra hai. Samay ko manipulate karne ki shakti wale superhero ke roop mein, aapke paas aapke shehar aur uske rahne walon ko bachane ke liye kya rannitiyan hongi?
 
 End of examples
-
-List of 25 tasks:
 
 The output format should be:
 INSTRUCTION: [first instruction in hinglish]
