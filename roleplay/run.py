@@ -167,7 +167,7 @@ def main(args):
         for r in existing_ds:
             final_data.append(r)
 
-    languages = ["hindi", "hinglish"]
+    languages = ["hinglish","hindi"]
     topic_selected = "roleplay"
     for lang in languages:
         args.lang = lang
