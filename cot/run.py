@@ -331,10 +331,10 @@ def main(args):
             if args.lang == "hinglish":
                 USER_PROMPT = PROMPT_2
 
-            # if topic_selected in topic_instruct_map:
-            #     existing_instruction = topic_instruct_map[topic_selected]
-            #     if len(existing_instruction) > 0:
-            #         USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
+            if topic_selected in topic_instruct_map:
+                existing_instruction = topic_instruct_map[topic_selected]
+                if len(existing_instruction) > 0:
+                    USER_PROMPT += "\n\n" + "Generated Tasks should be different from " + existing_instruction
 
             user = USER_PROMPT
             SYSTEM_PROMPT = "You are an helpful AI assistant. Follow the instructions provided."
@@ -350,8 +350,7 @@ def main(args):
                 add_generation_prompt=True
             )
             prompts.append(text)
-            print(text)
-
+            
             print("=======")
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
@@ -360,7 +359,6 @@ def main(args):
             sys_prompt_selected = []
             question2 = []
             print(outputs)
-            os.exit(1)
             for idx, text in enumerate(outputs):
 
                 instructions = []
