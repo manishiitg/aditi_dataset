@@ -199,7 +199,7 @@ def main(args):
 
     global TOPICS
 
-    languages = ["english", "hindi"] #"hinglish"
+    languages = ["hindi"] #"hinglish", "english"
     for lang in languages:
         topics_generated = []
         if lang in topics_generated_map:
