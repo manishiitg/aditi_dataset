@@ -163,7 +163,7 @@ def main(args):
                     add_generation_prompt=True
                 )
 
-                outputs = eval_hf_model(args, model, tokenizer, [text], .5)
+                outputs = eval_hf_model(args, model, tokenizer, [text], .25)
                 output = outputs[0]
 
                 topics = output.split("\n")
