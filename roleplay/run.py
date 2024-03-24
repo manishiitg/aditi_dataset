@@ -104,7 +104,7 @@ Generate a set of {batch_size} new similar prompts.
 
 Be appropriately loquacious for the task, e.g. stories should be long, complex, and detailed, whereas a haiku should be the standard three/5-7-5 format.
 
-Make sure to generate diverse and detailed tasks. 
+Make sure to generate diverse writing tasks. 
 Every task should be atleast 2-3 lines. 
 
 All output task should be in hinglish language.
@@ -167,7 +167,7 @@ def main(args):
         for r in existing_ds:
             final_data.append(r)
 
-    languages = ["hinglish", "hindi"]
+    languages = ["hindi", "hinglish"]
     topic_selected = "roleplay"
     for lang in languages:
         args.lang = lang
