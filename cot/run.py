@@ -350,6 +350,7 @@ def main(args):
                 add_generation_prompt=True
             )
             prompts.append(text)
+            print(text)
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
