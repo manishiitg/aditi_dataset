@@ -346,7 +346,7 @@ def main(args):
                 topics_generated_map[r["language"]] = []
             topics_generated_map[r["language"]].append(r["topic"])
 
-    languages = ["hinglish", "hindi"]
+    languages = ["hindi"] #"hinglish"
     topic_selected = "orca"
     PROGRAMMING_TOPICS = []
     for lang in languages:
