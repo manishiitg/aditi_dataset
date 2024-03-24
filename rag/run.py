@@ -273,16 +273,16 @@ def main(args):
                 )
                 prompts.append(text)
 
-                outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
-                for idx, text in enumerate(outputs):
-                    # print("prompt", prompts[idx], "text", text)
-                    context = text.split("ENDINSTRUCTION")[0] + "ENDINSTRUCTION"
-                    question = text.split("ENDINSTRUCTION")[1]
+            for idx, text in enumerate(outputs):
+                print("prompt", prompts[idx], "text", text)
+                context = text.split("ENDINSTRUCTION")[0] + "ENDINSTRUCTION"
+                question = text.split("ENDINSTRUCTION")[1]
 
-                    questions = text.split("\n")
+                questions = text.split("\n")
 
-                    pass
+                pass
 
                     
 
