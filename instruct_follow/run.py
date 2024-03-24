@@ -33,8 +33,11 @@ def contains_chinese(text):
 
 
 PROMPT_1 = """
-You are asked to come up with a set of 25 diverse task instructions. 
-These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
+You are asked to come up with a set of 25 diverse task instructions and corrosponding input. 
+
+You should generate an appropriate input to the instruction. The input field should contain a specific example provided for the instruction. It should involve realistic data and should not contain simple placeholders. The input should provide substantial content to make the instruction challenging but should ideally not exceed 100 words.
+
+These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions based on the input.
 
 The instruction should only be related to SUBJECT_AREA
 
@@ -48,10 +51,32 @@ Here are the requirements:
 5. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
 6. Make sure every instruction is in hindi language only. 
 
+Examples of instructions/input to generate:
+
+End of examples
+INSTRUCTION: दिखावा करो कि आप 1920 के दशक के एक जासूस हैं जो एक अपराध के गवाह से पूछ रहे हैं। संदिग्ध के बारे में जानकारी जानने के लिए 5 सवाल पूछिए।
+INPUT: गवाह का कहना है कि वो संदिग्ध को चुराया हुआ सामान लेकर भागते हुए देखा।
+
+INSTRUCTION: कल्पना कीजिए कि आप जेन गुडॉल हैं और एक व्यक्ति से समझते हैं जो अभी एक बड़ा क्षेत्र वनों को ख़त्म कर दिया है कि प्रकृति के निवास स्थलों को सुरक्षित रखने की महत्ता है।
+INPUT: वनों को सुरक्षित रखने की क्यों चिंता करनी चाहिए?
+
+INSTRUCTION: आप टेस्ला के एआई असिस्टेंट हैं जो 2040 में बन गया है, जो ग्राहकों की मदद करने में विशेष है। कृपया मुझे मदद करें जिनके घर में टेस्ला कार को चार्ज करने की समस्या आ रही है।
+INPUT: मैंने हाल ही में टेस्ला मॉडल एक्स3 खरीदा है और मुझे अपने गैराज में चार्ज करने के लिए कुछ समस्या आ रही है। चार्ज का केबल कार के चार्जिंग पोर्ट से मजबूत कनेक्शन नहीं बन रहा है, और प्रक्रिया हमेशा विफल हो जाती है। क्या आप मेरी मदद कर सकते हैं?
+
+INSTRUCTION: कल्पना कीजिए कि आप एक सुपरहीरो के लिए एआई असिस्टेंट हैं। कैसे उन्हें मदद करोगे जिसमें एक दुश्मन जो छुप गया है, उसका पता लगाया जा सके?
+INPUT: सुपरहीरो: नाइटशेड के पता मुझे ढूंढ दो। उसने हमारी आखिरी मुलाकात के बाद शहर में गायब हो गई।
+
+INSTRUCTION: कल्पना कीजिए कि आप एक सुपरहीरो हैं जिसके समय को नियंत्रित करने की शक्ति है। आप अपने शहर को आने वाले आपदा से कैसे बचाएंगे?
+INPUT: एक बड़ा भूखाम्प आपके शहर को लगने वाला है, जिसमें बड़े नुक्सान की संभावना है और अनेक लोगों की जिंदगी को खतरा है। समय को हेरफेर करने की शक्ति वाले सुपरहीरो के रूप में, आपके पास आपके शहर और उसके रहने वालों को बचाने के लिए क्या रानियां होंगी?
+
 List of 25 tasks:
 
-1. <instruction_in_hindi>
-2. <instruction_in_hindi>
+The output format should be:
+INSTRUCTION: [first instruction in hindi]
+INPUT: [first input's answer in hindi]
+
+INSTRUCTION: [second instruction in hindi]
+INPUT: [second instruction's answer in hindi]
 """
 
 PROMPT_2 = """
@@ -72,6 +97,25 @@ Here are the requirements:
 5. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
 6. The instructions should be 1 to 2 sentences long. Either an imperative sentence or a question is permitted
 7. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
+
+
+Examples of instructions/input to generate:
+INSTRUCTION: Pretend karo ki aap 1920s ke ek detective hain jo ek crime ke gawah se puchtaach kar raha hai. Suspect ke baare mein jaankari jaanne ke liye 5 sawal poochiye.
+INPUT: Gawah ka kehna hai ki woh suspect ko churaya hua saman lekar bhagte hue dekha.
+
+INSTRUCTION: Imagine karo ki aap Jane Goodall hain aur ek vyakti se samjhate hain jo abhi ek bada kshetra vanon ko khatam kar diya hai ki prakriti ke nivaas sthalon ko surakshit rakhne ki mahatva. 
+INPUT: Vanon ko surakshit rakhne ki kyun chinta karni chahiye?
+
+INSTRUCTION: Aap Tesla ke AI assistant hain jo 2040 mein banaya gaya hai, jo customers ki madad karne mein visheshagya hai. Kripya mujhe madad karein jinke ghar mein Tesla car ko charge karne mein samasya aa rahi hai.
+INPUT: Mainey haal hi mein Tesla Model X3 khareeda hai aur mujhe apne garage mein charge karne mein kuch samasya aa rahi hai. Charge ka cable car ke charging port se majboot connection nahi bana raha hai, aur process hamesha fail ho jata hai. Kya aap meri madad kar sakte hain?
+
+INSTRUCTION: Imagine karo ki aap ek superhero ke liye AI assistant hain. Kaise unhein madad karoge jisse ek dushman jo chhup gaya hai, uska pata lagaya ja sake?
+INPUT: Superhero: Nightshade ke pata mujhe dhoondh do. Usne hamare last encounter ke baad shehar mein gayab ho gayi.
+
+INSTRUCTION: Imagine karo ki aap ek superhero hain jiska samay ko control karne ki shakti hai. Kaise aap apne shehar ko ane wale apda se bachaoge?
+INPUT: Ek bada bhukamp aapke shehar ko lagne wala hai, jisme bade nuksan ki sambhavna hai aur anek logon ki zindagiyo ko khatra hai. Samay ko manipulate karne ki shakti wale superhero ke roop mein, aapke paas aapke shehar aur uske rahne walon ko bachane ke liye kya rannitiyan hongi?
+
+End of examples
 
 List of 25 tasks:
 
