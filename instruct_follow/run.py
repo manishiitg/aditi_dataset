@@ -84,20 +84,9 @@ You are asked to come up with a set of 25 diverse task instructions and corrospo
 
 You should generate an appropriate input to the instruction. The input field should contain a specific example provided for the instruction. It should involve realistic data and should not contain simple placeholders. The input should provide substantial content to make the instruction challenging but should ideally not exceed 100 words.
 
-These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions based on the input.
+Instructions generated should be detailed, atleast 2-3 lines. 
 
 The instruction should only be related to SUBJECT_AREA
-
-Here are the requirements:
-1. Generate tasks only in hinglish. Translate tasks generated to hinglish if tasks are in hindi.
-2. Try not to repeat the verb for each instruction to maximize diversity.
-3. The type of instructions should be diverse. 
-    a. The list should include diverse types of tasks like open-ended generation, classification, editing, writing, conversation, trivia, etc.
-4. The type of instructions should be related to only SUBJECT_AREA
-5. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
-6. The instructions should be 1 to 2 sentences long. Either an imperative sentence or a question is permitted
-7. The instructions should involve realistic data and should not contain simple placeholders. The instructions should provide substantial content to make the instruction challenging but should ideally not exceed 2 to 3 sentences.
-
 
 Examples of instructions/input to generate:
 INSTRUCTION: Pretend karo ki aap 1920s ke ek detective hain jo ek crime ke gawah se puchtaach kar raha hai. Suspect ke baare mein jaankari jaanne ke liye 5 sawal poochiye.
