@@ -156,7 +156,7 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 All output text should be in hindi, but the exact terms "QUESTION" and "ANSWER" are special tokens that must not be translated.
 
-Questions should be related to topic {topic_selected}
+All questions generated should be related to topic {topic_selected}
 
 The output format should be:
 QUESTION: [first question in hindi]
@@ -282,7 +282,7 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 
 All output text should be in hinglish language, but the exact terms "QUESTION" and "ANSWER" are special tokens that must not be translated.
 
-Questions should be related to topic {topic_selected}
+All questions generated should be related to topic {topic_selected}
 
 The output format should be:
 QUESTION: [first question in hinglish]
