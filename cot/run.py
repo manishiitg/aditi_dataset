@@ -60,8 +60,8 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 All output text should be in hindi, but the exact term "TSK" is a special token that must not be translated.
 
 The output format should be:
-TSK 1. [question 1 in hindi language, including instructions to provide multiple solutions, rank, and select best]
-TSK 2. [question 2 in hindi language, including instructions to provide multiple solutions, rank, and select best]
+TSK 1. [question 1 in hindi language]
+TSK 2. [question 2 in hindi language]
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
@@ -84,8 +84,8 @@ The output should be written in such a way as to have a Flesch-Kincaid readabili
 All output text should be in hinglish language, but the exact term "TSK" is a special token that must not be translated.
 
 The output format should be:
-TSK 1. [question 1 in hinglish language, including instructions to provide multiple solutions, rank, and select best]
-TSK 2. [question 2 in hinglish language, including instructions to provide multiple solutions, rank, and select best]
+TSK 1. [question 1 in hinglish language]
+TSK 2. [question 2 in hinglish language]
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
