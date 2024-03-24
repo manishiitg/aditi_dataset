@@ -48,7 +48,7 @@ def main(args):
             final_data.append(row)
 
     if len(final_data) > 0:
-        tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen1.5-7B-Chat")
+        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
         if args.awq:
             print("Loading model and tokenizer vllm awq...")

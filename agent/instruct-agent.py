@@ -333,7 +333,7 @@ List of 10 questions generated in hinglish which might CONFUSE the agent.
 def main(args):
 
     base_repo = "manishiitg/indic-agent"
-    tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen1.5-7B-Chat")
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
         model = vllm.LLM(
