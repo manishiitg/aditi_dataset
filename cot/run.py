@@ -352,6 +352,7 @@ def main(args):
             prompts.append(text)
             print(text)
 
+            print("=======")
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2)
 
             prompts2 = []
