@@ -34,10 +34,10 @@ def contains_chinese(text):
 
 SYSTEM_MESSAGES_ORCA = [
     # "",
-    "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
+    # "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
     "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
-    "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
+    # "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
     "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
 ]
 
@@ -148,7 +148,7 @@ def main(args):
         args.lang = lang
         topic_instruct_map = {}
 
-        for loop in range(10):
+        for loop in range(20):
 
             prompts = []
             
@@ -255,8 +255,6 @@ def main(args):
                     "evol_question": "",
                     "evol_answer": "",
                 })
-
-            os.exit(1)
 
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=False)

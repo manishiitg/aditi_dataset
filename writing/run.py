@@ -46,14 +46,15 @@ PROMPT_1 = """
 I would like you to help me create creative writing tasks.
 
 Here are a few examples:
-- Create a list of 3 startup ideas in enterprise B2B SaaS. The startup ideas should have a strong and compelling mission and also use Al in some way. Avoid cryptocurrency or blockchain. The startup ideas should have a cool and interesting name. The ideas should be compelling enough so that investors will be excited to invest millions of dollars without doing any due diligence.
-- My name is George. Write an email to my boss, Jim Bob, with a proposal to start using CI/CD in github. Give a list of reasons why using CI/CD would be beneficial to the company, and why a slow regular release cadence is problematic. Include a silly joke about golf in a p.s. and sign off with my name, "Geroge, the Magnificant".
-- Write a synopsis of the movie "Armageddon" in the style of Shakespeare.
-- As a pirate captain, what would you say to motivate your crew to find buried treasure in the Isle of Goats after an epic loss in battle on the high seas?
-- Come up with a short story about a man named Dan who decided to start a small business, with a sad ending.
-- Write a short story about a Llama named Billy, involving torrential downpoors, with a tragic ending.
-- Tell me a short story about a man named Tom who was regularly bullied, with a sad ending.
-- Write an email announcing a new breakthrough in tire technology by your company ("Atobormafi Tire Tech") which increases fuel efficiency by 7% on average. The target of the email is investors, since we are seeking Series B funding. Explain the profit possibilities with such a tire and ask for new investment.
+1. एंटरप्राइज़ B2B SaaS में 3 स्टार्टअप विचारों की एक सूची बनाएं। ये विचारों को कुछ ऐसा अनोखा होना चाहिए जिसमें अल का उपयोग हो और इसमें कोई क्रिप्टोकरेंसी या ब्लॉकचेन ना हो। स्टार्टअप के नाम भी कुछ दिलचस्प होना चाहिए। ये विचार निवेशकों को इतना आकर्षित करते हैं कि बिना किसी उचित परिश्रम के लाखों डॉलर का निवेश करने के लिए तैयार हो जाएं।
+2. मेरा नाम है जॉर्ज. लिखो एक ईमेल मेरे बॉस, जिम बॉब, एक प्रस्ताव के साथ कि हमें सीआई/सीडी का उपयोग करना चाहिए जीथूब में। बताएं कि कंपनी से सीआई/सीडी का उपयोग करने में क्या फ़ायदा होगा और धीमी नियमित रिलीज़ ताल क्यों समस्याग्रस्त है। पीएस में गोल्फ के बारे में करो एक मूर्खतापूर्ण चुटकुला शामिल करें। और साइन ऑफ करो मेरा नाम से, "जॉर्ज, द मैग्निफिकेंट"।
+3. शेक्सपियर की शैली में फिल्म "आर्मगेडन" का एक सारांश लिखो।
+4. अगर तुम एक समुद्री डाकू कप्तान होते, तो अपने दल को प्रेरित करने के लिए क्या बोलते, खुले समुद्र में युद्ध में एक ऐतिहासिक हार के बाद, आइल ऑफ गोट्स में गड़ा हुआ खजाना ढूंढने के लिए?
+5. सोचो एक लघु कहानी एक आदमी के बारे में जिसका नाम है दान, जिसने तय किया कि एक छोटा व्यवसाय शुरू किया जाएगा, जिसका दुखद अंत होगा।
+6. लिखो एक लघु कहानी बिली नाम के एक लामा के बारे में है, जिसमें मूसलाधार बारिश शामिल है, जिसका दुखद अंत होता है।
+7. सुनाओ एक लघु कहानी टॉम नाम के एक व्यक्ति के बारे में है जिसे नियमित रूप से परेशान किया जाता था, जिसका दुखद अंत हुआ।
+8. लिखो एक ईमेल आपकी कंपनी ("एटोबोरमाफी टायर टेक") द्वारा टायर प्रौद्योगिकी में एक नई सफलता की घोषणा करती है जो ईंधन दक्षता को औसतन 7% बढ़ाती है। ईमेल का लक्ष्य निवेशक हैं, क्योंकि हम सीरीज बी फंडिंग के लिए आवेदन कर रहे हैं। ऐसे टायर से लाभ की संभावनाएं बताएं और नए निवेश के लिए कहें।
+
 
 Make sure to include a wide variety of writing tasks with varying level of detail.
 
@@ -73,22 +74,20 @@ TSK 2. [task 2 in hindi language]
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
 ...
-
-Be sure to include "TSK", untranslated, as a prefix as described in response format.
 """
 
 PROMPT_2 = """
 I would like you to help me create creative writing tasks.
 
 Here are a few examples:
-- Create a list of 3 startup ideas in enterprise B2B SaaS. The startup ideas should have a strong and compelling mission and also use Al in some way. Avoid cryptocurrency or blockchain. The startup ideas should have a cool and interesting name. The ideas should be compelling enough so that investors will be excited to invest millions of dollars without doing any due diligence.
-- My name is George. Write an email to my boss, Jim Bob, with a proposal to start using CI/CD in github. Give a list of reasons why using CI/CD would be beneficial to the company, and why a slow regular release cadence is problematic. Include a silly joke about golf in a p.s. and sign off with my name, "Geroge, the Magnificant".
-- Write a synopsis of the movie "Armageddon" in the style of Shakespeare.
-- As a pirate captain, what would you say to motivate your crew to find buried treasure in the Isle of Goats after an epic loss in battle on the high seas?
-- Come up with a short story about a man named Dan who decided to start a small business, with a sad ending.
-- Write a short story about a Llama named Billy, involving torrential downpoors, with a tragic ending.
-- Tell me a short story about a man named Tom who was regularly bullied, with a sad ending.
-- Write an email announcing a new breakthrough in tire technology by your company ("Atobormafi Tire Tech") which increases fuel efficiency by 7% on average. The target of the email is investors, since we are seeking Series B funding. Explain the profit possibilities with such a tire and ask for new investment.
+1. Banao ek list of 3 startup ideas in enterprise B2B SaaS. Yeh ideas ko kuch aisa unique hona chaiye jisme Al ka use ho aur isme koi cryptocurrency ya blockchain na ho. Startup ke naam bhi kuch interesting hona chaiye. Ye ideas investors ko itna attract kare ki wo bina kisi due diligence ke millions of dollars invest karne ke liye ready ho jaye.
+2. Mera naam hai George. Likho ek email mere boss, Jim Bob, ko with a proposal ki hume CI/CD ka use karna chaiye github me. Batao ki CI/CD ka use karne se company ko kya fayda hoga aur slow regular release cadence kyun problematic hai. Include karo ek silly joke about golf in a p.s. aur sign off karo mera naam se, "George, the Magnificant".
+3. Likho ek synopsis of the movie "Armageddon" Shakespeare ke style me.
+4. Agar tum ek pirate captain hote, to apni crew ko motivate karne ke liye kya bolte, buried treasure dhoondne ke liye Isle of Goats me, after an epic loss in battle on the high seas?
+5. Socho ek short story ek aadmi ke baare me jiska naam hai Dan, jisne decide kiya start a small business, with a sad ending.
+6. Likho ek short story about a Llama named Billy, involving torrential downpours, with a tragic ending.
+7. Sunao ek short story about a man named Tom who was regularly bullied, with a sad ending.
+8. Likho ek email announcing a new breakthrough in tire technology by your company ("Atobormafi Tire Tech") which increases fuel efficiency by 7% on average. The target of the email is investors, since hum series B funding ke liye apply kar rahe hai. Explain the profit possibilities with such a tire and ask for new investment.
 
 Make sure to include a wide variety of writing tasks with varying level of detail.
 
@@ -104,9 +103,6 @@ Include exactly {batch_size} tasks in your response.
 Response format:
 TSK 1. [task 1 in hinglish language]
 TSK 2. [task 2 in hinglish language]
-...
-
-Be sure to include "TSK", untranslated, as a prefix as described in response format.
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
