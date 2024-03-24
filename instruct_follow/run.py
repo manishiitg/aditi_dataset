@@ -95,6 +95,8 @@ INPUT: Ek bada bhukamp aapke shehar ko lagne wala hai, jisme bade nuksan ki samb
 
 End of examples
 
+Instruction should only be generated in hinglish language.
+
 The output format should be:
 INSTRUCTION: [first instruction in hinglish]
 INPUT: [first input's answer in hinglish]
@@ -286,7 +288,7 @@ def main(args):
                     sys_prompt_selected.append(question.strip())
                     question2.append(answer.strip())
 
-            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, .1)
+            outputs2 = eval_hf_model(args, model, tokenizer, prompts2, 0)
             for idx, text in enumerate(outputs2):
                 print("======")
 
