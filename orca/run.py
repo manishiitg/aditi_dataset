@@ -390,7 +390,7 @@ def main(args):
 
             for idx, text in enumerate(outputs):
                 print("======")
-                print("prompt", prompts[idx], "text", text)
+                # print("prompt", prompts[idx], "text", text)
 
                 start_key = "QUESTION"
                 end_key = "ANSWER"
