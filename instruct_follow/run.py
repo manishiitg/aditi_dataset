@@ -189,20 +189,26 @@ def main(args):
         )
 
     final_data = []
+    topics_generated_map = {}
     if repo_exists(base_repo, repo_type="dataset"):
         existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
         for r in existing_ds:
             final_data.append(r)
+            if r["language"] not in topics_generated_map:
+                topics_generated_map[r["language"]] = []
+            topics_generated_map[r["language"]].append(r["topic"])
 
     global TOPICS
 
-    languages = ["hinglish","english", "hindi"]
+    languages = ["english", "hindi"] #"hinglish"
     for lang in languages:
         topics_generated = []
+        if lang in topics_generated_map:
+            topics_generated = topics_generated_map[lang]
         args.lang = lang
         topic_instruct_map = {}
 
-        for loop in range(10):
+        for loop in range(5):
 
             prompts = []
             topics_selected = []
