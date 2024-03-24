@@ -366,11 +366,6 @@ def main(args):
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", text, re.DOTALL
                 ):
                     instructions.append(instruction)
-                    if instruction.startswith("["):
-                        instructions = instructions[0:]
-                    if instruction.endswith("]"):
-                        instructions = instructions[:-1]
-
                     print("instructions", instruction)
                     system_message_selected = PROMPT_1_RESPONSE
 
