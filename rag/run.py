@@ -276,7 +276,7 @@ def main(args):
                 print("prompt", prompts[idx], "text", text)
                 context = text.split("BEGININSTRUCTION")[0] + "BEGININSTRUCTION"
                 question = text.split("BEGININSTRUCTION")[1]
-
+                question = question.replace("BEGININSTRUCTION", "").strip()
                 questions = question.split("\n")
 
                 print("context", context)
@@ -300,7 +300,7 @@ def main(args):
                     global_questions.append(ques)
 
                 outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, 1024)
-                for idx, text in outputs:
+                for idx, text in enumerate(outputs):
                     print("context", contexts[idx])
                     print("question", question[idx])
                     print("answer", text)
