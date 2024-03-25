@@ -185,10 +185,11 @@ def main(args):
     if repo_exists(base_repo, repo_type="dataset"):
         existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
         for r in existing_ds:
-            final_data.append(r)
-            if r["language"] not in topics_generated_map:
-                topics_generated_map[r["language"]] = []
-            topics_generated_map[r["language"]].append(r["topic"])
+            pass
+            # final_data.append(r)
+            # if r["language"] not in topics_generated_map:
+            #     topics_generated_map[r["language"]] = []
+            # topics_generated_map[r["language"]].append(r["topic"])
 
     languages = ["hinglish", "english"]
     topic_selected = "rag"
