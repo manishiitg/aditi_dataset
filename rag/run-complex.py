@@ -308,7 +308,6 @@ def main(args):
                 )
                 prompts.append(text)
                 contexts.append(context)
-                print("text", text)
 
             max_tokens = 2048
             if lang == "hindi":
@@ -350,6 +349,7 @@ def main(args):
                     add_generation_prompt=True
                 )
                 prompts2.append(text)
+                print(text)
 
             max_tokens = 2048
             if lang == "hindi":
