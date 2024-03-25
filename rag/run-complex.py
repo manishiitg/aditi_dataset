@@ -105,8 +105,8 @@ The type of tasks should be diverse. The list should include diverse types of ta
 Tasks should be generated in {language} language
 
 The output format should be:
-TSK 1. [task 1 in {language} language]
-TSK 2. [task 2 in {language} language]
+TSK 1. [task 1]
+TSK 2. [task 2]
 ...
 
 Be sure to include "TSK", untranslated, as a prefix as described in response format.
@@ -134,11 +134,6 @@ The answers should be written in such a way as to have a Flesch-Kincaid readabil
 If the tasks cannot be answered using only the information provided in the input, do not make up a response.
 
 Generate answer in {language} language
-
-Question: 
-{questions}
-
-Answer:
 """
 
 
@@ -195,7 +190,7 @@ def main(args):
                 topics_generated_map[r["language"]] = []
             topics_generated_map[r["language"]].append(r["topic"])
 
-    languages = ["hinglish","english", "hindi"]
+    languages = ["hinglish", "english", "hindi"]
     topic_selected = "rag"
     PROGRAMMING_TOPICS = []
     for lang in languages:
@@ -318,15 +313,14 @@ def main(args):
                 for instruction in re.findall(
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", questions_text, re.DOTALL
                 ):
-                    
+
                     user = PROMPT1_RESPONSE.replace("{language}", lang)
                     user = user.replace("{context}", context)
-                    user = user.replace("{question}", instruction)
 
                     msg_list = []
-                    msg_system = {"role": "system", "content": "You are an helpful AI assistant."}
+                    msg_system = {"role": "system", "content": user}
                     msg_list.append(msg_system)
-                    msg_prompt = {"role": "user", "content": user}
+                    msg_prompt = {"role": "user", "content": instruction}
                     msg_list.append(msg_prompt)
 
                     contexts2.append(contexts[idx])
@@ -361,7 +355,7 @@ def main(args):
                     "evol_question": "",
                     "evol_answer": "",
                 })
-            
+
             os.exit(1)
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=False)
