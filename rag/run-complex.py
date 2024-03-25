@@ -133,15 +133,17 @@ If the tasks cannot be answered using only the information provided in the input
 
 All answers should be in {language}.
 
+Generate detailed answers for every question.
+
 Questions: 
 {questions}
 
 Generate answers for the above questions based on the above context in the format.
 QUESTION: [first question]
-ANSWER: [first question's answer in hinglish]
+ANSWER: [first question's answer in {language}]
 
 QUESTION: [second question]
-ANSWER: [second question's answer in hinglish]
+ANSWER: [second question's answer in {language}]
 """
 
 
