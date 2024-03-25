@@ -1,0 +1,191 @@
+TOOLS
+```json
+[
+  {
+    "name": "performance_analyzer",
+    "description": "Analyzes an athlete's mental performance and provides insights",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "athlete_id": {
+          "type": "string",
+          "description": "The unique identifier of the athlete"
+        },
+        "performance_data": {
+          "type": "object",
+          "properties": {
+            "stress_level": {
+              "type": "number",
+              "description": "The athlete's perceived stress on a scale"
+            },
+            "focus_duration": {
+              "type": "integer",
+              "description": "The duration of focused concentration in minutes"
+            },
+            "recovery_time": {
+              "type": "integer",
+              "description": "The time taken to recover between sessions in minutes"
+            }
+          },
+          "required": [
+            "stress_level",
+            "focus_duration",
+            "recovery_time"
+          ]
+        }
+      },
+      "required": [
+        "athlete_id",
+        "performance_data"
+      ]
+    }
+  },
+  {
+    "name": "goal_setting",
+    "description": "Assists athletes in setting and tracking sports psychology goals",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "athlete_id": {
+          "type": "string",
+          "description": "The unique identifier of the athlete"
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The name of the goal"
+              },
+              "description": {
+                "type": "string",
+                "description": "A brief description of the goal"
+              },
+              "target_date": {
+                "type": "string",
+                "format": "date",
+                "description": "The date to achieve the goal"
+              },
+              "progress": {
+                "type": "number",
+                "description": "The current progress towards the goal (0-100)"
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "target_date"
+            ]
+          }
+        }
+      },
+      "required": [
+        "athlete_id",
+        "goals"
+      ]
+    }
+  },
+  {
+    "name": "coping_strategies",
+    "description": "Suggests coping mechanisms for pre-competition anxiety",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "athlete_id": {
+          "type": "string",
+          "description": "The unique identifier of the athlete"
+        },
+        "anxiety_level": {
+          "type": "number",
+          "description": "The athlete's anxiety level on a scale"
+        },
+        "previous_strategies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Previously used coping strategies"
+          },
+          "description": "A list of strategies the athlete has tried"
+        }
+      },
+      "required": [
+        "athlete_id",
+        "anxiety_level"
+      ]
+    }
+  },
+  {
+    "name": "visualizacion_session",
+    "description": "Guides an athlete through a visualization session for improved performance",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "athlete_id": {
+          "type": "string",
+          "description": "The unique identifier of the athlete"
+        },
+        "event_description": {
+          "type": "string",
+          "description": "A description of the event or scenario to visualize"
+        },
+        "duration": {
+          "type": "integer",
+          "description": "The duration of the visualization session in minutes"
+        }
+      },
+      "required": [
+        "athlete_id",
+        "event_description",
+        "duration"
+      ]
+    }
+  }
+]
+```
+
+You are given a TOOLS defination.
+You need to generate a relevent output based on users question using TOOLS in json format.
+
+Rules For Using TOOLS:
+    You ONLY have access to TOOLS listed above, and should NEVER make up tools that are not listed here.
+    If a value for tool parameter is missing, don't make assumptions about the value always ask the user.
+    You can only use a tool, when you have all parameter values. If you don't have values for all parameters, return "no_tools"
+    Always ask user about missing parameter values.
+    If there is no tool which fits the, reply with "no_tools"
+
+    If you are selecting a TOOL, reply in the exact format
+    {'arguments': <args-dict>, 'name': <function-name>}
+
+
+Reply in format below:
+
+Thought in English: think step by step about what to do in detail.
+Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
+Should Execute Action: do we have all parameter values to execute action reply only yes or no. If yes, i.e executing a tool reply to user should only contain a message asking user to wait.
+Reply to User: a short natural language based message to be sent to the user
+
+Question: How does the athlete's favorite color influence the performance analyzer's suggestions for stress management?
+
+
+List of 5 TRICKY tasks generated:
+TSK 1. For an athlete with a stress level of 7 out of 10, a focus duration of 45 minutes, and a recovery time of 120 minutes, what specific insights would the performance analyzer provide to improve their mental performance?
+TSK 2. If an athlete has set a goal to increase their focus duration by 20% in the next 60 days, and they're currently at 60%, what is the target focus duration they should aim for, and when is the target date?
+TSK 3. Given an athlete with an anxiety level of 8 on a scale of 10 and has tried deep breathing and positive self-talk as coping strategies, what novel coping mechanism could the coping_strategies tool suggest?
+TSK 4. In a visualization session lasting 25 minutes, an athlete is visualizing a successful performance in a marathon. What specific details should the visualizacion_session guide include to enhance the effectiveness of the session?
+TSK 5. An athlete with a goal to reduce their perceived stress level from 9 to 5 within a month has made 30% progress. Assuming the goal is linear, on what date would they reach their target stress level?
+
+List of 5 tasks generated which might CONFUSE the agent:
+TSK 1. How does the athlete's favorite color influence the performance analyzer's suggestions for stress management?
+TSK 2. Can the goal_setting tool predict the exact outcome of an athletic competition based on the set goals?
+TSK 3. In the coping_strategies tool, does the athlete's zodiac sign affect the recommended coping mechanisms for anxiety?
+TSK 4. Does the duration of the visualization session in the visualizacion_session tool affect the athlete's physical fitness, rather than mental preparation?
+TSK 5. Can the performance analyzer measure an athlete's emotional intelligence by analyzing their recovery time?
+
+List of 5 tasks generated which don't require tools:
+TSK 1. What are three common mental barriers that athletes might face during competition, and how can they overcome them?
+TSK 2. Describe a pre-competition routine that an athlete can follow to help manage anxiety and increase focus.
+TSK 3. Explain the concept of "flow state" in sports psychology and its importance for optimal performance.
+TSK 4. Discuss the role of a support team in an athlete's mental well-being and performance improvement.
+TSK 5. What are some mindfulness techniques that athletes can practice to enhance their mental resilience and concentration?

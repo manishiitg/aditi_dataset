@@ -1,0 +1,74 @@
+I would like you to help me generate prompts for a large language model to help train it in functional calling.
+
+To accomplish this, I want you to generate 3 to 6 tools similar to below.
+
+Example of tools:
+[
+  {
+    "name": "search_recipe",
+    "description": "Search for a recipe based on ingredients",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "ingredients": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The ingredients available"
+        },
+        "cuisine": {
+          "type": "string",
+          "description": "The cuisine type"
+        },
+        "diet": {
+          "type": "string",
+          "description": "The dietary restrictions"
+        },
+        "time": {
+          "type": "integer",
+          "description": "The maximum cooking time in minutes"
+        }
+      },
+      "required": [
+        "ingredients"
+      ]
+    }
+  },
+  {
+    "name": "convert_currency",
+    "description": "Convert one currency to another",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "The amount to convert"
+        },
+        "from_currency": {
+          "type": "string",
+          "description": "The currency to convert from"
+        },
+        "to_currency": {
+          "type": "string",
+          "description": "The currency to convert to"
+        }
+      },
+      "required": [
+        "amount",
+        "from_currency",
+        "to_currency"
+      ]
+    }
+  }
+]
+
+
+The tools generated should be related to related to:
+Sports psychology
+
+
+Tools generated should be in json format with "name", "description", "parameters", "required" as mandatory field.
+Be sure to format the list of available functions as proper JSON, with appropriate spacing for nested objects.
+
+Only responsed with the TOOLs json, don't include any placeholders text
