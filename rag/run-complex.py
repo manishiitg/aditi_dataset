@@ -300,8 +300,6 @@ def main(args):
                 contexts.append(context)
 
             max_tokens = 2048
-            if lang == "hindi":
-                max_tokens = 4096
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2, max_tokens)
 
             prompts2 = []
@@ -335,9 +333,7 @@ def main(args):
                     )
                     prompts2.append(text)
 
-            max_tokens = 4096
-            if lang == "hindi":
-                max_tokens = 8196
+            max_tokens = 2048
             outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, max_tokens)
             for idx, text in enumerate(outputs):
                 print("context", contexts2[idx])
