@@ -102,7 +102,7 @@ Generate tasks which always reference multiple text blocks.
 
 The type of tasks should be diverse. The list should include diverse types of tasks like summization, writing, open-ended generation, classification, editing, etc.
 
-Tasks should be generated in {language} language
+Tasks should be generated only in {language} language
 
 The output format should be:
 TSK 1. [task 1 in {language} language]
@@ -190,7 +190,7 @@ def main(args):
                 topics_generated_map[r["language"]] = []
             topics_generated_map[r["language"]].append(r["topic"])
 
-    languages = ["hinglish", "english", "hindi"]
+    languages = ["hinglish", "english"]
     topic_selected = "rag"
     PROGRAMMING_TOPICS = []
     for lang in languages:
