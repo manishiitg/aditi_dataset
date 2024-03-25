@@ -216,7 +216,7 @@ def main(args):
             prompts = []
             if args.generate_topics or True:
                 message = []
-                prompt = """Give me a numbered list of 50 completely random topics."""
+                prompt = """Give me a numbered list of 3 completely random topics."""
                 if len(topics_generated) > 0:
                     prompt += "\n Topics should not be related to " + \
                         ",".join(topics_generated)
@@ -375,6 +375,7 @@ def main(args):
                     "evol_answer": "",
                 })
 
+            os.exit(1)
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=False)
 
