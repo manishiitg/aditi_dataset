@@ -100,7 +100,7 @@ When generating questions, don't mention the word "CONTEXT" in the questions.
 
 Generate tasks which always reference multiple text blocks.
 
-The type of tasks should be diverse. The list should include diverse types of tasks like open-ended generation, classification, editing, etc.
+The type of tasks should be diverse. The list should include diverse types of tasks like summization, writing, open-ended generation, classification, editing, etc.
 
 Tasks should be generated in {language} language
 
