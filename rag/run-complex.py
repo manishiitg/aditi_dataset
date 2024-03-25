@@ -100,16 +100,12 @@ When generating questions, don't mention the word "CONTEXT" in the questions.
 
 Generate tasks which always reference multiple text blocks.
 
-Tasks can be related to 
+The type of tasks should be diverse. The list should include diverse types of tasks like open-ended generation, classification, editing, etc.
 
 Tasks should be generated in {language} language
 
 Respond in the following format.
 List of {task_count} TRICKY questions generated in {language}:
-1.
-2.
-
-List of {task_count} questions generated in {language} which might CONFUSE the agent.
 1.
 2.
 """
