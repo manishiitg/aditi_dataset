@@ -128,11 +128,11 @@ Don't include any references unless asked.
 
 If there are multiple context blocks from which the references are extracted, be sure to logically separate the references rather than including a single large mixed block.
 
-The output should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
+The answers should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
 
 If the tasks cannot be answered using only the information provided in the input, do not make up a response.
 
-All output should be in {language}.
+All answers should be in {language}.
 
 
 Questions: 
@@ -144,7 +144,6 @@ ANSWER: [first question's answer in hinglish]
 
 QUESTION: [second question]
 ANSWER: [second question's answer in hinglish]
-
 """
 
 
@@ -249,6 +248,7 @@ def main(args):
                     topics_generated.append(t)
                     print("topic", t)
 
+            topics = []
             for topic_selected in PROGRAMMING_TOPICS:
                 existing_instructions = []
                 for r in final_data:
@@ -274,8 +274,7 @@ def main(args):
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
-                msg_prompt = {"role": "user",
-                              "content": user}
+                msg_prompt = {"role": "user", "content": user}
                 msg_list.append(msg_prompt)
 
                 text = tokenizer.apply_chat_template(
@@ -284,6 +283,7 @@ def main(args):
                     add_generation_prompt=True
                 )
                 prompts.append(text)
+                topics.append(topic_selected)
 
             outputs = eval_hf_model(args, model, tokenizer, prompts, 0)
 
@@ -308,10 +308,12 @@ def main(args):
                 prompts.append(text)
                 contexts.append(context)
 
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 0, 2048)
+            max_tokens = 2048
+            if lang == "hindi":
+                max_tokens = 4096
+            outputs = eval_hf_model(args, model, tokenizer, prompts, 0, max_tokens)
 
             prompts2 = []
-            contexts = []
             global_questions = []
             for idx, text in enumerate(outputs):
                 context = contexts[idx]
@@ -333,28 +335,49 @@ def main(args):
                 for i, question in enumerate(questions, start=1):
                     print(f"{question}")
 
-                for ques in questions:
+                questions_text = "\n".join(questions)
 
-                    msg_system = {"role": "system", "content": PROMPT1_RESPONSE.replace("{language}", lang)}
-                    msg_list.append(msg_system)
-                    msg_prompt = {"role": "user", "content": ques}
-                    msg_list.append(msg_prompt)
+                user = PROMPT1_RESPONSE.replace("{language}", lang)
+                user = user.replace("{context}", context)
+                user = user.replace("{questions}", questions_text)
 
-                    text = tokenizer.apply_chat_template(
-                        msg_list,
-                        tokenize=False,
-                        add_generation_prompt=True
-                    )
-                    prompts2.append(text)
-                    contexts.append(context)
-                    global_questions.append(ques)
+                msg_system = {"role": "system", "content": "You are an helpful AI assistant."}
+                msg_list.append(msg_system)
+                msg_prompt = {"role": "user", "content": user}
+                msg_list.append(msg_prompt)
 
-                outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, 2048)
-                for idx, text in enumerate(outputs):
-                    print("context", contexts[idx])
-                    print("question", global_questions[idx])
-                    print("answer", text)
-                    print("========")
+                global_questions.append(text)
+
+                text = tokenizer.apply_chat_template(
+                    msg_list,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                prompts2.append(text)
+                
+
+            max_tokens = 2048
+            if lang == "hindi":
+                max_tokens = 4096
+            outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, max_tokens)
+            for idx, text in enumerate(outputs):
+                print("context", contexts[idx])
+                print("question", global_questions[idx])
+                print("answer", text)
+                print("========")
+
+                final_data.append({
+                    "topic": topics[idx],
+                    "question": global_questions[idx],
+                    "answer": text,
+                    "system_prompt": "",
+                    "language": args.lang,
+                    "type": "rag",
+                    "model": args.model_name_or_path,
+                    "messages": [],
+                    "evol_question": "",
+                    "evol_answer": "",
+                })
 
             os.exit(1)
             # dataset = process_and_update_dataset(final_data)
