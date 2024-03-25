@@ -209,11 +209,11 @@ def main(args):
             topics_generated = topics_generated_map[lang]
         topic_instruct_map = {}
 
-        for loop in range(1):
+        for loop in range(10):
             prompts = []
             if args.generate_topics or True:
                 message = []
-                prompt = """Give me a numbered list of 10 completely random topics."""
+                prompt = """Give me a numbered list of 50 completely random topics."""
                 if len(topics_generated) > 0:
                     prompt += "\n Topics should not be related to " + \
                         ",".join(topics_generated)
