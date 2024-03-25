@@ -337,8 +337,6 @@ def main(args):
                     add_generation_prompt=True
                 )
                 prompts2.append(text)
-                print("text)", text)
-                os.exit(1)
 
             max_tokens = 2048
             if lang == "hindi":
