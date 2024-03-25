@@ -134,7 +134,6 @@ If the tasks cannot be answered using only the information provided in the input
 
 All answers should be in {language}.
 
-
 Questions: 
 {questions}
 
