@@ -313,6 +313,8 @@ def main(args):
                 for instruction in re.findall(
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", questions_text, re.DOTALL
                 ):
+                    
+                    print("instruction", instruction)
 
                     user = PROMPT1_RESPONSE.replace("{language}", lang)
                     user = user.replace("{context}", context)
