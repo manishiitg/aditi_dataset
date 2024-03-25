@@ -222,13 +222,12 @@ def main(args):
     if repo_exists(base_repo, repo_type="dataset"):
         existing_ds = load_dataset(base_repo, split="train", cache_dir="temp-" + str(time.time()))
         for r in existing_ds:
-            pass
-            # final_data.append(r)
-            # if r["language"] not in topics_generated_map:
-            #     topics_generated_map[r["language"]] = []
-            # topics_generated_map[r["language"]].append(r["topic"])
+            final_data.append(r)
+            if r["language"] not in topics_generated_map:
+                topics_generated_map[r["language"]] = []
+            topics_generated_map[r["language"]].append(r["topic"])
 
-    languages = ["english", "hinglish"]
+    languages = ["hinglish"]
     topic_selected = "tools"
     PROGRAMMING_TOPICS = []
     for lang in languages:
@@ -325,6 +324,9 @@ def main(args):
 
                 msg_list = []
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
+                if lang == "hinglish":
+                    SYSTEM_PROMPT += "\n Reply in hinglish"
+
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user", "content": user}

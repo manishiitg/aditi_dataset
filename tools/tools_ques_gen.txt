@@ -137,7 +137,7 @@ TOOLS:
 ]
 ```
 
-Tasks should be generated only in english language.
+Tasks should be generated only in hinglish language.
 
 Your task is to generate complex task(s) that asks the user to generate a response based exclusively on the information of one or more of the generated tools blocks.
 
@@ -155,13 +155,13 @@ When generating questions, don't mention the word "TOOLS" in the questions.
 
 Respond in the following format.
 List of 5 tasks generated with tools and parameters:
-TSK 1. [task 1 in english language]
-TSK 2. [task 2 in english language]
+TSK 1. [task 1 in hinglish language]
+TSK 2. [task 2 in hinglish language]
 
 List of 5 tasks generated with parameters missing.
-TSK 1. [task 1 in english language]
-TSK 2. [task 2 in english language]
+TSK 1. [task 1 in hinglish language]
+TSK 2. [task 2 in hinglish language]
 
 List of 5 tasks generated which don't require tools.
-TSK 1. [task 1 in english language]
-TSK 2. [task 2 in english language]
+TSK 1. [task 1 in hinglish language]
+TSK 2. [task 2 in hinglish language]
