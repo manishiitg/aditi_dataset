@@ -316,21 +316,8 @@ def main(args):
 
             prompts2 = []
             global_questions = []
-            for idx, text in enumerate(outputs):
+            for idx, questions_text in enumerate(outputs):
                 context = contexts[idx]
-
-                def extract_questions(text):
-                    pattern = r'\d+\.\s*(.+?)\s*\?'
-                    matches = re.findall(pattern, text)
-                    return matches
-
-                print("questions", text)
-                questions = extract_questions(text)
-
-                # Print the list of questions
-                questions_text = ""
-                for i, question in enumerate(questions, start=1):
-                    questions_text += f"{i}. {question} \n"
 
                 user = PROMPT1_RESPONSE.replace("{language}", lang)
                 user = user.replace("{context}", context)
@@ -350,7 +337,8 @@ def main(args):
                     add_generation_prompt=True
                 )
                 prompts2.append(text)
-                print(text)
+                print("text)", text)
+                os.exit(1)
 
             max_tokens = 2048
             if lang == "hindi":
