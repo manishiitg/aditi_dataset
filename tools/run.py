@@ -129,6 +129,8 @@ You also need to generate question another set of questions, which might CONFUSE
 
 When generating questions, don't mention the word "TOOLS" in the questions.
 
+Generate tasks in {language} language only.
+
 Respond in the following format.
 List of 5 tasks generated with tools and parameters:
 TSK 1. [task 1 in {language} language]
@@ -325,7 +327,7 @@ def main(args):
                 msg_list = []
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 if lang == "hinglish":
-                    SYSTEM_PROMPT += "\n Reply in hinglish"
+                    SYSTEM_PROMPT += "\n Reply in hinglish only."
 
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
