@@ -347,7 +347,7 @@ def main(args):
                     "topic": topics2[idx],
                     "question": global_questions[idx],
                     "answer": text,
-                    "system_prompt": "",
+                    "system_prompt": contexts2[idx],
                     "language": args.lang,
                     "type": "rag",
                     "model": args.model_name_or_path,
