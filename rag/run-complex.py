@@ -304,6 +304,7 @@ def main(args):
 
             prompts2 = []
             contexts2 = []
+            topics2 = []
             global_questions = []
             for idx, questions_text in enumerate(outputs):
                 context = contexts[idx]
@@ -325,6 +326,7 @@ def main(args):
 
                     contexts2.append(contexts[idx])
                     global_questions.append(instruction)
+                    topics2.append(topics[idx])
 
                     text = tokenizer.apply_chat_template(
                         msg_list,
@@ -342,7 +344,7 @@ def main(args):
                 print("========")
 
                 final_data.append({
-                    "topic": topics[idx],
+                    "topic": topics2[idx],
                     "question": global_questions[idx],
                     "answer": text,
                     "system_prompt": "",
