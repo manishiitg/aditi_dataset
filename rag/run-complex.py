@@ -329,7 +329,7 @@ def main(args):
                 msg_prompt = {"role": "user", "content": user}
                 msg_list.append(msg_prompt)
 
-                global_questions.append(text)
+                global_questions.append(questions_text)
 
                 text = tokenizer.apply_chat_template(
                     msg_list,
@@ -360,6 +360,8 @@ def main(args):
                     "evol_question": "",
                     "evol_answer": "",
                 })
+            
+            os.exit(1)
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=False)
 
