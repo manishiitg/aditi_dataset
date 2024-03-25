@@ -168,7 +168,7 @@ Do not make up parameter values, make sure you have exact value as per the requi
 Reply in format below:
 
 Thought in English: think step by step about what to do in detail.
-Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
+Action: the action to take if you have all tool parameter values, only one name of tool_names, in the exact format {'arguments': <args-dict>, 'name': <function-name>}
 Should Execute Action: do we have all parameter values to execute action reply only yes or no. If yes, i.e executing a tool reply to user should only contain a message asking user to wait.
 Reply to User: a short natural language based message to be sent to the user
 """
@@ -237,7 +237,7 @@ def main(args):
             topics_generated = topics_generated_map[lang]
         topic_instruct_map = {}
 
-        for loop in range(5):
+        for loop in range(1):
             prompts = []
             if args.generate_topics or True:
                 message = []
@@ -381,7 +381,7 @@ def main(args):
             max_tokens = 1024
             outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, max_tokens)
             for idx, text in enumerate(outputs):
-                print("context", contexts2[idx])
+                # print("context", contexts2[idx])
                 print("question", global_questions[idx])
                 print("answer", text)
                 print("========")
