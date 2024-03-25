@@ -316,23 +316,17 @@ def main(args):
             global_questions = []
             for idx, text in enumerate(outputs):
                 context = contexts[idx]
-                print("questions", text)
 
                 def extract_questions(text):
-                    # Regular expression to match questions
-                    pattern = r'\d+\.\s*(.+?)(?=\d+\.\s*|$)'
-
-                    # Find all matches in the text
+                    pattern = r'\d+\.\s*(.+?)\s*\?'
                     matches = re.findall(pattern, text)
-
-                    # Return the list of questions
                     return matches
 
                 questions = extract_questions(text)
 
                 # Print the list of questions
                 for i, question in enumerate(questions, start=1):
-                    print(f"{question}")
+                    print(f"question {question}")
 
                 questions_text = "\n".join(questions)
 
