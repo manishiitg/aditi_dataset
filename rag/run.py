@@ -209,7 +209,7 @@ def main(args):
             topics_generated = topics_generated_map[lang]
         topic_instruct_map = {}
 
-        for loop in range(20):
+        for loop in range(1):
             prompts = []
             if args.generate_topics or True:
                 message = []
