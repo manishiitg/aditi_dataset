@@ -43,6 +43,8 @@ The random text block(s) should be extremely realistic, and should not include a
 
 Make sure the random text blocks are atleast more than 250 words.
 
+Make sure the random blocks should have interlinked facts.
+
 Each text block should be in English, but "BEGININPUT", "ENDINPUT" are special tokens that must not be translated.
 
 Random text block writing style:
@@ -82,6 +84,7 @@ Output format should be:
 """
 
 PROMPT1_QUESTION_GEN = """
+Below are one or more blocks of input text between BEGININPUT and ENDINPUT.
 Context:
 {context}
 
@@ -93,11 +96,11 @@ Do not include phrasing such as "Using the first text block", or "using the blog
 
 The task(s) must not start with "Describe the ...", "Explain how ...", etc., and should ask for specific information, and must be completely and accurately answerable using only the random text.
 
-Ask TRICKY questions, so that the user really needs to think before he is able to answer. 
-
-You also need to generate question another set of questions, which might CONFUSE the agent and force him to hallucinate. 
-
 When generating questions, don't mention the word "CONTEXT" in the questions.
+
+Generate tasks which always reference multiple text blocks.
+
+Tasks can be related to 
 
 Tasks should be generated in {language} language
 
@@ -209,7 +212,7 @@ def main(args):
             topics_generated = topics_generated_map[lang]
         topic_instruct_map = {}
 
-        for loop in range(5):
+        for loop in range(10):
             prompts = []
             if args.generate_topics or True:
                 message = []
