@@ -204,7 +204,7 @@ def main(args):
             prompts = []
             if args.generate_topics or True:
                 message = []
-                prompt = """Give me a numbered list of 50 completely random topics."""
+                prompt = """Give me a numbered list of 50 completely random topics.  Every topic should be in a new line."""
                 if len(topics_generated) > 0:
                     prompt += "\n Topics should not be related to " + \
                         ",".join(topics_generated)
