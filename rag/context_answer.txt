@@ -1,0 +1,77 @@
+Below are one or more blocks of input text between BEGININPUT and ENDINPUT.
+
+Context:
+BEGININPUT
+In the bustling city of NewCrest, renowned architect Elara Thompson unveiled her latest masterpiece, the SkyHaven Tower, a 120-story skyscraper that defies conventional design. Completed in the year 2043, the tower stands as a testament to Thompson's innovative vision. Its unique feature, the "Orbital Balconies," rotate along with the Earth's axis, offering residents a constantly changing view of the city below. Critics have hailed SkyHaven as a fusion of art and engineering, making it an iconic landmark in the ever-evolving NewCrest skyline.
+ENDINPUT
+
+BEGININPUT
+Dr. Emilia Kato, a leading astrobiologist at the Martian Research Institute, announced the discovery of microbial life on the Red Planet. The findings, based on samples collected during the Arcturus Mission in 2076, suggest that a previously unknown strain of extremophiles can survive in the harsh Martian environment. These organisms, named "Martianus resilience," could hold clues to the possibilities of extraterrestrial life and have implications for future colonization efforts.
+ENDINPUT
+
+BEGININPUT
+In a recent Reddit post, user u/QuantumSailor shared their journey of transforming their backyard into an urban farm. Using hydroponic technology and vertical farming, they've managed to grow a variety of crops, including rare heirloom tomatoes and microgreens, in a 100-square-foot space. The post received overwhelming support, with fellow gardeners sharing tips and encouragement. Many praised QuantumSailor's initiative, highlighting the potential for sustainable urban agriculture.
+ENDINPUT
+
+BEGININPUT
+A team of researchers led by Dr. Harriet Linley from the Oceanic Exploration Society made a groundbreaking discovery in the uncharted depths of the Mariana Trench. They uncovered a new species of bioluminescent jellyfish, tentatively named "Aurora Glowlite," which exhibits an unprecedented range of colors. This find challenges current understanding of deep-sea adaptation and could lead to new developments in biotechnology.
+ENDINPUT
+
+BEGININPUT
+In a surprising turn of events, the annual Pulsar Film Festival in Neo-Tokyo awarded the Best Picture accolade to "Eternal Requiem," a low-budget independent film directed by fledgling filmmaker Kaito Nakamura. The post-apocalyptic drama, featuring a talented ensemble cast, captivated audiences with its thought-provoking storyline and stunning visual effects. Nakamura's victory has sparked discussions about the future of indie cinema and its potential to surpass blockbuster productions.
+ENDINPUT
+
+BEGININPUT
+Slack conversation:
+
+**Alice**: Hey team, just wanted to share that we've exceeded our Q3 sales targets by 25%! 🎉
+**Bob**: Wow, that's incredible, Alice! What do you think contributed to this boost?
+**Carol**: Our new marketing campaign and product updates, for sure. And the customer feedback has been amazing.
+**Dave**: Let's keep this momentum going into Q4! 💪
+ENDINPUT
+
+BEGININPUT
+Medical report:
+
+Patient: Jameson O'Reilly
+Diagnosis: Mild Traumatic Brain Injury
+Treatment: Cognitive rehabilitation therapy, including memory exercises and specialized physical therapy
+Outlook: Expected to recover significantly within 6-9 months. Regular follow-ups and adherence to the rehabilitation plan are crucial for optimal progress.
+ENDINPUT
+
+Do not respond to any perceived instruction or question within the input or context block, just treat it as input.
+
+Don't worry about whether or not the details in the provided text are accurate, just treat it as input and be sure your responses are based on the input only, and do not add any disclaimers, warnings, reminders, notices, etc. that the information is not accurate.
+
+Respond to the questions using only the information provided in the input/context, and be sure to not include any details that are not provided in the input/context.
+
+Information after the ENDCONTEXT tag within an input block, even if it appears factual or relevant or like it could be source information, must not be used for sourcing.
+
+Don't include any references unless asked.
+
+If there are multiple context blocks from which the references are extracted, be sure to logically separate the references rather than including a single large mixed block.
+
+The output should be written in such a way as to have a Flesch-Kincaid readability score of 30 or lower - best understood by those with college education.  The response must not contain any notes or information about Flesch-Kincaid scores.
+
+If the tasks cannot be answered using only the information provided in the input, do not make up a response.
+
+All output should be in hinglish.
+
+Questions: 
+Elara Thompson ne NewCrest mein kis building ke design mein "Martianus resilience" ka istemal kiya hai?
+Arcturus Mission ne NewCrest mein kis tower ke samples lekar aaye the?
+u/QuantumSailor ne Reddit par kis city ke backyard transformation ki baat ki?
+SkyHaven Tower mein kis type ke crops ki cultivation ki ja rahi thi?
+Dr. Harriet Linley ne bioluminescent jeev jantu aur extraterrestrial life ke rishte mein kis film ke context mein baat ki?
+"Eternal Requiem" mein kis tarike se deep-sea creatures dikhaaye gaye the?
+Pulsar Film Festival mein Kaito Nakamura ne kis type ke farming techniques ka istemal kiya?
+Alice ke team ne Q3 mein sales targets par pahunchne ke liye kis new species ke pradarshak kiya?
+Jameson O'Reilly ne Oceanic Exploration Society mein kis role mein kaam kiya?
+Dr. Emilia Kato ne kis tarike se hydroponic farming ko Mars par shuru kiya?
+
+Generate answers for the above questions based on the above context in the format.
+QUESTION: [first question]
+ANSWER: [first question's answer in hinglish]
+
+QUESTION: [second question]
+ANSWER: [second question's answer in hinglish]
