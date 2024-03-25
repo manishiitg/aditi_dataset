@@ -311,7 +311,7 @@ def main(args):
             max_tokens = 2048
             if lang == "hindi":
                 max_tokens = 4096
-            outputs = eval_hf_model(args, model, tokenizer, prompts, 0, max_tokens)
+            outputs = eval_hf_model(args, model, tokenizer, prompts, .2, max_tokens)
 
             prompts2 = []
             global_questions = []
