@@ -65,7 +65,7 @@ Example of tools:
 
 
 The tools generated should be related to related to:
-Sports psychology
+AWS IoT Analytics for data analysis
 
 
 Tools generated should be in json format with "name", "description", "parameters", "required" as mandatory field.

@@ -123,16 +123,18 @@ Ask TRICKY questions, so that the user really needs to think before he is able t
 
 You also need to generate question another set of questions, which might CONFUSE the agent and force him to hallucinate. 
 
+1. Generate diverse questions which would require the tools to be used with values for all the required parameters.
+2. Generate random questions which require tools to be used but with few required parameters missing. Don't specially mention parameters are missing in the question.
+3. Generate questions which don't require tools be used at all.
+
 When generating questions, don't mention the word "TOOLS" in the questions.
 
-Tasks should be generated in {language} language
-
 Respond in the following format.
-List of 5 TRICKY tasks generated:
+List of 5 tasks generated with tools and parameters:
 TSK 1. [task 1 in {language} language]
 TSK 2. [task 2 in {language} language]
 
-List of 5 tasks generated which might CONFUSE the agent.
+List of 5 tasks generated with parameters missing.
 TSK 1. [task 1 in {language} language]
 TSK 2. [task 2 in {language} language]
 
@@ -348,6 +350,10 @@ def main(args):
                     r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", questions_text, re.DOTALL
                 ):
                     
+                    if "List of 5 tasks" in instruction:
+                        ixxx = instruction.find("List of 5 tasks")
+                        instruction = instruction[:ixxx]
+
                     print("instruction", instruction)
 
                     user = PROMPT1_RESPONSE.replace("{language}", lang)

@@ -1,4 +1,5 @@
-TOOLS
+TOOLS:
+
 ```json
 [
   {
@@ -135,50 +136,31 @@ TOOLS
 ]
 ```
 
-You are given a TOOLS defination.
-You need to generate a relevent output based on users question using TOOLS in json format.
+Tasks should be generated only in english language.
 
-Rules For Using TOOLS:
-    You ONLY have access to TOOLS listed above, and should NEVER make up tools that are not listed here.
-    If a value for tool parameter is missing, don't make assumptions about the value always ask the user.
-    You can only use a tool, when you have all parameter values. If you don't have values for all parameters, return "no_tools"
-    Always ask user about missing parameter values.
-    If there is no tool which fits the, reply with "no_tools"
-    
-    If you are selecting a TOOL, reply in the exact format
-    {'arguments': <args-dict>, 'name': <function-name>}
+Your task is to generate complex task(s) that asks the user to generate a response based exclusively on the information of one or more of the generated tools blocks.
 
-If executing  a TOOL:
-Make sure you have all required parameter values as per the parameter types.
-Do not make up parameter values, make sure you have exact value as per the required parameter type.
+The task(s) should be questions or instructions. The task(s) should not specifically indicate that the user should reference the tools, just state the task(s).
 
-Reply in format below:
+Do not include phrasing such as "Using the first text block", or "using the blog post", etc., just assume the target audience will know where to find the answer based on the question/instruction.
 
-Thought in English: think step by step about what to do in detail.
-Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
-Should Execute Action: do we have all parameter values to execute action reply only yes or no. If yes, i.e executing a tool reply to user should only contain a message asking user to wait.
-Reply to User: a short natural language based message to be sent to the user
+The task(s) must not start with "Describe the ...", "Explain how ...", etc., and should ask for specific information, and must be completely and accurately answerable using only the random text.
 
-Question: Find the current weather in a city using its ZIP code, but don't mention the country code or temperature units.
+1. Generate diverse questions which would require the tools to be used with values for all the required parameters.
+2. Generate random questions which require tools to be used but with few required parameters missing. Don't specially mention parameters are missing in the question.
+3. Generate questions which don't require tools be used at all.
 
+When generating questions, don't mention the word "TOOLS" in the questions.
 
+Respond in the following format.
 List of 5 tasks generated with tools and parameters:
-TSK 1. What's the current weather in New York City, including temperature and weather conditions, using metric units?
-TSK 2. Can you fetch a 5-day forecast for London, showing high and low temperatures in Fahrenheit?
-TSK 3. Are there any active weather alerts for Tokyo, Japan?
-TSK 4. What's the current weather in Sydney, Australia, using ZIP code 2000, and provide the temperature in Celsius?
-TSK 5. Find the humidity index for a location with 80% humidity and a temperature of 25°C, in Paris.
+TSK 1. [task 1 in english language]
+TSK 2. [task 2 in english language]
 
-List of 5 tasks generated with parameters missing:
-TSK 1. Check the current weather conditions for a location based on its IP address.
-TSK 2. Get a 5-day forecast for a city, but don't specify the location or temperature units.
-TSK 3. Determine if there are any weather alerts for a location, only providing the latitude and longitude.
-TSK 4. Find the current weather in a city using its ZIP code, but don't mention the country code or temperature units.
-TSK 5. Calculate the humidity index for a location, but don't provide the temperature.
+List of 5 tasks generated with parameters missing.
+TSK 1. [task 1 in english language]
+TSK 2. [task 2 in english language]
 
-List of 5 tasks generated which don't require tools:
-TSK 1. Name three factors that influence weather patterns.
-TSK 2. Describe the difference between a hurricane and a tornado.
-TSK 3. Explain the process of water evaporation in the context of the water cycle.
-TSK 4. What are the four main seasons experienced in temperate climates?
-TSK 5. Discuss the role of the Earth's axis tilt in causing seasonal changes.
+List of 5 tasks generated which don't require tools.
+TSK 1. [task 1 in english language]
+TSK 2. [task 2 in english language]
