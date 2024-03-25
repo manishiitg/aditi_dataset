@@ -170,7 +170,7 @@ def eval_hf_model(args, model, tokenizer, prompts, temperature, max_tokens=8196)
 
 def main(args):
 
-    base_repo = "manishiitg/indic-synthetic-rag"
+    base_repo = "manishiitg/indic-synthetic-rag-complex"
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
     if args.awq:
         print("Loading model and tokenizer vllm awq...")
