@@ -293,6 +293,7 @@ def main(args):
                 user = user.replace("{task_count}", "5")
                 user = user.replace("{language}", lang)
 
+                msg_list = []
                 SYSTEM_PROMPT = "You are an helpful AI assistant"
                 msg_system = {"role": "system", "content": SYSTEM_PROMPT}
                 msg_list.append(msg_system)
@@ -334,6 +335,7 @@ def main(args):
                 user = user.replace("{context}", context)
                 user = user.replace("{questions}", questions_text)
 
+                msg_list = []
                 msg_system = {"role": "system", "content": "You are an helpful AI assistant."}
                 msg_list.append(msg_system)
                 msg_prompt = {"role": "user", "content": user}
