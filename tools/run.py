@@ -239,7 +239,7 @@ def main(args):
             prompts = []
             if args.generate_topics or True:
                 message = []
-                prompt = """Give me a numbered list of 10 completely random topics which could be related to popular open source API's available online related to specific tasks/websites"""
+                prompt = """Give me a numbered list of 50 completely random topics which could be related to popular open source API's available online related to specific tasks/websites"""
                 if len(topics_generated) > 0:
                     prompt += "\n Topics should not be related to " + \
                         ",".join(topics_generated)
