@@ -324,6 +324,7 @@ def main(args):
                     matches = re.findall(pattern, text)
                     return matches
 
+                print("questions", text)
                 questions = extract_questions(text)
 
                 # Print the list of questions
