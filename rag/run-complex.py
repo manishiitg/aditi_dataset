@@ -210,7 +210,7 @@ def main(args):
             topics_generated = topics_generated_map[lang]
         topic_instruct_map = {}
 
-        for loop in range(10):
+        for loop in range(1):
             prompts = []
             if args.generate_topics or True:
                 message = []
@@ -338,9 +338,9 @@ def main(args):
                 )
                 prompts2.append(text)
 
-            max_tokens = 2048
+            max_tokens = 4096
             if lang == "hindi":
-                max_tokens = 4096
+                max_tokens = 8196
             outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, max_tokens)
             for idx, text in enumerate(outputs):
                 print("context", contexts[idx])
@@ -360,8 +360,6 @@ def main(args):
                     "evol_question": "",
                     "evol_answer": "",
                 })
-
-            os.exit(1)
             dataset = process_and_update_dataset(final_data)
             dataset.push_to_hub(base_repo, private=False)
 
