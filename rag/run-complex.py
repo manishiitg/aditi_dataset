@@ -308,6 +308,7 @@ def main(args):
                 )
                 prompts.append(text)
                 contexts.append(context)
+                print("text", text)
 
             max_tokens = 2048
             if lang == "hindi":
