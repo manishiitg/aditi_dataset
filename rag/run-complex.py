@@ -105,7 +105,7 @@ The type of tasks should be diverse. The list should include diverse types of ta
 Tasks should be generated in {language} language
 
 Respond in the following format.
-List of {task_count} TRICKY tasks generated in {language}:
+List of {task_count} TRICKY tasks generated in {language} language:
 1.
 2.
 """
