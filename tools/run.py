@@ -157,13 +157,15 @@ Rules For Using TOOLS:
     You can only use a tool, when you have all parameter values. If you don't have values for all parameters, return "no_tools"
     Always ask user about missing parameter values.
     If there is no tool which fits the, reply with "no_tools"
-
+    
     If you are selecting a TOOL, reply in the exact format
     {'arguments': <args-dict>, 'name': <function-name>}
 
-If the tasks cannot be answered using only the TOOLS provided, do not make up a response.
+If executing  a TOOL:
+Make sure you have all required parameter values as per the parameter types.
+Do not make up parameter values, make sure you have exact value as per the required parameter type.
 
-Reply only in format below:
+Reply in format below:
 
 Thought in English: think step by step about what to do in detail.
 Action: the action to take if you have all tool parameter values, only one name of [{tool_names}], in the exact format {'arguments': <args-dict>, 'name': <function-name>}
