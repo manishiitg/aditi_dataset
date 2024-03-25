@@ -326,10 +326,9 @@ def main(args):
                 questions = extract_questions(text)
 
                 # Print the list of questions
+                questions_text = ""
                 for i, question in enumerate(questions, start=1):
-                    print(f"question {question}")
-
-                questions_text = "\n".join(questions)
+                    questions_text += f"{i}. {question} \n"
 
                 user = PROMPT1_RESPONSE.replace("{language}", lang)
                 user = user.replace("{context}", context)
@@ -350,7 +349,6 @@ def main(args):
                 )
                 prompts2.append(text)
                 print("prompt2", text)
-                
 
             max_tokens = 2048
             if lang == "hindi":
@@ -375,9 +373,8 @@ def main(args):
                     "evol_answer": "",
                 })
 
-            os.exit(1)
-            # dataset = process_and_update_dataset(final_data)
-            # dataset.push_to_hub(base_repo, private=False)
+            dataset = process_and_update_dataset(final_data)
+            dataset.push_to_hub(base_repo, private=False)
 
 
 def process_and_update_dataset(new_data):
