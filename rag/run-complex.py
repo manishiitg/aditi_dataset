@@ -104,10 +104,12 @@ The type of tasks should be diverse. The list should include diverse types of ta
 
 Tasks should be generated in {language} language
 
-Respond in the following format.
-List of {task_count} TRICKY tasks generated in {language} language:
-1.
-2.
+The output format should be:
+TSK 1. [task 1 in {language} language]
+TSK 2. [task 2 in {language} language]
+...
+
+Be sure to include "TSK", untranslated, as a prefix as described in response format.
 """
 
 
@@ -131,19 +133,12 @@ The answers should be written in such a way as to have a Flesch-Kincaid readabil
 
 If the tasks cannot be answered using only the information provided in the input, do not make up a response.
 
-All answers should be in {language}.
+Generate answer in {language} language
 
-Generate detailed answers for every question.
-
-Questions: 
+Question: 
 {questions}
 
-Generate answers for the above questions based on the above context in the format.
-QUESTION: [first question]
-ANSWER: [first question's answer in {language}]
-
-QUESTION: [second question]
-ANSWER: [second question's answer in {language}]
+Answer:
 """
 
 
@@ -315,35 +310,41 @@ def main(args):
             outputs = eval_hf_model(args, model, tokenizer, prompts, .2, max_tokens)
 
             prompts2 = []
+            contexts2 = []
             global_questions = []
             for idx, questions_text in enumerate(outputs):
                 context = contexts[idx]
 
-                user = PROMPT1_RESPONSE.replace("{language}", lang)
-                user = user.replace("{context}", context)
-                user = user.replace("{questions}", questions_text)
+                for instruction in re.findall(
+                    r"(?:^|\n)TSK \d+\. (.*?)(?:$|(?=\nTSK \d+\. ))", questions_text, re.DOTALL
+                ):
+                    
+                    user = PROMPT1_RESPONSE.replace("{language}", lang)
+                    user = user.replace("{context}", context)
+                    user = user.replace("{question}", instruction)
 
-                msg_list = []
-                msg_system = {"role": "system", "content": "You are an helpful AI assistant."}
-                msg_list.append(msg_system)
-                msg_prompt = {"role": "user", "content": user}
-                msg_list.append(msg_prompt)
+                    msg_list = []
+                    msg_system = {"role": "system", "content": "You are an helpful AI assistant."}
+                    msg_list.append(msg_system)
+                    msg_prompt = {"role": "user", "content": user}
+                    msg_list.append(msg_prompt)
 
-                global_questions.append(questions_text)
+                    contexts2.append(contexts[idx])
+                    global_questions.append(instruction)
 
-                text = tokenizer.apply_chat_template(
-                    msg_list,
-                    tokenize=False,
-                    add_generation_prompt=True
-                )
-                prompts2.append(text)
+                    text = tokenizer.apply_chat_template(
+                        msg_list,
+                        tokenize=False,
+                        add_generation_prompt=True
+                    )
+                    prompts2.append(text)
 
             max_tokens = 4096
             if lang == "hindi":
                 max_tokens = 8196
             outputs = eval_hf_model(args, model, tokenizer, prompts2, 0, max_tokens)
             for idx, text in enumerate(outputs):
-                print("context", contexts[idx])
+                print("context", contexts2[idx])
                 print("question", global_questions[idx])
                 print("answer", text)
                 print("========")
