@@ -2,136 +2,138 @@ TOOLS
 ```json
 [
   {
-    "name": "get_current_weather",
-    "description": "Get the current weather conditions for a specific location",
+    "name": "analyze_device_data",
+    "description": "Analyze IoT device data for patterns and insights",
     "parameters": {
       "type": "object",
       "properties": {
-        "location": {
+        "dataset_name": {
           "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
+          "description": "The name of the IoT data dataset"
         },
-        "units": {
+        "query_expression": {
           "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
+          "description": "A SQL-like query to filter and aggregate data"
+        },
+        "time_window": {
+          "type": "string",
+          "description": "The time window for analysis (e.g., 'PT1H', 'P1D')"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of variables to analyze"
         }
       },
       "required": [
-        "location"
+        "dataset_name",
+        "query_expression"
       ]
     }
   },
   {
-    "name": "fetch_forecast",
-    "description": "Fetch a 5-day weather forecast for a location",
+    "name": "detect_anomalies",
+    "description": "Detect anomalies in IoT sensor data",
     "parameters": {
       "type": "object",
       "properties": {
-        "location": {
+        "data_channel": {
           "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
+          "description": "The IoT data channel to analyze"
         },
-        "units": {
-          "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
-        }
-      },
-      "required": [
-        "location"
-      ]
-    }
-  },
-  {
-    "name": "check_weather_alerts",
-    "description": "Check for any active weather alerts for a location",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "location": {
-          "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
-        }
-      },
-      "required": [
-        "location"
-      ]
-    }
-  },
-  {
-    "name": "get_weather_by_zip_code",
-    "description": "Get the current weather for a location using a ZIP code",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "zip_code": {
-          "type": "string",
-          "description": "The ZIP code of the location"
-        },
-        "country_code": {
-          "type": "string",
-          "description": "The ISO 3166-1 alpha-2 country code of the location"
-        },
-        "units": {
-          "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
-        }
-      },
-      "required": [
-        "zip_code",
-        "country_code"
-      ]
-    }
-  },
-  {
-    "name": "calculate_humidity_index",
-    "description": "Calculate the humidity index for a location's current weather",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "location": {
-          "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
-        },
-        "humidity": {
-          "type": "integer",
-          "description": "The humidity percentage"
-        },
-        "temperature": {
+        "threshold": {
           "type": "number",
-          "description": "The temperature in Celsius"
+          "description": "The threshold for anomaly detection"
+        },
+        "time_period": {
+          "type": "string",
+          "description": "The time period for analysis (e.g., 'PT1H', 'P1D')"
+        },
+        "reference_data_set": {
+          "type": "string",
+          "description": "Optional reference dataset for context"
         }
       },
       "required": [
-        "location",
-        "humidity",
-        "temperature"
+        "data_channel",
+        "threshold",
+        "time_period"
       ]
     }
   },
   {
-    "name": "get_weather_by_ip_address",
-    "description": "Get the current weather for a location using an IP address",
+    "name": "generate_dashboard",
+    "description": "Create a dashboard visualizing IoT analytics",
     "parameters": {
       "type": "object",
       "properties": {
-        "ip_address": {
+        "dashboard_name": {
           "type": "string",
-          "description": "The IP address of the location"
+          "description": "The name of the dashboard"
         },
-        "units": {
-          "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
+        "widgets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Widget type (e.g., 'lineChart', 'pieChart')"
+              },
+              "data_source": {
+                "type": "string",
+                "description": "The data source for the widget"
+              },
+              "time_range": {
+                "type": "string",
+                "description": "The time range to display (e.g., 'PT1H', 'P1D')"
+              }
+            },
+            "required": [
+              "type",
+              "data_source"
+            ]
+          }
         }
       },
       "required": [
-        "ip_address"
+        "dashboard_name",
+        "widgets"
       ]
     }
-  }
+  },
+  {
+    "name": "predict_device_behavior",
+    "description": "Predict future behavior of IoT devices",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "description": "The ID of the IoT device"
+        },
+        "model_name": {
+          "type": "string",
+          "description": "The name of the预测模型"
+        },
+        "time_series_window": {
+          "type": "string",
+          "description": "The time window for input data (e.g., 'PT1H', 'P1D')"
+        },
+        "prediction_interval": {
+          "type": "integer",
+          "description": "Number of time steps to predict"
+        }
+      },
+      "required": [
+        "device_id",
+        "model_name",
+        "time_series_window"
+      ]
+    }
+  },
 ]
 ```
 
@@ -159,26 +161,26 @@ Action: the action to take if you have all tool parameter values, only one name 
 Should Execute Action: do we have all parameter values to execute action reply only yes or no. If yes, i.e executing a tool reply to user should only contain a message asking user to wait.
 Reply to User: a short natural language based message to be sent to the user
 
-Question: Find the current weather in a city using its ZIP code, but don't mention the country code or temperature units.
+Question: Detect anomalies in the 'humidity' data channel of device 'DHU-456' over the past day with a threshold of 10%. Include a reference dataset 'normal_humidity_profiles' for context.
 
 
 List of 5 tasks generated with tools and parameters:
-TSK 1. What's the current weather in New York City, including temperature and weather conditions, using metric units?
-TSK 2. Can you fetch a 5-day forecast for London, showing high and low temperatures in Fahrenheit?
-TSK 3. Are there any active weather alerts for Tokyo, Japan?
-TSK 4. What's the current weather in Sydney, Australia, using ZIP code 2000, and provide the temperature in Celsius?
-TSK 5. Find the humidity index for a location with 80% humidity and a temperature of 25°C, in Paris.
+TSK 1. Analyze the dataset named "Factory_123" to find average temperature readings over the last 24 hours for devices in the 'temperature' channel. Use a query to filter out readings below 20°C.
+TSK 2. Detect anomalies in the 'humidity' data channel of device 'DHU-456' over the past day with a threshold of 10%. Include a reference dataset 'normal_humidity_profiles' for context.
+TSK 3. Create a dashboard named 'EnergyUsage' with a line chart widget showing power consumption data from the 'power' data source over the last hour.
+TSK 4. Predict the behavior of device 'AC-345' for the next 24 hours using the 'temperature_prediction_model' and a time series window of the last day.
+TSK 5. Generate a dashboard named 'DevicePerformance' with a pie chart widget displaying the number of normal and anomalous readings from the 'sensor_data' source over the past week.
 
 List of 5 tasks generated with parameters missing:
-TSK 1. Check the current weather conditions for a location based on its IP address.
-TSK 2. Get a 5-day forecast for a city, but don't specify the location or temperature units.
-TSK 3. Determine if there are any weather alerts for a location, only providing the latitude and longitude.
-TSK 4. Find the current weather in a city using its ZIP code, but don't mention the country code or temperature units.
-TSK 5. Calculate the humidity index for a location, but don't provide the temperature.
+TSK 1. Run anomaly detection on a specific data channel, considering a given time period and a threshold, to identify unusual activity.
+TSK 2. Create a dashboard visualizing IoT analytics, but without specifying the widgets or their data sources.
+TSK 3. Analyze IoT device data for patterns, but only provide the dataset name and time window, not the query expression or variables.
+TSK 4. Predict future behavior of an IoT device using a model, but don't mention the device ID, time series window, or prediction interval.
+TSK 5. Generate a dashboard with a widget, but leave out the dashboard name, widget type, and data source.
 
 List of 5 tasks generated which don't require tools:
-TSK 1. Name three factors that influence weather patterns.
-TSK 2. Describe the difference between a hurricane and a tornado.
-TSK 3. Explain the process of water evaporation in the context of the water cycle.
-TSK 4. What are the four main seasons experienced in temperate climates?
-TSK 5. Discuss the role of the Earth's axis tilt in causing seasonal changes.
+TSK 1. Summarize the main factors influencing the efficiency of IoT devices in industrial settings.
+TSK 2. Explain the difference between supervised and unsupervised learning in the context of IoT data analysis.
+TSK 3. Describe a strategy for securing communication between IoT devices and a central server.
+TSK 4. Discuss the importance of data preprocessing in extracting meaningful insights from IoT sensor data.
+TSK 5. Outline the steps involved in creating a predictive maintenance system for IoT-enabled machinery.

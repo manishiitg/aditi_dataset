@@ -1,138 +1,139 @@
 TOOLS:
-
 ```json
 [
   {
-    "name": "get_current_weather",
-    "description": "Get the current weather conditions for a specific location",
+    "name": "analyze_device_data",
+    "description": "Analyze IoT device data for patterns and insights",
     "parameters": {
       "type": "object",
       "properties": {
-        "location": {
+        "dataset_name": {
           "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
+          "description": "The name of the IoT data dataset"
         },
-        "units": {
+        "query_expression": {
           "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
+          "description": "A SQL-like query to filter and aggregate data"
+        },
+        "time_window": {
+          "type": "string",
+          "description": "The time window for analysis (e.g., 'PT1H', 'P1D')"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of variables to analyze"
         }
       },
       "required": [
-        "location"
+        "dataset_name",
+        "query_expression"
       ]
     }
   },
   {
-    "name": "fetch_forecast",
-    "description": "Fetch a 5-day weather forecast for a location",
+    "name": "detect_anomalies",
+    "description": "Detect anomalies in IoT sensor data",
     "parameters": {
       "type": "object",
       "properties": {
-        "location": {
+        "data_channel": {
           "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
+          "description": "The IoT data channel to analyze"
         },
-        "units": {
-          "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
-        }
-      },
-      "required": [
-        "location"
-      ]
-    }
-  },
-  {
-    "name": "check_weather_alerts",
-    "description": "Check for any active weather alerts for a location",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "location": {
-          "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
-        }
-      },
-      "required": [
-        "location"
-      ]
-    }
-  },
-  {
-    "name": "get_weather_by_zip_code",
-    "description": "Get the current weather for a location using a ZIP code",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "zip_code": {
-          "type": "string",
-          "description": "The ZIP code of the location"
-        },
-        "country_code": {
-          "type": "string",
-          "description": "The ISO 3166-1 alpha-2 country code of the location"
-        },
-        "units": {
-          "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
-        }
-      },
-      "required": [
-        "zip_code",
-        "country_code"
-      ]
-    }
-  },
-  {
-    "name": "calculate_humidity_index",
-    "description": "Calculate the humidity index for a location's current weather",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "location": {
-          "type": "string",
-          "description": "The city name or geographic coordinates (latitude, longitude) of the location"
-        },
-        "humidity": {
-          "type": "integer",
-          "description": "The humidity percentage"
-        },
-        "temperature": {
+        "threshold": {
           "type": "number",
-          "description": "The temperature in Celsius"
+          "description": "The threshold for anomaly detection"
+        },
+        "time_period": {
+          "type": "string",
+          "description": "The time period for analysis (e.g., 'PT1H', 'P1D')"
+        },
+        "reference_data_set": {
+          "type": "string",
+          "description": "Optional reference dataset for context"
         }
       },
       "required": [
-        "location",
-        "humidity",
-        "temperature"
+        "data_channel",
+        "threshold",
+        "time_period"
       ]
     }
   },
   {
-    "name": "get_weather_by_ip_address",
-    "description": "Get the current weather for a location using an IP address",
+    "name": "generate_dashboard",
+    "description": "Create a dashboard visualizing IoT analytics",
     "parameters": {
       "type": "object",
       "properties": {
-        "ip_address": {
+        "dashboard_name": {
           "type": "string",
-          "description": "The IP address of the location"
+          "description": "The name of the dashboard"
         },
-        "units": {
-          "type": "string",
-          "enum": ["metric", "imperial"],
-          "description": "The temperature unit, either 'metric' for Celsius or 'imperial' for Fahrenheit"
+        "widgets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Widget type (e.g., 'lineChart', 'pieChart')"
+              },
+              "data_source": {
+                "type": "string",
+                "description": "The data source for the widget"
+              },
+              "time_range": {
+                "type": "string",
+                "description": "The time range to display (e.g., 'PT1H', 'P1D')"
+              }
+            },
+            "required": [
+              "type",
+              "data_source"
+            ]
+          }
         }
       },
       "required": [
-        "ip_address"
+        "dashboard_name",
+        "widgets"
       ]
     }
-  }
+  },
+  {
+    "name": "predict_device_behavior",
+    "description": "Predict future behavior of IoT devices",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "description": "The ID of the IoT device"
+        },
+        "model_name": {
+          "type": "string",
+          "description": "The name of the预测模型"
+        },
+        "time_series_window": {
+          "type": "string",
+          "description": "The time window for input data (e.g., 'PT1H', 'P1D')"
+        },
+        "prediction_interval": {
+          "type": "integer",
+          "description": "Number of time steps to predict"
+        }
+      },
+      "required": [
+        "device_id",
+        "model_name",
+        "time_series_window"
+      ]
+    }
+  },
 ]
 ```
 
