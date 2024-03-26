@@ -32,7 +32,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
-    dataset = load_dataset(base_repo, split="train")
+    dataset = load_dataset(base_repo, split="train").filter(lambda x: x["language"] == "en").shuffle()
 
     final_data = []
     max_rows = 5
@@ -76,9 +76,34 @@ def main(args):
         default_system_en = "You are a helpful assistant. Provide a short, accurate and well formatted response."
 
         prompts = []
-        for row in tqdm(final_data):
+        if args.lang == "hinglish":
+            for row in tqdm(final_data):
 
-            prompt = row["prompt"]
+                prompt = row["prompt"]
+                messages = [
+                    {"role": "user", "content": "Translate given text to hinglish language."}
+                ]
+
+                messages.append(
+                    {"role": "user", "content": prompt}
+                )
+                text = tokenizer.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                prompts.append(text)
+
+            outputs = eval_hf_model(args, model, tokenizer, prompts)
+
+        prompts = []
+        for idx, row in tqdm(enumerate(final_data)):
+            if args.lang == "hinglish":
+                prompt = outputs[idx]
+            else:
+                prompt = row["prompt"]
+
+            print("prompt", prompt)
             if args.lang == "hi":
                 messages = [
                     {"role": "system", "content": default_system_en + "If users question in related to programing, always insert inline comments. Reply only in hindi language."}
@@ -113,6 +138,7 @@ def main(args):
             final_data[idx][key] = text
             uuid_row_map[uuid] = final_data[idx]
 
+        os.exit(1)
         existing_data = []
         dataset = load_dataset(base_repo, split="train",
                                cache_dir="temp-" + str(time.time()))
@@ -123,7 +149,7 @@ def main(args):
                 existing_data.append(processed_row)
             else:
                 existing_data.append(row)
-        os.exit(1)
+        
         final_data = existing_data
         dataset = process_and_update_dataset(final_data)
         dataset.push_to_hub(base_repo, private=True)
