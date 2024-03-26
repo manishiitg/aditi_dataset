@@ -38,7 +38,10 @@ def main(args):
     max_rows = 5
 
     if args.model_name_or_path == "Qwen/Qwen1.5-72B-Chat-AWQ":
-        key = "chosen2"
+        if args.lang == "hinglish":
+            key = "chosen2"
+        else:
+            key = "chosen3"
     else:
         key = "rejected"
 
@@ -78,7 +81,11 @@ def main(args):
             prompt = row["prompt"]
             if args.lang == "hi":
                 messages = [
-                    {"role": "system", "content": default_system_en + "Reply only in hindi."}
+                    {"role": "system", "content": default_system_en + "Reply only in hindi language."}
+                ]
+            elif args.lang == "hinglish":
+                messages = [
+                    {"role": "system", "content": default_system_en + "Reply only in hinglish language."}
                 ]
             else:
                 messages = [
