@@ -14,7 +14,7 @@ import time
 def eval_hf_model(args, model, tokenizer, prompts):
     sampling_params = vllm.SamplingParams(
         temperature=0,
-        max_tokens=4096,
+        max_tokens=2048,
         stop=["<|im_end|>"],
     )
     # We need to remap the outputs to the prompts because vllm might not return outputs for some prompts (e.g., if the prompt is too long)
@@ -35,10 +35,10 @@ def main(args):
     dataset = load_dataset(base_repo, split="train")
 
     final_data = []
-    max_rows = 5000
+    max_rows = 5
 
     if args.model_name_or_path == "Qwen/Qwen1.5-72B-Chat-AWQ":
-        key = "chosen"
+        key = "chosen2"
     else:
         key = "rejected"
 
@@ -70,8 +70,7 @@ def main(args):
                 max_model_len=8196*2,
             )
 
-        default_system_en = "You are a helpful assistant."
-        default_system_hi = "आप एक सहायक सहायक हैं."
+        default_system_en = "You are a helpful assistant. Provide a short, accurate and well formatted response."
 
         prompts = []
         for row in tqdm(final_data):
@@ -79,7 +78,7 @@ def main(args):
             prompt = row["prompt"]
             if args.lang == "hi":
                 messages = [
-                    {"role": "system", "content": default_system_hi}
+                    {"role": "system", "content": default_system_en + "Reply only in hindi."}
                 ]
             else:
                 messages = [
