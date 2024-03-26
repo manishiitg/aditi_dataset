@@ -32,7 +32,9 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
-    dataset = load_dataset(base_repo, split="train").filter(lambda x: x["language"] == "en").shuffle()
+    dataset = load_dataset(base_repo, split="train")
+    if args.lang == "hinglish":
+        dataset = dataset.filter(lambda x: x["language"] == "en").shuffle()
 
     final_data = []
     max_rows = 5
@@ -48,6 +50,9 @@ def main(args):
     for row in dataset:
 
         if len(row[key]) == 0 and len(final_data) < max_rows:
+            if args.lang == "hinglish":
+                if len(row["prompt"]) < 250:
+                    continue
             final_data.append(row)
 
     if len(final_data) > 0:
@@ -108,9 +113,7 @@ def main(args):
             else:
                 prompt = row["prompt"]
                 print("prompt", prompt)
-                
 
-            
             if args.lang == "hi":
                 messages = [
                     {"role": "system", "content": default_system_en + "If users question in related to programing, always insert inline comments. Reply only in hindi language."}
@@ -156,7 +159,7 @@ def main(args):
                 existing_data.append(processed_row)
             else:
                 existing_data.append(row)
-        
+
         final_data = existing_data
         dataset = process_and_update_dataset(final_data)
         dataset.push_to_hub(base_repo, private=True)
