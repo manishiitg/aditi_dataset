@@ -86,7 +86,7 @@ def main(args):
 
                 prompt = row["prompt"]
                 messages = [
-                    {"role": "user", "content": "Translate given text to hinglish language."}
+                    {"role": "user", "content": "Translate given text to hinglish language. Only translate given input, don't do anything else."}
                 ]
 
                 messages.append(
