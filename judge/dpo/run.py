@@ -148,7 +148,6 @@ def main(args):
             final_data[idx][key] = text
             uuid_row_map[uuid] = final_data[idx]
 
-        os.exit(1)
         existing_data = []
         dataset = load_dataset(base_repo, split="train",
                                cache_dir="temp-" + str(time.time()))
