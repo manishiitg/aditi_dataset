@@ -97,13 +97,20 @@ def main(args):
             outputs = eval_hf_model(args, model, tokenizer, prompts)
 
         prompts = []
+        hinglish_prompts = []
         for idx, row in tqdm(enumerate(final_data)):
             if args.lang == "hinglish":
                 prompt = outputs[idx]
+                hinglish_prompts.append(prompt)
+                print("--------")
+                print("prompt", prompt)
+                print("org prompt", row["prompt"])
             else:
                 prompt = row["prompt"]
+                print("prompt", prompt)
+                
 
-            print("prompt", prompt)
+            
             if args.lang == "hi":
                 messages = [
                     {"role": "system", "content": default_system_en + "If users question in related to programing, always insert inline comments. Reply only in hindi language."}
