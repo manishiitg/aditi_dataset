@@ -123,7 +123,7 @@ def main(args):
                 existing_data.append(processed_row)
             else:
                 existing_data.append(row)
-
+        os.exit(1)
         final_data = existing_data
         dataset = process_and_update_dataset(final_data)
         dataset.push_to_hub(base_repo, private=True)
