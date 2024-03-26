@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source ./scripts/common_vars.sh
+model_names=(
+    "Qwen/Qwen1.5-72B-Chat-AWQ"
+)
+FOLDER_BASE=/sky-notebook/eval-results
 
 TASK_NAME=dpo
 
