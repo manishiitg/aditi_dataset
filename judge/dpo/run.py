@@ -81,11 +81,11 @@ def main(args):
             prompt = row["prompt"]
             if args.lang == "hi":
                 messages = [
-                    {"role": "system", "content": default_system_en + "Reply only in hindi language."}
+                    {"role": "system", "content": default_system_en + "If users question in related to programing, always insert inline comments. Reply only in hindi language."}
                 ]
             elif args.lang == "hinglish":
                 messages = [
-                    {"role": "system", "content": default_system_en + "Reply only in hinglish language."}
+                    {"role": "system", "content": default_system_en + "If users question in related to programing, always insert inline comments. Reply only in hinglish language."}
                 ]
             else:
                 messages = [
