@@ -181,7 +181,7 @@ def main(args):
                 pending_data[idx]["rating"] = float(rating)
                 pending_data[idx]["judgement_pending"] = False
                 pending_data[idx]["rated_by"] = judge_model
-                if rating < 5:
+                if int(rating) < 6:
                     print("------------------------------------------------------------------------------")
                     print("text", text)
             except TypeError as e:
