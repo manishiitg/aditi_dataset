@@ -113,7 +113,7 @@ def main(args):
         tensor_parallel_size=torch.cuda.device_count(),
         # max_num_batched_tokens=4096,
         quantization="AWQ",
-        max_model_len=1028,
+        max_model_len=8196,
         dtype="float16",
         gpu_memory_utilization=.8
     )
@@ -139,7 +139,7 @@ def main(args):
                 question=question, answer=row["response"])
 
             messages = [
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a helpful assistant. Only follow the instructions provided by the user."},
                 {"role": "user", "content": prompt}
             ]
             text = tokenizer.apply_chat_template(
