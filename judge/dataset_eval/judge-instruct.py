@@ -114,9 +114,9 @@ def main(args):
         tensor_parallel_size=torch.cuda.device_count(),
         # max_num_batched_tokens=4096,
         # quantization="AWQ",
-        max_model_len=8196,
+        max_model_len=1028,
         dtype="float16",
-        # gpu_memory_utilization=.8
+        gpu_memory_utilization=.8
     )
 
     default_system_en = "You are a helpful assistant."
