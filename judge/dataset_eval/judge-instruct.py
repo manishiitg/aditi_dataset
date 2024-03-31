@@ -115,7 +115,7 @@ def main(args):
         quantization="AWQ",
         max_model_len=8196,
         dtype="float16",
-        gpu_memory_utilization=.8
+        # gpu_memory_utilization=.8
     )
 
     default_system_en = "You are a helpful assistant."
@@ -183,7 +183,9 @@ def main(args):
                 pending_data[idx]["rated_by"] = judge_model
                 if int(rating) < 6:
                     print("------------------------------------------------------------------------------")
-                    print("text", text)
+                    print(text)
+                    print("****")
+                    print(prompts[idx])
             except TypeError as e:
                 pending_data[idx]["judgement"] = text + "Exception:" + str(e)
                 pending_data[idx]["rating"] = -1
