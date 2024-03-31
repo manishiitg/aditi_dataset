@@ -27,7 +27,7 @@ Your evaluation should take into account several factors, including relevance, a
 Please rate the response on a scale of 1 to 10 for each of the following evaluation factors:
 
 Relevance: The extent to which the response is related to the user's question or topic.
-Accuracy: The correctness of the information provided in the response.
+Accuracy: The correctness of the information provided in the response based on the question asked.
 
 
 Calculate an overall rating based on above factors and also provide an detailed explanation for the overall rating.
