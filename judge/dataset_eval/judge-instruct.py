@@ -132,8 +132,8 @@ def main(args):
             continue
         else:
             question = instruction
-            # if system != default_system_en and system != default_system_en:
-            #     question = system + "\n\n" + instruction
+            if system != default_system_en and system != default_system_en:
+                question = system + "\n\n" + instruction
 
             prompt = get_lm_judge_rating_prompt(
                 question=question, answer=row["response"])
@@ -181,7 +181,7 @@ def main(args):
                 pending_data[idx]["rating"] = float(rating)
                 pending_data[idx]["judgement_pending"] = False
                 pending_data[idx]["rated_by"] = judge_model
-                if rating < 8:
+                if rating < 5:
                     print("------------------------------------------------------------------------------")
                     print("text", text)
             except TypeError as e:
