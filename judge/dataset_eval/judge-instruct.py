@@ -101,9 +101,9 @@ def main(args):
             hash = r["system"] + r["instruction"] + r["response"]
             existing_data[hash] = r
 
-    # judge_model = "Qwen/Qwen1.5-72B-Chat-AWQ"
+    judge_model = "Qwen/Qwen1.5-72B-Chat-GPTQ-Int4"
     # judge_model = "Qwen/Qwen1.5-7B-Chat"
-    judge_model = "Qwen/Qwen1.5-MoE-A2.7B"    
+    # judge_model = "Qwen/Qwen1.5-MoE-A2.7B"    
     tokenizer = AutoTokenizer.from_pretrained(judge_model)
 
     print("Loading model and tokenizer vllm awq...")
