@@ -10,6 +10,7 @@ from datasets import Dataset
 import torch
 import re
 import time
+from huggingface_hub import repo_exists
 
 # in this we simply save prompts outputs to a huggingface repo
 # https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/data/judge_prompts.jsonl
@@ -73,12 +74,12 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     ds = load_dataset(
-        "manishiitg/data-check", split="train", cache_dir="temp-" + str(time.time()))
+        "manishiitg/data-check-v2", split="train", cache_dir="temp-" + str(time.time()))
     ds = ds.filter(lambda x: x["lang"] == "hi").shuffle()
 
     new_data = []
     final_data = []
-    no_rows = 40000
+    no_rows = 10
 
     for r in ds:
         if "processed" not in r:
@@ -91,16 +92,18 @@ def main(args):
         new_data.append(r)
 
     dataset = process_and_update_dataset(new_data)
-    dataset.push_to_hub("manishiitg/data-check", private=False)
+    dataset.push_to_hub("manishiitg/data-check-v2", private=False)
 
-    existing_ds = load_dataset("manishiitg/custom-data", split="train")
     existing_data = {}
-    for r in existing_ds:
-        hash = r["system"] + r["instruction"] + r["response"]
-        existing_data[hash] = r
+    if repo_exists("manishiitg/custom-data-v2", repo_type="dataset"):
+        existing_ds = load_dataset("manishiitg/custom-data-v2", split="train")
+        for r in existing_ds:
+            hash = r["system"] + r["instruction"] + r["response"]
+            existing_data[hash] = r
 
     # judge_model = "Qwen/Qwen1.5-72B-Chat-AWQ"
-    judge_model = "Qwen/Qwen1.5-7B-Chat"
+    # judge_model = "Qwen/Qwen1.5-7B-Chat"
+    judge_model = "Qwen/Qwen1.5-MoE-A2.7B"    
     tokenizer = AutoTokenizer.from_pretrained(judge_model)
 
     print("Loading model and tokenizer vllm awq...")
@@ -117,7 +120,6 @@ def main(args):
     )
 
     default_system_en = "You are a helpful assistant."
-    default_system_hi = "आप एक सहायक सहायक हैं."
 
     prompts = []
     pending_data = []
@@ -131,7 +133,7 @@ def main(args):
             continue
         else:
             question = instruction
-            if system != default_system_en and system != default_system_hi:
+            if system != default_system_en and system != default_system_en:
                 question = system + "\n\n" + instruction
 
             prompt = get_lm_judge_rating_prompt(
@@ -163,11 +165,11 @@ def main(args):
         })
         ix += 1
 
-    with open(os.path.join(args.save_dir, f"lm_judge_datacheck.jsonl"), "w") as fout:
+    with open(os.path.join(args.save_dir, f"lm_judge_datacheck-v2.jsonl"), "w") as fout:
         json.dump(final_data, fout, indent=4)
 
     for idx, text in enumerate(outputs):
-        # print("text", text , "prompt", prompts[idx])
+        print("text", text , "prompt", prompts[idx])
         try:
             if "```" in text:
                 text = text.replace("```json", "")
@@ -211,7 +213,7 @@ def main(args):
         del pending_data[idx]["processed"]
 
     completed_data = []
-    existing_ds = load_dataset("manishiitg/custom-data", split="train")
+    existing_ds = load_dataset("manishiitg/custom-data-v2", split="train")
     existing_data = {}
     for r in existing_ds:
         hash = r["system"] + r["instruction"] + r["response"]
@@ -220,7 +222,7 @@ def main(args):
 
     final_data = pending_data + completed_data
     dataset = process_and_update_dataset(final_data)
-    dataset.push_to_hub("manishiitg/custom-data", private=False)
+    dataset.push_to_hub("manishiitg/custom-data-v2", private=False)
 
 
 def process_and_update_dataset(new_data):
