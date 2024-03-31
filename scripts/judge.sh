@@ -1,11 +1,6 @@
 #!/bin/bash
 
-model_names=(
-    "Qwen/Qwen1.5-72B-Chat-AWQ"
-)
-FOLDER_BASE=/sky-notebook/eval-results
-
-TASK_NAME=gen
+TASK_NAME=judge
 
 for model_name_or_path in "${model_names[@]}"; do
     model_name=${model_name_or_path##*/}
@@ -19,7 +14,7 @@ for model_name_or_path in "${model_names[@]}"; do
     fi
     
     cd judge/dataset_eval
-    python3 judge-instruct.py --model_name_or_path $model_name_or_path $awq_param
+    python3 judge-instruct.py
     cd ..
     
 done
