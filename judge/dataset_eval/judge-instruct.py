@@ -101,7 +101,6 @@ def main(args):
             hash = r["system"] + r["instruction"] + r["response"]
             existing_data[hash] = r
 
-    # judge_model = "Qwen/Qwen1.5-72B-Chat-GPTQ-Int4"
     judge_model = "Qwen/Qwen1.5-7B-Chat-AWQ"
     # judge_model = "Qwen/Qwen1.5-MoE-A2.7B"    
     tokenizer = AutoTokenizer.from_pretrained(judge_model)
@@ -213,15 +212,17 @@ def main(args):
         del pending_data[idx]["processed"]
 
     completed_data = []
-    existing_ds = load_dataset("manishiitg/custom-data-v2", split="train")
     existing_data = {}
-    for r in existing_ds:
-        hash = r["system"] + r["instruction"] + r["response"]
-        existing_data[hash] = r
-        completed_data.append(r)
+    if repo_exists("manishiitg/custom-data-v2", repo_type="dataset"):
+        existing_ds = load_dataset("manishiitg/custom-data-v2", split="train")
+        for r in existing_ds:
+            hash = r["system"] + r["instruction"] + r["response"]
+            existing_data[hash] = r
+            completed_data.append(r)
 
     final_data = pending_data + completed_data
     dataset = process_and_update_dataset(final_data)
+    os.exit(1)
     dataset.push_to_hub("manishiitg/custom-data-v2", private=False)
 
 
