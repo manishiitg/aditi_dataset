@@ -132,8 +132,8 @@ def main(args):
             continue
         else:
             question = instruction
-            if system != default_system_en and system != default_system_en:
-                question = system + "\n\n" + instruction
+            # if system != default_system_en and system != default_system_en:
+            #     question = system + "\n\n" + instruction
 
             prompt = get_lm_judge_rating_prompt(
                 question=question, answer=row["response"])
