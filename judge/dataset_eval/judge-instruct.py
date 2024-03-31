@@ -74,7 +74,7 @@ def eval_hf_model(args, model, tokenizer, prompts):
 def main(args):
 
     ds = load_dataset(
-        "manishiitg/data-check-v2", split="train", cache_dir="temp-" + str(time.time()))
+        "manishiitg/data-check-v2", split="train")
     ds = ds.filter(lambda x: x["lang"] == "hi").shuffle()
 
     new_data = []
@@ -101,8 +101,8 @@ def main(args):
             hash = r["system"] + r["instruction"] + r["response"]
             existing_data[hash] = r
 
-    judge_model = "Qwen/Qwen1.5-72B-Chat-GPTQ-Int4"
-    # judge_model = "Qwen/Qwen1.5-7B-Chat"
+    # judge_model = "Qwen/Qwen1.5-72B-Chat-GPTQ-Int4"
+    judge_model = "Qwen/Qwen1.5-7B-Chat-AWQ"
     # judge_model = "Qwen/Qwen1.5-MoE-A2.7B"    
     tokenizer = AutoTokenizer.from_pretrained(judge_model)
 
@@ -113,7 +113,7 @@ def main(args):
         tokenizer_mode="auto",
         tensor_parallel_size=torch.cuda.device_count(),
         # max_num_batched_tokens=4096,
-        quantization="GPTQ",
+        quantization="AWQ",
         max_model_len=1028,
         dtype="float16",
         gpu_memory_utilization=.8
