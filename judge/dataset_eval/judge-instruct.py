@@ -79,7 +79,7 @@ def main(args):
 
     new_data = []
     final_data = []
-    no_rows = 10
+    no_rows = 100
 
     for r in ds:
         if "processed" not in r:
@@ -102,7 +102,7 @@ def main(args):
             existing_data[hash] = r
 
     judge_model = "Qwen/Qwen1.5-7B-Chat-AWQ"
-    # judge_model = "Qwen/Qwen1.5-MoE-A2.7B"    
+    # judge_model = "Qwen/Qwen1.5-MoE-A2.7B"
     tokenizer = AutoTokenizer.from_pretrained(judge_model)
 
     print("Loading model and tokenizer vllm awq...")
@@ -168,8 +168,6 @@ def main(args):
         json.dump(final_data, fout, indent=4)
 
     for idx, text in enumerate(outputs):
-        print("------------------------------------------------------------------------------")
-        print("text", text)
         try:
             if "```" in text:
                 text = text.replace("```json", "")
@@ -183,6 +181,9 @@ def main(args):
                 pending_data[idx]["rating"] = float(rating)
                 pending_data[idx]["judgement_pending"] = False
                 pending_data[idx]["rated_by"] = judge_model
+                if rating < 8:
+                    print("------------------------------------------------------------------------------")
+                    print("text", text)
             except TypeError as e:
                 pending_data[idx]["judgement"] = text + "Exception:" + str(e)
                 pending_data[idx]["rating"] = -1
@@ -208,8 +209,10 @@ def main(args):
                     pending_data[idx]["rated_by"] = judge_model
                     print("text failed", text, -1, e)
         except Exception as e:
+            print("------------------------------------------------------------------------------")
+            print("text", text)
             print("failed ", e)
-        
+
         del pending_data[idx]["processed"]
 
     completed_data = []
