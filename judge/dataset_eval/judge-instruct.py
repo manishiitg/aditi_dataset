@@ -169,7 +169,7 @@ def main(args):
 
     for idx, text in enumerate(outputs):
         print("------------------------------------------------------------------------------")
-        print("text", text , "prompt", prompts[idx])
+        print("text", text)
         try:
             if "```" in text:
                 text = text.replace("```json", "")
@@ -223,7 +223,6 @@ def main(args):
 
     final_data = pending_data + completed_data
     dataset = process_and_update_dataset(final_data)
-    os.exit(1)
     dataset.push_to_hub("manishiitg/custom-data-v2", private=False)
 
 
