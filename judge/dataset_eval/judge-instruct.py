@@ -79,7 +79,7 @@ def main(args):
 
     new_data = []
     final_data = []
-    no_rows = 10
+    no_rows = 100
 
     for r in ds:
         if "processed" not in r:
@@ -92,7 +92,7 @@ def main(args):
         new_data.append(r)
 
     dataset = process_and_update_dataset(new_data)
-    # dataset.push_to_hub("manishiitg/data-check-v2", private=False)
+    dataset.push_to_hub("manishiitg/data-check-v2", private=False)
 
     existing_data = {}
     if repo_exists("manishiitg/custom-data-v2", repo_type="dataset"):
