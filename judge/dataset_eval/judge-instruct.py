@@ -113,7 +113,7 @@ def main(args):
         tensor_parallel_size=torch.cuda.device_count(),
         # max_num_batched_tokens=4096,
         quantization="AWQ",
-        max_model_len=8196,
+        max_model_len=8192,
         dtype="float16",
         enable_prefix_caching=True,
         # gpu_memory_utilization=.8
@@ -149,7 +149,7 @@ def main(args):
                 add_generation_prompt=True
             )
             tokenized_prompt = tokenizer(prompt).input_ids
-            if len(tokenized_prompt) < (8196 - 1024):
+            if len(tokenized_prompt) < (8192 - 1024):
                 prompts.append(text)
                 pending_data.append(row)
 
