@@ -92,7 +92,7 @@ def main(args):
         new_data.append(r)
 
     dataset = process_and_update_dataset(new_data)
-    dataset.push_to_hub("manishiitg/data-check-v2", private=False)
+    # dataset.push_to_hub("manishiitg/data-check-v2", private=False)
 
     existing_data = {}
     if repo_exists("manishiitg/custom-data-v2", repo_type="dataset"):
@@ -101,8 +101,8 @@ def main(args):
             hash = r["system"] + r["instruction"] + r["response"]
             existing_data[hash] = r
 
-    judge_model = "Qwen/Qwen1.5-7B-Chat-AWQ"
-    # judge_model = "Qwen/Qwen1.5-MoE-A2.7B"
+    # judge_model = "Qwen/Qwen1.5-7B-Chat-AWQ"
+    judge_model = "Qwen/Qwen1.5-MoE-A2.7B"
     tokenizer = AutoTokenizer.from_pretrained(judge_model)
 
     print("Loading model and tokenizer vllm awq...")
@@ -115,6 +115,7 @@ def main(args):
         quantization="AWQ",
         max_model_len=8196,
         dtype="float16",
+        enable_prefix_caching=True,
         # gpu_memory_utilization=.8
     )
 
