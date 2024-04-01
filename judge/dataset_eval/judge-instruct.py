@@ -43,6 +43,7 @@ Only respond in json format as follows:
   },
 }
 Response format should be parsable by json.loads
+Reply only in json format, don't write any other texts.
 """
 
 
@@ -79,7 +80,7 @@ def main(args):
 
     new_data = []
     final_data = []
-    no_rows = 100
+    no_rows = 20
 
     for r in ds:
         if "processed" not in r:
