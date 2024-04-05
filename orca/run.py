@@ -34,11 +34,11 @@ def contains_chinese(text):
 
 SYSTEM_MESSAGES_ORCA = [
     # "",
-    "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
+    # "You are an AI assistant. Provide a detailed answer so user don't need to search outside to understand the answer.",
     "You are an AI assistant. You will be given a task. You must generate a detailed and long answer.",
-    "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
-    "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
-    "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
+    # "You are a helpful assistant, who always provide explanation. Think like you are answering to a five year old.",
+    # "You are an AI assistant that follows instruction extremely well. Help as much as you can.",
+    # "You are an AI assistant. User will you give you a task. Your goal is to complete the task as faithfully as you can. While performing the task think step-by-step and justify your steps.",
 ]
 
 
