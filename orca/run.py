@@ -346,7 +346,7 @@ def main(args):
                 topics_generated_map[r["language"]] = []
             topics_generated_map[r["language"]].append(r["topic"])
 
-    languages = ["hindi"] #"hinglish"
+    languages = ["hindi", "hinglish"] #""
     topic_selected = "orca"
     PROGRAMMING_TOPICS = []
     for lang in languages:
@@ -361,7 +361,7 @@ def main(args):
             if args.generate_topics or True:
                 message = []
                 prompt = """
-                    Give me a numbered list of 50 completely random topics related to reasoning.
+                    Give me a numbered list of 50 completely random topics related to common sense reasoning, maths.
                     Generate a diverse list of topics in english.
                 """
 
