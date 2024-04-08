@@ -33,7 +33,7 @@ def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
     dataset = load_dataset(base_repo, split="train")
-    dataset = dataset.filter(lambda x: x["is_repeating"]).select(range(10))
+    dataset = dataset.filter(lambda x: x["is_repeating"])
     if args.lang == "hinglish":
         dataset = dataset.filter(lambda x: x["language"] == "en").shuffle()
 
