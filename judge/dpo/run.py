@@ -44,7 +44,7 @@ def main(args):
         if args.lang == "hinglish":
             key = "chosen2"
         else:
-            key = "chosen"
+            key = "chosen3"
     else:
         key = "rejected"
 
