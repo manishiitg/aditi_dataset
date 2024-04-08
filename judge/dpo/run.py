@@ -33,6 +33,7 @@ def main(args):
 
     base_repo = "manishiitg/aditi-dpo-prompts"
     dataset = load_dataset(base_repo, split="train")
+    dataset = dataset.filter(lambda x: x["is_repeating"]).select(range(10))
     if args.lang == "hinglish":
         dataset = dataset.filter(lambda x: x["language"] == "en").shuffle()
 
@@ -49,11 +50,11 @@ def main(args):
 
     for row in dataset:
 
-        if len(row[key]) == 0 and len(final_data) < max_rows:
-            if args.lang == "hinglish":
-                if len(row["prompt"]) < 250:
-                    continue
-            final_data.append(row)
+        # if len(row[key]) == 0 and len(final_data) < max_rows:
+        #     if args.lang == "hinglish":
+        #         if len(row["prompt"]) < 250:
+        #             continue
+        final_data.append(row)
 
     if len(final_data) > 0:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
